@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { eplData } from "../data/courses";
+import { FaExclamationTriangle } from "react-icons/fa";
 import Sidebar from "../components/Sidebar";
 import FiliereCard from "../components/FiliereCard";
 
@@ -38,9 +39,10 @@ const Parcours = () => {
             ))
           )}
           {filteredParcours.length === 0 && (
-            <p className="text-[#1A1A1A] col-span-full text-center text-lg">
-              Aucune filière trouvée.
-            </p>
+            <div className="col-span-full text-center text-[#1A1A1A] py-8">
+              <FaExclamationTriangle className="text-4xl text-yellow-500 mx-auto mb-4" />
+              <p className="text-lg">Aucune filière trouvée.</p>
+            </div>
           )}
         </section>
       </main>
