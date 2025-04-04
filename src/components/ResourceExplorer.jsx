@@ -1,54 +1,46 @@
 import React, { useState } from "react";
-import { FaFilePdf, FaFolder, FaDownload } from "react-icons/fa";
+import { FaFilePdf, FaFileWord, FaFolder, FaDownload, FaFileArchive } from "react-icons/fa";
+import { storage, bucketId } from "../appwrite";
 
 const ResourceExplorer = ({ resources }) => {
   const [openFolders, setOpenFolders] = useState({});
 
-  // Exemple de structure imbriquée (à adapter selon vos données)
-  const folderStructure = {
-    name: "Ressources",
-    type: "folder",
-    contents: [
-      ...resources.map((resource) => ({
-        name: resource.type,
-        type: "file",
-        url: resource.pdf,
-      })),
-      {
-        name: "Annexes",
-        type: "folder",
-        contents: [
-          { name: "Annexe 1", type: "file", url: "url-to-annexe1.pdf" },
-          { name: "Annexe 2", type: "file", url: "url-to-annexe2.pdf" },
-        ],
-      },
-    ],
-  };
-
   const toggleFolder = (folderPath) => {
-    setOpenFolders((prev) => ({
-      ...prev,
-      [folderPath]: !prev[folderPath],
-    }));
+    setOpenFolders((prev) => ({ ...prev, [folderPath]: !prev[folderPath] }));
   };
 
   const handleDownloadFolder = (contents) => {
-    alert("Téléchargement du dossier entier (nécessite un backend pour ZIP)");
-    // Simule le téléchargement de tous les fichiers dans 'contents'
+    alert("Téléchargement du dossier (nécessite un backend pour ZIP)");
+  };
+
+  const getFileIcon = (fileType) => {
+    switch (fileType) {
+      case "application/pdf":
+        return <FaFilePdf className="mr-2 text-[#D32F2F]" />;
+      case "application/msword":
+        return <FaFileWord className="mr-2 text-[#2B579A]" />;
+      case "application/zip":
+        return <FaFileArchive className="mr-2 text-[#FFB300]" />;
+      default:
+        return <FaFilePdf className="mr-2 text-[#D32F2F]" />;
+    }
   };
 
   const renderItem = (item, path = "") => {
     const itemPath = path ? `${path}/${item.name}` : item.name;
 
     if (item.type === "file") {
+      const fileUrl = storage.getFileDownload(bucketId, item.fileId || item.url.split("/").pop());
+      const fileType = item.mimeType || "application/pdf"; // À adapter selon vos données
+
       return (
         <a
-          href={item.url}
+          href={fileUrl}
           download
-          className="flex items-center justify-between py-2 px-4 bg-[#F7F7F7] rounded-md hover:bg-[#D32F2F] hover:text-white transition duration-200"
+          className="flex items-center justify-between py-2 px-4 bg-[#F7F7F7] rounded-md hover:bg-gray-200 transition duration-200"
         >
           <div className="flex items-center">
-            <FaFilePdf className="mr-2 text-[#D32F2F]" />
+            {getFileIcon(fileType)}
             <span>{item.name}</span>
           </div>
           <FaDownload className="text-sm" />
@@ -90,7 +82,7 @@ const ResourceExplorer = ({ resources }) => {
     return null;
   };
 
-  return <div className="space-y-2">{renderItem(folderStructure)}</div>;
+  return <div className="space-y-2">{renderItem(resources)}</div>;
 };
 
 export default ResourceExplorer;
