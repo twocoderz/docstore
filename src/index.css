@@ -1,5 +1,10 @@
 @import "tailwindcss";
 
 body {
-    font-family: Roboto, sans-serif;
+  font-family: Poppins, sans-serif;
+  background-color: #F7F7F7;
+  color: #1A1A1A;
+  margin: 0;
+  padding: 0;
 }
+  

@@ -1,57 +1,63 @@
 import React, { useState } from "react";
-import Navbar from "../components/Navbar";
-import CourseCard from "../components/CourseCard";
-import SemesterFilter from "../components/SemesterFilter";
 import { eplData } from "../data/courses";
-import { FaCalendarAlt } from "react-icons/fa";
+import { useParams } from "react-router-dom";
+import Sidebar from "../components/Sidebar";
+import CourseCard from "../components/CourseCard";
+import FilterSelect from "../components/FilterSelect";
+import BackButton from "../components/BackButton";
 
 const Filiere = () => {
-  const filiere = eplData.parcours[0].filieres[0]; // Génie Logiciel
-  const [selectedYear, setSelectedYear] = useState(filiere.years[0]);
+  const { filiereName } = useParams();
+  const filiere = eplData.parcours
+    .flatMap((p) => p.filieres)
+    .find((f) => f.name.toLowerCase().replace(" ", "-") === filiereName);
+
+  const [selectedYear, setSelectedYear] = useState(filiere?.years[0]?.year || "");
   const [selectedSemester, setSelectedSemester] = useState(
-    selectedYear.semesters[0].name
+    filiere?.years[0]?.semesters[0]?.name || ""
   );
 
-  const handleSemesterChange = (semesterName) => {
-    setSelectedSemester(semesterName);
-  };
+  if (!filiere) {
+    return (
+      <div className="min-h-screen flex bg-[#F7F7F7]">
+        <Sidebar parcoursList={eplData.parcours} onParcoursSelect={() => {}} onSearch={() => {}} />
+        <main className="flex-grow p-6 text-center">
+          <h2 className="text-xl font-semibold text-[#1A1A1A] mb-4">Filière non trouvée</h2>
+          <BackButton />
+        </main>
+      </div>
+    );
+  }
 
-  const currentSemester = selectedYear.semesters.find(
-    (sem) => sem.name === selectedSemester
-  );
+  const currentYear = filiere.years.find((y) => y.year === selectedYear);
+  const currentSemester = currentYear?.semesters.find((s) => s.name === selectedSemester);
 
   return (
-    <div className="min-h-screen flex flex-col">
-      <Navbar />
-      <main className="flex-grow container mx-auto p-4">
-        <h2 className="text-2xl font-bold mb-4">{filiere.name}</h2>
-        <div className="mb-4 flex items-center">
-          <FaCalendarAlt className="mr-2 text-gray-600" />
-          <label className="mr-2 font-semibold">Année :</label>
-          <select
-            onChange={(e) =>
-              setSelectedYear(
-                filiere.years.find((y) => y.year === e.target.value)
-              )
-            }
-            className="p-2 border rounded"
-          >
-            {filiere.years.map((year) => (
-              <option key={year.year} value={year.year}>
-                {year.year}
-              </option>
-            ))}
-          </select>
-        </div>
-        <SemesterFilter
-          semesters={selectedYear.semesters}
-          onSemesterChange={handleSemesterChange}
-        />
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-          {currentSemester.courses.map((course, index) => (
+    <div className="min-h-screen flex bg-[#F7F7F7]">
+      <Sidebar parcoursList={eplData.parcours} onParcoursSelect={() => {}} onSearch={() => {}} />
+      <main className="flex-grow p-4 md:p-6">
+        <section className="mb-6 flex flex-col sm:flex-row gap-4 items-start sm:items-center bg-white p-4 rounded-md shadow-sm">
+          <FilterSelect
+            label="Année"
+            options={filiere.years.map((y) => y.year)}
+            value={selectedYear}
+            onChange={setSelectedYear}
+          />
+          <FilterSelect
+            label="Semestre"
+            options={currentYear?.semesters.map((s) => s.name) || []}
+            value={selectedSemester}
+            onChange={setSelectedSemester}
+          />
+          <div className="mt-2 sm:mt-0">
+            <BackButton />
+          </div>
+        </section>
+        <section className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+          {currentSemester?.courses.map((course, index) => (
             <CourseCard key={index} course={course} />
           ))}
-        </div>
+        </section>
       </main>
     </div>
   );
