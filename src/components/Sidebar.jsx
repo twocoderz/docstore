@@ -36,7 +36,7 @@ const Sidebar = ({ parcoursList, onParcoursSelect, onSearch }) => {
                 className="w-full flex items-center py-3 px-4 rounded-md hover:bg-[#4A90E2] transition duration-200 text-base font-medium"
               >
                 <FaGraduationCap className="mr-3 text-[#4A90E2] hover:text-white" />
-                Tous les parcours
+                Toutes les écoles
               </button>
             </li>
             {parcoursList.map((parcours) => (

@@ -2,8 +2,42 @@ import React, { useState } from "react";
 import { FaFilePdf, FaFileWord, FaFolder, FaDownload, FaFileArchive } from "react-icons/fa";
 import { storage, bucketId } from "../appwrite";
 
-const ResourceExplorer = ({ resources }) => {
+const buildFileTree = (files) => {
+  const tree = { name: "Ressources", type: "folder", contents: [] };
+  const folderMap = {};
+
+  files.forEach((file) => {
+    const pathParts = file.name.split("_"); // Utiliser "_" comme séparateur
+    let currentLevel = tree.contents;
+
+    for (let i = 0; i < pathParts.length - 1; i++) {
+      const folderName = pathParts[i];
+      let folder = currentLevel.find(
+        (item) => item.name === folderName && item.type === "folder"
+      );
+      if (!folder) {
+        folder = { name: folderName, type: "folder", contents: [] };
+        currentLevel.push(folder);
+      }
+      currentLevel = folder.contents;
+    }
+
+    currentLevel.push({
+      name: pathParts[pathParts.length - 1],
+      type: "file",
+      fileId: file.$id,
+      mimeType: file.mimeType,
+      originalName: file.name,
+    });
+  });
+
+  return tree;
+};
+
+const ResourceExplorer = ({ files }) => {
   const [openFolders, setOpenFolders] = useState({});
+
+  const fileTree = buildFileTree(files);
 
   const toggleFolder = (folderPath) => {
     setOpenFolders((prev) => ({ ...prev, [folderPath]: !prev[folderPath] }));
@@ -30,17 +64,17 @@ const ResourceExplorer = ({ resources }) => {
     const itemPath = path ? `${path}/${item.name}` : item.name;
 
     if (item.type === "file") {
-      const fileUrl = storage.getFileDownload(bucketId, item.fileId || item.url.split("/").pop());
-      const fileType = item.mimeType || "application/pdf"; // À adapter selon vos données
+      const fileUrl = storage.getFileDownload(bucketId, item.fileId);
+      const safeFileName = item.originalName.replace(/_/g, "-"); // Remplacer "_" par "-" pour Windows
 
       return (
         <a
           href={fileUrl}
-          download
+          download={safeFileName}
           className="flex items-center justify-between py-2 px-4 bg-[#F7F7F7] rounded-md hover:bg-gray-200 transition duration-200"
         >
           <div className="flex items-center">
-            {getFileIcon(fileType)}
+            {getFileIcon(item.mimeType)}
             <span>{item.name}</span>
           </div>
           <FaDownload className="text-sm" />
@@ -82,7 +116,7 @@ const ResourceExplorer = ({ resources }) => {
     return null;
   };
 
-  return <div className="space-y-2">{renderItem(resources)}</div>;
+  return <div className="space-y-2">{renderItem(fileTree)}</div>;
 };
 
 export default ResourceExplorer;
