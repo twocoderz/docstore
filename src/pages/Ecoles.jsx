@@ -1,69 +1,58 @@
 import React, { useState, useEffect } from "react";
 import { FaExclamationTriangle } from "react-icons/fa";
-import Sidebar from "../components/Sidebar";
-import FiliereCard from "../components/FiliereCard";
-import { databases, databaseId, ecolesCollectionId, filieresCollectionId } from "../appwrite";
+import { Link } from "react-router-dom";
+import { databases, databaseId, ecolesCollectionId } from "../appwrite";
+import Spinner from "../components/Spinner";
 
 const Ecoles = () => {
-  const [searchQuery, setSearchQuery] = useState("");
-  const [selectedEcole, setSelectedEcole] = useState(null);
   const [ecoles, setEcoles] = useState([]);
-  const [filieres, setFilieres] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     const fetchEcoles = async () => {
-      const response = await databases.listDocuments(databaseId, ecolesCollectionId);
-      setEcoles(response.documents);
+      try {
+        const response = await databases.listDocuments(databaseId, ecolesCollectionId);
+        setEcoles(response.documents);
+        console.log("Écoles récupérées :", response.documents);
+      } catch (error) {
+        console.error("Erreur lors de la récupération des écoles :", error);
+      } finally {
+        setIsLoading(false);
+      }
     };
-
-    const fetchFilieres = async () => {
-      const response = await databases.listDocuments(databaseId, filieresCollectionId);
-      setFilieres(response.documents);
-    };
-
-    fetchEcoles().then(fetchFilieres);
+    fetchEcoles();
   }, []);
 
-  const filteredFilieres = filieres
-    .filter((filiere) =>
-      filiere.nom.toLowerCase().includes(searchQuery.toLowerCase())
-    )
-    .filter((filiere) =>
-      selectedEcole ? filiere.idEcole === selectedEcole.$id : true
-    );
-
   return (
-    <div className="min-h-screen flex bg-[#F7F7F7]">
-      <Sidebar
-        parcoursList={[{ name: "Toutes les écoles" }, ...ecoles.map((ecole) => ({ name: ecole.nom }))]}
-        onParcoursSelect={(nom) => {
-          if (nom === "Toutes les écoles") {
-            setSelectedEcole(null);
-          } else {
-            const ecole = ecoles.find((e) => e.nom === nom);
-            setSelectedEcole(ecole);
-          }
-        }}
-        onSearch={setSearchQuery}
-      />
-      <main className="flex-grow p-4 md:p-6">
-        <section className="mt-12 md:mt-0 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-          {filteredFilieres.length > 0 ? (
-            filteredFilieres.map((filiere) => (
-              <FiliereCard
-                key={filiere.$id}
-                filiere={{ name: filiere.nom, description: filiere.description }}
-                parcoursName={filiere.parcours}
-              />
+    <div className="min-h-screen bg-gray-100 p-4 sm:p-6">
+      <h1 className="text-2xl sm:text-3xl font-bold text-gray-800 mb-4 sm:mb-6">Écoles</h1>
+      {isLoading ? (
+        <div className="flex justify-center py-8">
+          <Spinner size="lg" />
+        </div>
+      ) : (
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
+          {ecoles.length > 0 ? (
+            ecoles.map((ecole) => (
+              <Link
+                key={ecole.$id}
+                to={`/ecole/${encodeURIComponent(ecole.nom)}`}
+                className="bg-white p-4 sm:p-6 rounded-lg shadow-md hover:shadow-lg transition duration-200"
+              >
+                <h2 className="text-lg sm:text-xl font-semibold text-gray-800 truncate">
+                  {ecole.nom}
+                </h2>
+                <p className="text-gray-600 mt-2 text-sm sm:text-base">{ecole.description}</p>
+              </Link>
             ))
           ) : (
-            <div className="col-span-full text-center text-[#1A1A1A] py-8">
-              <FaExclamationTriangle className="text-4xl text-yellow-500 mx-auto mb-4" />
-              <p className="text-lg">Aucune filière trouvée.</p>
+            <div className="col-span-full text-center py-8">
+              <FaExclamationTriangle className="text-3xl sm:text-4xl text-yellow-500 mx-auto mb-4" />
+              <p className="text-base sm:text-lg text-gray-800">Aucune école trouvée.</p>
             </div>
           )}
-        </section>
-      </main>
+        </div>
+      )}
     </div>
   );
 };

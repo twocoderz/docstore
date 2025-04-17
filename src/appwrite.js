@@ -1,4 +1,4 @@
-import { Client, Databases, Storage, ID } from 'appwrite';
+import { Client, Databases, Storage, ID, Query } from 'appwrite';
 
 const client = new Client();
 client.setProject('67efdbc8003bcb27bcaf');
@@ -11,4 +11,4 @@ export const ecolesCollectionId = "67f727d60008a5965d9e";
 export const filieresCollectionId = "67f728960028e33b576a";
 export const uesCollectionId = "67f72a8f00239ccc2b36";
 export const bucketId = "67efdc26000acfe7e2ea";       // Remplacez par l'ID de votre bucket
-export { ID };
+export { ID, Query };

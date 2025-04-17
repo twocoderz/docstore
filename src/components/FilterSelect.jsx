@@ -1,15 +1,15 @@
 import React from "react";
-import { FaCalendarAlt } from "react-icons/fa";
 
 const FilterSelect = ({ label, options, value, onChange }) => {
   return (
-    <div className="flex items-center w-full sm:w-40">
-      <FaCalendarAlt className="text-lg text-[#4A90E2] mr-2" />
+    <div className="flex items-center space-x-2 w-full sm:w-auto">
+      <label className="text-gray-800 font-medium text-sm sm:text-base">{label} :</label>
       <select
         value={value}
         onChange={(e) => onChange(e.target.value)}
-        className="w-full p-2 border rounded-md bg-[#F7F7F7] text-[#1A1A1A] focus:outline-none focus:ring-2 focus:ring-[#4A90E2] transition duration-200"
+        className="p-2 border rounded-md bg-white text-gray-800 text-sm sm:text-base w-full"
       >
+        <option value="">Tous</option>
         {options.map((option) => (
           <option key={option} value={option}>
             {option}

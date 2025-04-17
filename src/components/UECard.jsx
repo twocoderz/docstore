@@ -3,13 +3,13 @@ import ResourceExplorer from "./ResourceExplorer";
 
 const UECard = ({ ue }) => {
   return (
-    <div className="bg-white p-6 rounded-md shadow-sm hover:shadow-md transition duration-300">
-      <h3 className="text-lg font-semibold text-[#1A1A1A] mb-2">{ue.nom}</h3>
-      <p className="text-sm text-gray-600 mb-2">{ue.description}</p>
-      <p className="text-xs text-gray-500 mb-4">
-        Année(s) : {ue.anneeEnseignement.join(", ")}
-      </p>
-      <ResourceExplorer files={ue.files || []} />
+    <div className="bg-white p-4 sm:p-6 rounded-lg shadow-md">
+      <h2 className="text-lg sm:text-xl font-semibold text-gray-800 truncate">{ue.nom}</h2>
+      <p className="text-gray-600 mt-2 text-sm sm:text-base">{ue.description}</p>
+      <p className="text-xs sm:text-sm text-gray-500 mt-1">Année : {ue.anneeEnseignement.join(", ")}</p>
+      <div className="mt-4">
+        <ResourceExplorer files={ue.files || []} />
+      </div>
     </div>
   );
 };

@@ -1,16 +1,17 @@
 import React from "react";
+import { useNavigate } from "react-router-dom";
 import { FaArrowLeft } from "react-icons/fa";
-import { Link } from "react-router-dom";
 
 const BackButton = () => {
+  const navigate = useNavigate();
   return (
-    <Link
-      to="/parcours"
-      className="inline-flex items-center bg-[#4A90E2] text-white py-2 px-4 rounded-md hover:bg-[#357ABD] transition duration-200"
+    <button
+      onClick={() => navigate(-1)}
+      className="flex items-center px-3 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 text-sm sm:text-base"
     >
       <FaArrowLeft className="mr-2" />
       Retour
-    </Link>
+    </button>
   );
 };
 
