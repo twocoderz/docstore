@@ -25,7 +25,7 @@ const UECard = ({ ue }) => {
         </Typography>
         <Divider sx={{ my: 1 }} />
         <Box mt={2}>
-          <ResourceExplorer files={ue.files || []} />
+        <ResourceExplorer files={ue.files || []} />
         </Box>
       </CardContent>
     </Card>

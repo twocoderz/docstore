@@ -64,7 +64,7 @@ const Ecoles = () => {
                       <Box display="flex" alignItems="center" gap={1} mb={1}>
                         <FaUniversity size={22} style={{ color: '#1976d2' }} />
                         <Typography variant="h6" component="div" noWrap fontWeight={600} color="primary.main">
-                          {ecole.nom}
+                  {ecole.nom}
                         </Typography>
                       </Box>
                       <Typography variant="body2" color="text.secondary" sx={{ mb: 1 }}>

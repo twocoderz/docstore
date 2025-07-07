@@ -82,7 +82,7 @@ const Ecole = () => {
         <FaUniversity size={32} style={{ color: '#1976d2' }} />
         <Box>
           <Typography variant="h4" component="h1" fontWeight={700} color="primary.main" gutterBottom>
-            {ecole?.nom || "Chargement..."}
+          {ecole?.nom || "Chargement..."}
           </Typography>
           {ecole?.lieu && (
             <Box display="flex" alignItems="center" gap={1}>
@@ -101,12 +101,12 @@ const Ecole = () => {
       <Divider sx={{ mb: 3 }} />
       <Grid container spacing={2} alignItems="center" sx={{ mb: 3 }}>
         <Grid item xs={12} sm={6} md={4}>
-          <FilterSelect
-            label="Parcours"
-            options={parcoursOptions}
-            value={selectedParcours}
-            onChange={setSelectedParcours}
-          />
+      <FilterSelect
+        label="Parcours"
+        options={parcoursOptions}
+        value={selectedParcours}
+        onChange={setSelectedParcours}
+      />
         </Grid>
       </Grid>
       {isLoading ? (
@@ -124,7 +124,7 @@ const Ecole = () => {
                       <Box display="flex" alignItems="center" gap={1} mb={1}>
                         <FaBook size={20} style={{ color: '#1976d2' }} />
                         <Typography variant="h6" component="div" noWrap fontWeight={600} color="primary.main">
-                          {filiere.nom}
+                  {filiere.nom}
                         </Typography>
                       </Box>
                       <Typography variant="body2" color="text.secondary" sx={{ mb: 1 }}>

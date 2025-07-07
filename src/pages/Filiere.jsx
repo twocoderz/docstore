@@ -1,26 +1,24 @@
 import React, { useState, useEffect } from "react";
-import { useParams } from "react-router-dom";
+import { useParams, Link } from "react-router-dom";
 import FilterSelect from "../components/FilterSelect";
 import SearchBar from "../components/SearchBar";
-import UECard from "../components/UECard";
-import BackButton from "../components/BackButton";
-import Spinner from "../components/Spinner";
-import {
-  databases,
-  storage,
-  databaseId,
-  filieresCollectionId,
-  uesCollectionId,
-  bucketId,
-  Query,
-} from "../appwrite";
-import Grid from '@mui/material/Grid';
-import Card from '@mui/material/Card';
-import CardContent from '@mui/material/CardContent';
+import { databases, storage, databaseId, filieresCollectionId, uesCollectionId, bucketId, Query } from "../appwrite";
 import Typography from '@mui/material/Typography';
 import CircularProgress from '@mui/material/CircularProgress';
 import Alert from '@mui/material/Alert';
 import Button from '@mui/material/Button';
+import Box from '@mui/material/Box';
+import Divider from '@mui/material/Divider';
+import Card from '@mui/material/Card';
+import CardContent from '@mui/material/CardContent';
+import CardActions from '@mui/material/CardActions';
+import Tooltip from '@mui/material/Tooltip';
+import IconButton from '@mui/material/IconButton';
+import List from '@mui/material/List';
+import ListItem from '@mui/material/ListItem';
+import ListItemIcon from '@mui/material/ListItemIcon';
+import ListItemText from '@mui/material/ListItemText';
+import { FaLayerGroup, FaBookOpen, FaFilePdf, FaDownload, FaEye } from "react-icons/fa";
 
 const Filiere = () => {
   const { filiereName } = useParams();
@@ -102,49 +100,114 @@ const Filiere = () => {
 
   return (
     <>
-      <Grid container alignItems="center" justifyContent="space-between" sx={{ mb: 4 }}>
-        <Grid item>
+      <Box display="flex" alignItems="center" mb={3} gap={2}>
+        <FaLayerGroup size={32} style={{ color: '#1976d2' }} />
+        <Box>
           <Typography variant="h4" component="h1" fontWeight={700} color="primary.main" gutterBottom>
-            {filiere?.nom || "Chargement..."}
+          {filiere?.nom || "Chargement..."}
           </Typography>
-        </Grid>
-        <Grid item>
-          <Button variant="outlined" component={BackButton}>
-            Retour
-          </Button>
-        </Grid>
-      </Grid>
-      <Grid container spacing={2} alignItems="center" sx={{ mb: 3 }}>
-        <Grid item xs={12} sm={6} md={4}>
-          <FilterSelect
-            label="Année"
-            options={yearOptions}
-            value={selectedYear}
-            onChange={setSelectedYear}
-          />
-        </Grid>
-        <Grid item xs={12} sm={6} md={8}>
-          <SearchBar onSearch={setSearchQuery} placeholder="Rechercher une UE" />
-        </Grid>
-      </Grid>
+        </Box>
+        <Box flexGrow={1} />
+        <Button variant="outlined" component={Link} to={-1}>
+          Retour
+        </Button>
+      </Box>
+      <Divider sx={{ mb: 3 }} />
+      <Box display="flex" flexDirection={{ xs: 'column', md: 'row' }} gap={2} mb={3}>
+        <Box flex={1}>
+        <FilterSelect
+          label="Année"
+          options={yearOptions}
+          value={selectedYear}
+          onChange={setSelectedYear}
+        />
+        </Box>
+        <Box flex={2}>
+        <SearchBar onSearch={setSearchQuery} placeholder="Rechercher une UE" />
+        </Box>
+      </Box>
       {isLoading ? (
-        <Grid container justifyContent="center" sx={{ py: 6 }}>
+        <Box display="flex" justifyContent="center" sx={{ py: 6 }}>
           <CircularProgress size={48} />
-        </Grid>
+        </Box>
       ) : (
-        <Grid container spacing={3}>
+        <Box>
           {filteredUes.length > 0 ? (
-            filteredUes.map((ue) => (
-              <Grid item xs={12} sm={6} md={4} key={ue.$id}>
-                <UECard ue={ue} />
-              </Grid>
-            ))
+            <List sx={{ width: '100%' }}>
+              {filteredUes.map((ue) => (
+                <Card key={ue.$id} elevation={4} sx={{ mb: 3, borderRadius: 3, background: 'linear-gradient(135deg, #e3f2fd 0%, #fff 100%)' }}>
+                  <CardContent>
+                    <Box display="flex" alignItems="center" gap={2} mb={1}>
+                      <FaBookOpen size={22} style={{ color: '#1976d2' }} />
+                      <Tooltip title={ue.nom} arrow>
+                        <Typography variant="h6" component="div" noWrap fontWeight={600} color="primary.main" sx={{ maxWidth: { xs: 180, sm: 300, md: 400 } }}>
+                          {ue.nom}
+                        </Typography>
+                      </Tooltip>
+                      <Typography variant="caption" color="text.secondary" sx={{ ml: 2 }}>
+                        {ue.anneeEnseignement && ue.anneeEnseignement.length > 0 ? `Année : ${ue.anneeEnseignement.join(", ")}` : null}
+                      </Typography>
+                    </Box>
+                    <Tooltip title={ue.description} arrow>
+                      <Typography variant="body2" color="text.secondary" sx={{ mb: 2, maxWidth: { xs: '100%', md: 600 }, whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
+                        {ue.description}
+                      </Typography>
+                    </Tooltip>
+                    <Divider sx={{ my: 1 }} />
+                    <Typography variant="subtitle2" color="primary" sx={{ mb: 1, display: 'flex', alignItems: 'center', gap: 1 }}>
+                      <FaFilePdf style={{ marginRight: 4 }} /> Ressources
+                    </Typography>
+                    <List dense disablePadding>
+                      {ue.files && ue.files.length > 0 ? (
+                        ue.files.map((file) => (
+                          <ListItem key={file.$id} sx={{ pl: 0, pr: 0 }}
+                            secondaryAction={
+                              <Box display="flex" gap={1}>
+                                <Tooltip title="Télécharger">
+                                  <IconButton component="a" href={storage.getFileDownload(bucketId, file.$id)} target="_blank" rel="noopener noreferrer">
+                                    <FaDownload />
+                                  </IconButton>
+                                </Tooltip>
+                                <Tooltip title="Aperçu">
+                                  <IconButton component="a" href={storage.getFileView(bucketId, file.$id)} target="_blank" rel="noopener noreferrer">
+                                    <FaEye />
+                                  </IconButton>
+                                </Tooltip>
+                              </Box>
+                            }
+                          >
+                            <ListItemIcon sx={{ minWidth: 32 }}>
+                              <FaFilePdf style={{ color: '#d32f2f' }} />
+                            </ListItemIcon>
+                            <Tooltip title={file.name} arrow>
+                              <ListItemText
+                                primary={file.name}
+                                primaryTypographyProps={{
+                                  sx: {
+                                    maxWidth: { xs: 120, sm: 200, md: 300 },
+                                    whiteSpace: 'nowrap',
+                                    overflow: 'hidden',
+                                    textOverflow: 'ellipsis',
+                                  }
+                                }}
+                              />
+                            </Tooltip>
+                          </ListItem>
+                        ))
+                      ) : (
+                        <ListItem>
+                          <ListItemText primary="Aucune ressource PDF." />
+                        </ListItem>
+                      )}
+                    </List>
+                  </CardContent>
+                </Card>
+              ))}
+            </List>
           ) : (
-            <Grid item xs={12}>
-              <Alert severity="info" sx={{ my: 4 }}>Aucune UE trouvée.</Alert>
-            </Grid>
+            <Alert severity="info" sx={{ my: 4 }}>Aucune UE trouvée.</Alert>
           )}
-        </Grid>
+        </Box>
       )}
     </>
   );
