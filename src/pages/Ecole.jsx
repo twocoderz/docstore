@@ -1,8 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useParams, Link } from "react-router-dom";
 import FilterSelect from "../components/FilterSelect";
-import BackButton from "../components/BackButton";
-import Spinner from "../components/Spinner";
 import { databases, databaseId, ecolesCollectionId, filieresCollectionId, Query } from "../appwrite";
 import Grid from '@mui/material/Grid';
 import Card from '@mui/material/Card';
@@ -12,6 +10,10 @@ import CardActionArea from '@mui/material/CardActionArea';
 import CircularProgress from '@mui/material/CircularProgress';
 import Alert from '@mui/material/Alert';
 import Button from '@mui/material/Button';
+import Box from '@mui/material/Box';
+import Chip from '@mui/material/Chip';
+import Divider from '@mui/material/Divider';
+import { FaUniversity, FaBook, FaMapMarkerAlt, FaLayerGroup } from "react-icons/fa";
 
 const Ecole = () => {
   const { ecoleName } = useParams();
@@ -76,18 +78,27 @@ const Ecole = () => {
 
   return (
     <>
-      <Grid container alignItems="center" justifyContent="space-between" sx={{ mb: 4 }}>
-        <Grid item>
+      <Box display="flex" alignItems="center" mb={3} gap={2}>
+        <FaUniversity size={32} style={{ color: '#1976d2' }} />
+        <Box>
           <Typography variant="h4" component="h1" fontWeight={700} color="primary.main" gutterBottom>
             {ecole?.nom || "Chargement..."}
           </Typography>
-        </Grid>
-        <Grid item>
-          <Button variant="outlined" component={Link} to="/ecoles">
-            Retour
-          </Button>
-        </Grid>
-      </Grid>
+          {ecole?.lieu && (
+            <Box display="flex" alignItems="center" gap={1}>
+              <FaMapMarkerAlt size={16} style={{ color: '#e57373' }} />
+              <Typography variant="subtitle2" color="text.secondary">
+                {ecole.lieu}
+              </Typography>
+            </Box>
+          )}
+        </Box>
+        <Box flexGrow={1} />
+        <Button variant="outlined" component={Link} to="/ecoles">
+          Retour
+        </Button>
+      </Box>
+      <Divider sx={{ mb: 3 }} />
       <Grid container spacing={2} alignItems="center" sx={{ mb: 3 }}>
         <Grid item xs={12} sm={6} md={4}>
           <FilterSelect
@@ -103,22 +114,28 @@ const Ecole = () => {
           <CircularProgress size={48} />
         </Grid>
       ) : (
-        <Grid container spacing={3}>
+        <Grid container spacing={4}>
           {filteredFilieres.length > 0 ? (
             filteredFilieres.map((filiere) => (
               <Grid item xs={12} sm={6} md={4} key={filiere.$id}>
-                <Card elevation={3} sx={{ height: '100%' }}>
+                <Card elevation={6} sx={{ height: '100%', borderRadius: 3, background: 'linear-gradient(135deg, #f3e5f5 0%, #fff 100%)' }}>
                   <CardActionArea component={Link} to={`/filiere/${encodeURIComponent(filiere.nom)}`} sx={{ height: '100%' }}>
                     <CardContent>
-                      <Typography variant="h6" component="div" noWrap gutterBottom>
-                        {filiere.nom}
-                      </Typography>
-                      <Typography variant="body2" color="text.secondary">
+                      <Box display="flex" alignItems="center" gap={1} mb={1}>
+                        <FaBook size={20} style={{ color: '#1976d2' }} />
+                        <Typography variant="h6" component="div" noWrap fontWeight={600} color="primary.main">
+                          {filiere.nom}
+                        </Typography>
+                      </Box>
+                      <Typography variant="body2" color="text.secondary" sx={{ mb: 1 }}>
                         {filiere.description}
                       </Typography>
-                      <Typography variant="caption" color="text.secondary" display="block" sx={{ mt: 1 }}>
-                        Parcours : {filiere.parcours}
-                      </Typography>
+                      <Box display="flex" alignItems="center" gap={1} mb={1}>
+                        <FaLayerGroup size={14} style={{ color: '#1976d2' }} />
+                        <Typography variant="caption" color="text.secondary">
+                          Parcours : {filiere.parcours}
+                        </Typography>
+                      </Box>
                     </CardContent>
                   </CardActionArea>
                 </Card>
