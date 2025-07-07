@@ -1,10 +1,17 @@
 import React, { useState, useEffect } from "react";
 import { useParams, Link } from "react-router-dom";
-import { FaExclamationTriangle } from "react-icons/fa";
 import FilterSelect from "../components/FilterSelect";
 import BackButton from "../components/BackButton";
 import Spinner from "../components/Spinner";
 import { databases, databaseId, ecolesCollectionId, filieresCollectionId, Query } from "../appwrite";
+import Grid from '@mui/material/Grid';
+import Card from '@mui/material/Card';
+import CardContent from '@mui/material/CardContent';
+import Typography from '@mui/material/Typography';
+import CardActionArea from '@mui/material/CardActionArea';
+import CircularProgress from '@mui/material/CircularProgress';
+import Alert from '@mui/material/Alert';
+import Button from '@mui/material/Button';
 
 const Ecole = () => {
   const { ecoleName } = useParams();
@@ -12,8 +19,8 @@ const Ecole = () => {
   const [filieres, setFilieres] = useState([]);
   const [selectedParcours, setSelectedParcours] = useState("");
   const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState(null);
 
-  // Fetch école
   useEffect(() => {
     const fetchEcole = async () => {
       try {
@@ -22,24 +29,23 @@ const Ecole = () => {
         ]);
         if (response.documents.length > 0) {
           setEcole(response.documents[0]);
+          setError(null);
         } else {
           setEcole(null);
+          setError("École non trouvée.");
         }
       } catch (error) {
-        console.error("Erreur lors de la récupération de l'école :", error);
+        setError("Erreur lors de la récupération de l'école.");
       } finally {
         setIsLoading(false);
       }
     };
-
     setIsLoading(true);
     fetchEcole();
   }, [ecoleName]);
 
-  // Fetch filières quand école est disponible
   useEffect(() => {
     if (!ecole) return;
-
     const fetchFilieres = async () => {
       try {
         setIsLoading(true);
@@ -47,76 +53,85 @@ const Ecole = () => {
           Query.equal("idEcole", ecole.$id),
         ]);
         setFilieres(response.documents);
-        console.log("Filières récupérées pour l'école :", response.documents);
+        setError(null);
       } catch (error) {
-        console.error("Erreur lors de la récupération des filières :", error);
+        setError("Erreur lors de la récupération des filières.");
       } finally {
         setIsLoading(false);
       }
     };
-
     fetchFilieres();
   }, [ecole?.$id]);
-
-  if (!ecole && !isLoading) {
-    return (
-      <div className="min-h-screen bg-gray-100 p-4 sm:p-6 text-center">
-        <h2 className="text-lg sm:text-2xl font-semibold text-gray-800 mb-4">
-          École "{decodeURIComponent(ecoleName)}" non trouvée
-        </h2>
-        <BackButton />
-      </div>
-    );
-  }
 
   const parcoursOptions = [...new Set(filieres.map((f) => f.parcours))];
   const filteredFilieres = filieres.filter(
     (f) => !selectedParcours || f.parcours === selectedParcours
   );
 
+  if (error && !isLoading) {
+    return (
+      <Alert severity="error" sx={{ my: 4 }}>{error}</Alert>
+    );
+  }
+
   return (
-    <div className="min-h-screen bg-gray-100 p-4 sm:p-6">
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between mb-4 sm:mb-6 gap-4">
-        <h1 className="text-2xl sm:text-3xl font-bold text-gray-800 truncate">
-          {ecole?.nom || "Chargement..."}
-        </h1>
-        <BackButton />
-      </div>
-      <FilterSelect
-        label="Parcours"
-        options={parcoursOptions}
-        value={selectedParcours}
-        onChange={setSelectedParcours}
-      />
+    <>
+      <Grid container alignItems="center" justifyContent="space-between" sx={{ mb: 4 }}>
+        <Grid item>
+          <Typography variant="h4" component="h1" fontWeight={700} color="primary.main" gutterBottom>
+            {ecole?.nom || "Chargement..."}
+          </Typography>
+        </Grid>
+        <Grid item>
+          <Button variant="outlined" component={Link} to="/ecoles">
+            Retour
+          </Button>
+        </Grid>
+      </Grid>
+      <Grid container spacing={2} alignItems="center" sx={{ mb: 3 }}>
+        <Grid item xs={12} sm={6} md={4}>
+          <FilterSelect
+            label="Parcours"
+            options={parcoursOptions}
+            value={selectedParcours}
+            onChange={setSelectedParcours}
+          />
+        </Grid>
+      </Grid>
       {isLoading ? (
-        <div className="flex justify-center py-8">
-          <Spinner size="lg" />
-        </div>
+        <Grid container justifyContent="center" sx={{ py: 6 }}>
+          <CircularProgress size={48} />
+        </Grid>
       ) : (
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 mt-4 sm:mt-6">
+        <Grid container spacing={3}>
           {filteredFilieres.length > 0 ? (
             filteredFilieres.map((filiere) => (
-              <Link
-                key={filiere.$id}
-                to={`/filiere/${encodeURIComponent(filiere.nom)}`}
-                className="bg-white p-4 sm:p-6 rounded-lg shadow-md hover:shadow-lg transition duration-200"
-              >
-                <h2 className="text-lg sm:text-xl font-semibold text-gray-800 truncate">
-                  {filiere.nom}
-                </h2>
-                <p className="text-gray-600 mt-2 text-sm sm:text-base">{filiere.description}</p>
-                <p className="text-xs sm:text-sm text-gray-500 mt-1">Parcours : {filiere.parcours}</p>
-              </Link>
+              <Grid item xs={12} sm={6} md={4} key={filiere.$id}>
+                <Card elevation={3} sx={{ height: '100%' }}>
+                  <CardActionArea component={Link} to={`/filiere/${encodeURIComponent(filiere.nom)}`} sx={{ height: '100%' }}>
+                    <CardContent>
+                      <Typography variant="h6" component="div" noWrap gutterBottom>
+                        {filiere.nom}
+                      </Typography>
+                      <Typography variant="body2" color="text.secondary">
+                        {filiere.description}
+                      </Typography>
+                      <Typography variant="caption" color="text.secondary" display="block" sx={{ mt: 1 }}>
+                        Parcours : {filiere.parcours}
+                      </Typography>
+                    </CardContent>
+                  </CardActionArea>
+                </Card>
+              </Grid>
             ))
           ) : (
-            <div className="col-span-full text-center py-8">
-              <FaExclamationTriangle className="text-3xl sm:text-4xl text-yellow-500 mx-auto mb-4" />
-              <p className="text-base sm:text-lg text-gray-800">Aucune filière trouvée.</p>
-            </div>
+            <Grid item xs={12}>
+              <Alert severity="info" sx={{ my: 4 }}>Aucune filière trouvée.</Alert>
+            </Grid>
           )}
-        </div>
+        </Grid>
       )}
-    </div>
+    </>
   );
 };
 

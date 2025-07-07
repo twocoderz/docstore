@@ -1,21 +1,28 @@
 import React, { useState, useEffect } from "react";
-import { FaExclamationTriangle } from "react-icons/fa";
 import { Link } from "react-router-dom";
 import { databases, databaseId, ecolesCollectionId } from "../appwrite";
 import Spinner from "../components/Spinner";
+import Grid from '@mui/material/Grid';
+import Card from '@mui/material/Card';
+import CardContent from '@mui/material/CardContent';
+import Typography from '@mui/material/Typography';
+import CardActionArea from '@mui/material/CardActionArea';
+import CircularProgress from '@mui/material/CircularProgress';
+import Alert from '@mui/material/Alert';
 
 const Ecoles = () => {
   const [ecoles, setEcoles] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState(null);
 
   useEffect(() => {
     const fetchEcoles = async () => {
       try {
         const response = await databases.listDocuments(databaseId, ecolesCollectionId);
         setEcoles(response.documents);
-        console.log("Écoles récupérées :", response.documents);
+        setError(null);
       } catch (error) {
-        console.error("Erreur lors de la récupération des écoles :", error);
+        setError("Erreur lors de la récupération des écoles.");
       } finally {
         setIsLoading(false);
       }
@@ -24,36 +31,43 @@ const Ecoles = () => {
   }, []);
 
   return (
-    <div className="min-h-screen bg-gray-100 p-4 sm:p-6">
-      <h1 className="text-2xl sm:text-3xl font-bold text-gray-800 mb-4 sm:mb-6">Écoles</h1>
+    <>
+      <Typography variant="h4" component="h1" gutterBottom fontWeight={700} color="primary.main">
+        Écoles
+      </Typography>
       {isLoading ? (
-        <div className="flex justify-center py-8">
-          <Spinner size="lg" />
-        </div>
+        <Grid container justifyContent="center" sx={{ py: 6 }}>
+          <CircularProgress size={48} />
+        </Grid>
+      ) : error ? (
+        <Alert severity="error" sx={{ my: 4 }}>{error}</Alert>
       ) : (
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
+        <Grid container spacing={3}>
           {ecoles.length > 0 ? (
             ecoles.map((ecole) => (
-              <Link
-                key={ecole.$id}
-                to={`/ecole/${encodeURIComponent(ecole.nom)}`}
-                className="bg-white p-4 sm:p-6 rounded-lg shadow-md hover:shadow-lg transition duration-200"
-              >
-                <h2 className="text-lg sm:text-xl font-semibold text-gray-800 truncate">
-                  {ecole.nom}
-                </h2>
-                <p className="text-gray-600 mt-2 text-sm sm:text-base">{ecole.description}</p>
-              </Link>
+              <Grid item xs={12} sm={6} md={4} key={ecole.$id}>
+                <Card elevation={3} sx={{ height: '100%' }}>
+                  <CardActionArea component={Link} to={`/ecole/${encodeURIComponent(ecole.nom)}`} sx={{ height: '100%' }}>
+                    <CardContent>
+                      <Typography variant="h6" component="div" noWrap gutterBottom>
+                        {ecole.nom}
+                      </Typography>
+                      <Typography variant="body2" color="text.secondary">
+                        {ecole.description}
+                      </Typography>
+                    </CardContent>
+                  </CardActionArea>
+                </Card>
+              </Grid>
             ))
           ) : (
-            <div className="col-span-full text-center py-8">
-              <FaExclamationTriangle className="text-3xl sm:text-4xl text-yellow-500 mx-auto mb-4" />
-              <p className="text-base sm:text-lg text-gray-800">Aucune école trouvée.</p>
-            </div>
+            <Grid item xs={12}>
+              <Alert severity="info" sx={{ my: 4 }}>Aucune école trouvée.</Alert>
+            </Grid>
           )}
-        </div>
+        </Grid>
       )}
-    </div>
+    </>
   );
 };
 
