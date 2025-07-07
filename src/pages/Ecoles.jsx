@@ -24,7 +24,7 @@ const Ecoles = () => {
         const response = await databases.listDocuments(databaseId, ecolesCollectionId);
         setEcoles(response.documents);
         setError(null);
-      } catch (error) {
+      } catch {
         setError("Erreur lors de la récupération des écoles.");
       } finally {
         setIsLoading(false);

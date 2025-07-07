@@ -11,7 +11,6 @@ import CircularProgress from '@mui/material/CircularProgress';
 import Alert from '@mui/material/Alert';
 import Button from '@mui/material/Button';
 import Box from '@mui/material/Box';
-import Chip from '@mui/material/Chip';
 import Divider from '@mui/material/Divider';
 import { FaUniversity, FaBook, FaMapMarkerAlt, FaLayerGroup } from "react-icons/fa";
 
@@ -36,7 +35,7 @@ const Ecole = () => {
           setEcole(null);
           setError("École non trouvée.");
         }
-      } catch (error) {
+      } catch {
         setError("Erreur lors de la récupération de l'école.");
       } finally {
         setIsLoading(false);
@@ -56,14 +55,14 @@ const Ecole = () => {
         ]);
         setFilieres(response.documents);
         setError(null);
-      } catch (error) {
+      } catch {
         setError("Erreur lors de la récupération des filières.");
       } finally {
         setIsLoading(false);
       }
     };
     fetchFilieres();
-  }, [ecole?.$id]);
+  }, [ecole]);
 
   const parcoursOptions = [...new Set(filieres.map((f) => f.parcours))];
   const filteredFilieres = filieres.filter(

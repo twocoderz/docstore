@@ -43,7 +43,7 @@ const Filiere = () => {
           setFiliere(null);
           setError(`Filière "${normalizedName}" non trouvée`);
         }
-      } catch (error) {
+      } catch {
         setError("Erreur lors du chargement de la filière");
       } finally {
         setIsLoading(false);
@@ -69,7 +69,7 @@ const Filiere = () => {
                 try {
                   const file = await storage.getFile(bucketId, fileId);
                   return { $id: file.$id, name: file.name, mimeType: file.mimeType };
-                } catch (error) {
+                } catch {
                   return null;
                 }
               })
@@ -78,14 +78,14 @@ const Filiere = () => {
           })
         );
         setUes(uesWithFiles);
-      } catch (error) {
+      } catch {
         setError("Erreur lors du chargement des cours");
       } finally {
         setIsLoading(false);
       }
     };
     fetchUEs();
-  }, [filiere?.$id]);
+  }, [filiere, error]);
 
   const yearOptions = [...new Set(ues.flatMap((ue) => ue.anneeEnseignement))];
   const filteredUes = ues
