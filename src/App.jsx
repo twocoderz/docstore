@@ -8,14 +8,14 @@ import Box from '@mui/material/Box';
 import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
-// import LibraryBooksIcon from '@mui/icons-material/LibraryBooks';
+import LibraryBooksIcon from '@mui/icons-material/LibraryBooks';
 
 const App = () => {
   return (
     <Router>
       <AppBar position="static">
         <Toolbar>
-          {/* <LibraryBooksIcon sx={{ mr: 2 }} /> */}
+          <LibraryBooksIcon sx={{ mr: 2 }} />
           <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
             <Link to="/ecoles" style={{ color: 'inherit', textDecoration: 'none' }}>
               Bibliothèque EPL

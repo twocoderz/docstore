@@ -19,6 +19,16 @@ import ListItem from '@mui/material/ListItem';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
 import { FaLayerGroup, FaBookOpen, FaFilePdf, FaDownload, FaEye } from "react-icons/fa";
+import Dialog from '@mui/material/Dialog';
+import DialogTitle from '@mui/material/DialogTitle';
+import DialogContent from '@mui/material/DialogContent';
+import Pagination from '@mui/material/Pagination';
+import Accordion from '@mui/material/Accordion';
+import AccordionSummary from '@mui/material/AccordionSummary';
+import AccordionDetails from '@mui/material/AccordionDetails';
+import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
+
+const UES_PER_PAGE = 5;
 
 const Filiere = () => {
   const { filiereName } = useParams();
@@ -28,6 +38,9 @@ const Filiere = () => {
   const [searchQuery, setSearchQuery] = useState("");
   const [error, setError] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
+  const [previewUrl, setPreviewUrl] = useState(null);
+  const [previewOpen, setPreviewOpen] = useState(false);
+  const [page, setPage] = useState(1);
 
   useEffect(() => {
     const fetchFiliere = async () => {
@@ -98,6 +111,20 @@ const Filiere = () => {
     );
   }
 
+  const handlePreview = (fileId) => {
+    setPreviewUrl(storage.getFileView(bucketId, fileId));
+    setPreviewOpen(true);
+  };
+  const handleClosePreview = () => {
+    setPreviewOpen(false);
+    setPreviewUrl(null);
+  };
+
+  // Pagination logic
+  const paginatedUes = filteredUes.slice((page - 1) * UES_PER_PAGE, page * UES_PER_PAGE);
+  const pageCount = Math.ceil(filteredUes.length / UES_PER_PAGE);
+  const handlePageChange = (event, value) => setPage(value);
+
   return (
     <>
       <Box display="flex" alignItems="center" mb={3} gap={2}>
@@ -133,82 +160,109 @@ const Filiere = () => {
       ) : (
         <Box>
           {filteredUes.length > 0 ? (
-            <List sx={{ width: '100%' }}>
-              {filteredUes.map((ue) => (
-                <Card key={ue.$id} elevation={4} sx={{ mb: 3, borderRadius: 3, background: 'linear-gradient(135deg, #e3f2fd 0%, #fff 100%)' }}>
-                  <CardContent>
-                    <Box display="flex" alignItems="center" gap={2} mb={1}>
-                      <FaBookOpen size={22} style={{ color: '#1976d2' }} />
-                      <Tooltip title={ue.nom} arrow>
-                        <Typography variant="h6" component="div" noWrap fontWeight={600} color="primary.main" sx={{ maxWidth: { xs: 180, sm: 300, md: 400 } }}>
-                          {ue.nom}
+            <>
+              <List sx={{ width: '100%' }}>
+                {paginatedUes.map((ue) => (
+                  <Card key={ue.$id} elevation={4} sx={{ mb: 3, borderRadius: 3, background: 'linear-gradient(135deg, #e3f2fd 0%, #fff 100%)' }}>
+                    <CardContent>
+                      <Box display="flex" alignItems="center" gap={2} mb={1}>
+                        <FaBookOpen size={22} style={{ color: '#1976d2' }} />
+                        <Tooltip title={ue.nom} arrow>
+                          <Typography variant="h6" component="div" noWrap fontWeight={600} color="primary.main" sx={{ maxWidth: { xs: 180, sm: 300, md: 400 } }}>
+                            {ue.nom}
+                          </Typography>
+                        </Tooltip>
+                        <Typography variant="caption" color="text.secondary" sx={{ ml: 2 }}>
+                          {ue.anneeEnseignement && ue.anneeEnseignement.length > 0 ? `Année : ${ue.anneeEnseignement.join(", ")}` : null}
+                        </Typography>
+                      </Box>
+                      <Tooltip title={ue.description} arrow>
+                        <Typography variant="body2" color="text.secondary" sx={{ mb: 2, maxWidth: { xs: '100%', md: 600 }, whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
+                          {ue.description}
                         </Typography>
                       </Tooltip>
-                      <Typography variant="caption" color="text.secondary" sx={{ ml: 2 }}>
-                        {ue.anneeEnseignement && ue.anneeEnseignement.length > 0 ? `Année : ${ue.anneeEnseignement.join(", ")}` : null}
-                      </Typography>
-                    </Box>
-                    <Tooltip title={ue.description} arrow>
-                      <Typography variant="body2" color="text.secondary" sx={{ mb: 2, maxWidth: { xs: '100%', md: 600 }, whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
-                        {ue.description}
-                      </Typography>
-                    </Tooltip>
-                    <Divider sx={{ my: 1 }} />
-                    <Typography variant="subtitle2" color="primary" sx={{ mb: 1, display: 'flex', alignItems: 'center', gap: 1 }}>
-                      <FaFilePdf style={{ marginRight: 4 }} /> Ressources
-                    </Typography>
-                    <List dense disablePadding>
-                      {ue.files && ue.files.length > 0 ? (
-                        ue.files.map((file) => (
-                          <ListItem key={file.$id} sx={{ pl: 0, pr: 0 }}
-                            secondaryAction={
-                              <Box display="flex" gap={1}>
-                                <Tooltip title="Télécharger">
-                                  <IconButton component="a" href={storage.getFileDownload(bucketId, file.$id)} target="_blank" rel="noopener noreferrer">
-                                    <FaDownload />
-                                  </IconButton>
-                                </Tooltip>
-                                <Tooltip title="Aperçu">
-                                  <IconButton component="a" href={storage.getFileView(bucketId, file.$id)} target="_blank" rel="noopener noreferrer">
-                                    <FaEye />
-                                  </IconButton>
-                                </Tooltip>
-                              </Box>
-                            }
-                          >
-                            <ListItemIcon sx={{ minWidth: 32 }}>
-                              <FaFilePdf style={{ color: '#d32f2f' }} />
-                            </ListItemIcon>
-                            <Tooltip title={file.name} arrow>
-                              <ListItemText
-                                primary={file.name}
-                                primaryTypographyProps={{
-                                  sx: {
-                                    maxWidth: { xs: 120, sm: 200, md: 300 },
-                                    whiteSpace: 'nowrap',
-                                    overflow: 'hidden',
-                                    textOverflow: 'ellipsis',
+                      <Divider sx={{ my: 1 }} />
+                      <Accordion sx={{ background: 'transparent', boxShadow: 'none' }}>
+                        <AccordionSummary expandIcon={<ExpandMoreIcon />}>
+                          <Typography variant="subtitle2" color="primary" sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+                            <FaFilePdf style={{ marginRight: 4 }} /> Ressources
+                          </Typography>
+                        </AccordionSummary>
+                        <AccordionDetails>
+                          <List dense disablePadding>
+                            {ue.files && ue.files.length > 0 ? (
+                              ue.files.map((file) => (
+                                <ListItem key={file.$id} sx={{ pl: 0, pr: 0 }}
+                                  secondaryAction={
+                                    <Box display="flex" gap={1}>
+                                      <Tooltip title="Télécharger">
+                                        <IconButton component="a" href={storage.getFileDownload(bucketId, file.$id)} target="_blank" rel="noopener noreferrer">
+                                          <FaDownload />
+                                        </IconButton>
+                                      </Tooltip>
+                                      <Tooltip title="Aperçu">
+                                        <IconButton onClick={() => handlePreview(file.$id)}>
+                                          <FaEye />
+                                        </IconButton>
+                                      </Tooltip>
+                                    </Box>
                                   }
-                                }}
-                              />
-                            </Tooltip>
-                          </ListItem>
-                        ))
-                      ) : (
-                        <ListItem>
-                          <ListItemText primary="Aucune ressource PDF." />
-                        </ListItem>
-                      )}
-                    </List>
-                  </CardContent>
-                </Card>
-              ))}
-            </List>
+                                >
+                                  <ListItemIcon sx={{ minWidth: 32 }}>
+                                    <FaFilePdf style={{ color: '#d32f2f' }} />
+                                  </ListItemIcon>
+                                  <Tooltip title={file.name} arrow>
+                                    <ListItemText
+                                      primary={file.name}
+                                      primaryTypographyProps={{
+                                        sx: {
+                                          maxWidth: { xs: 120, sm: 200, md: 300 },
+                                          whiteSpace: 'nowrap',
+                                          overflow: 'hidden',
+                                          textOverflow: 'ellipsis',
+                                        }
+                                      }}
+                                    />
+                                  </Tooltip>
+                                </ListItem>
+                              ))
+                            ) : (
+                              <ListItem>
+                                <ListItemText primary="Aucune ressource PDF." />
+                              </ListItem>
+                            )}
+                          </List>
+                        </AccordionDetails>
+                      </Accordion>
+                    </CardContent>
+                  </Card>
+                ))}
+              </List>
+              {pageCount > 1 && (
+                <Box display="flex" justifyContent="center" mt={2}>
+                  <Pagination count={pageCount} page={page} onChange={handlePageChange} color="primary" />
+                </Box>
+              )}
+            </>
           ) : (
             <Alert severity="info" sx={{ my: 4 }}>Aucune UE trouvée.</Alert>
           )}
         </Box>
       )}
+      <Dialog open={previewOpen} onClose={handleClosePreview} maxWidth="md" fullWidth>
+        <DialogTitle>Aperçu du PDF</DialogTitle>
+        <DialogContent sx={{ p: 0 }}>
+          {previewUrl && (
+            <iframe
+              src={previewUrl}
+              title="Aperçu PDF"
+              width="100%"
+              height="600px"
+              style={{ border: 0 }}
+            />
+          )}
+        </DialogContent>
+      </Dialog>
     </>
   );
 };
