@@ -1,20 +1,24 @@
 import React, { useState, useEffect } from "react";
-import { useParams } from "react-router-dom";
-import { FaExclamationTriangle } from "react-icons/fa";
+import { useParams, Link } from "react-router-dom";
 import FilterSelect from "../components/FilterSelect";
 import SearchBar from "../components/SearchBar";
-import UECard from "../components/UECard";
-import BackButton from "../components/BackButton";
-import Spinner from "../components/Spinner";
-import {
-  databases,
-  storage,
-  databaseId,
-  filieresCollectionId,
-  uesCollectionId,
-  bucketId,
-  Query,
-} from "../appwrite";
+import { databases, storage, databaseId, filieresCollectionId, uesCollectionId, bucketId, Query } from "../appwrite";
+import Typography from '@mui/material/Typography';
+import CircularProgress from '@mui/material/CircularProgress';
+import Alert from '@mui/material/Alert';
+import Button from '@mui/material/Button';
+import Box from '@mui/material/Box';
+import Divider from '@mui/material/Divider';
+import Card from '@mui/material/Card';
+import CardContent from '@mui/material/CardContent';
+import CardActions from '@mui/material/CardActions';
+import Tooltip from '@mui/material/Tooltip';
+import IconButton from '@mui/material/IconButton';
+import List from '@mui/material/List';
+import ListItem from '@mui/material/ListItem';
+import ListItemIcon from '@mui/material/ListItemIcon';
+import ListItemText from '@mui/material/ListItemText';
+import { FaLayerGroup, FaBookOpen, FaFilePdf, FaDownload, FaEye } from "react-icons/fa";
 
 const Filiere = () => {
   const { filiereName } = useParams();
@@ -25,38 +29,32 @@ const Filiere = () => {
   const [error, setError] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
 
-  // Fetch filière
   useEffect(() => {
     const fetchFiliere = async () => {
       try {
         const normalizedName = decodeURIComponent(filiereName).trim();
-        console.log("Recherche de la filière :", normalizedName);
         const response = await databases.listDocuments(databaseId, filieresCollectionId, [
           Query.equal("nom", normalizedName),
         ]);
         if (response.documents.length > 0) {
           setFiliere(response.documents[0]);
-          console.log("Filière trouvée :", response.documents[0]);
+          setError(null);
         } else {
-          console.log("Aucune filière trouvée pour :", normalizedName);
+          setFiliere(null);
           setError(`Filière "${normalizedName}" non trouvée`);
         }
       } catch (error) {
-        console.error("Erreur lors de la récupération de la filière :", error);
         setError("Erreur lors du chargement de la filière");
       } finally {
         setIsLoading(false);
       }
     };
-
     setIsLoading(true);
     fetchFiliere();
   }, [filiereName]);
 
-  // Fetch UEs quand filière est disponible
   useEffect(() => {
     if (!filiere || error) return;
-
     const fetchUEs = async () => {
       try {
         setIsLoading(true);
@@ -72,7 +70,6 @@ const Filiere = () => {
                   const file = await storage.getFile(bucketId, fileId);
                   return { $id: file.$id, name: file.name, mimeType: file.mimeType };
                 } catch (error) {
-                  console.warn(`Fichier ${fileId} introuvable :`, error.message);
                   return null;
                 }
               })
@@ -82,66 +79,137 @@ const Filiere = () => {
         );
         setUes(uesWithFiles);
       } catch (error) {
-        console.error("Erreur lors de la récupération des UEs :", error);
         setError("Erreur lors du chargement des cours");
       } finally {
         setIsLoading(false);
       }
     };
-
     fetchUEs();
   }, [filiere?.$id]);
-
-  if (error || (!filiere && !isLoading)) {
-    return (
-      <div className="min-h-screen bg-gray-100 p-4 sm:p-6 text-center">
-        <h2 className="text-lg sm:text-2xl font-semibold text-gray-800 mb-4">
-          {error || `Filière "${decodeURIComponent(filiereName)}" non trouvée`}
-        </h2>
-        <BackButton />
-      </div>
-    );
-  }
 
   const yearOptions = [...new Set(ues.flatMap((ue) => ue.anneeEnseignement))];
   const filteredUes = ues
     .filter((ue) => ue.nom.toLowerCase().includes(searchQuery.toLowerCase()))
     .filter((ue) => (selectedYear ? ue.anneeEnseignement.includes(selectedYear) : true));
 
+  if (error || (!filiere && !isLoading)) {
+    return (
+      <Alert severity="error" sx={{ my: 4 }}>{error || `Filière "${decodeURIComponent(filiereName)}" non trouvée`}</Alert>
+    );
+  }
+
   return (
-    <div className="min-h-screen bg-gray-100 p-4 sm:p-6">
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between mb-4 sm:mb-6 gap-4">
-        <h1 className="text-2xl sm:text-3xl font-bold text-gray-800 truncate">
+    <>
+      <Box display="flex" alignItems="center" mb={3} gap={2}>
+        <FaLayerGroup size={32} style={{ color: '#1976d2' }} />
+        <Box>
+          <Typography variant="h4" component="h1" fontWeight={700} color="primary.main" gutterBottom>
           {filiere?.nom || "Chargement..."}
-        </h1>
-        <BackButton />
-      </div>
-      <div className="flex flex-col sm:flex-row gap-4 mb-4 sm:mb-6">
+          </Typography>
+        </Box>
+        <Box flexGrow={1} />
+        <Button variant="outlined" component={Link} to={-1}>
+          Retour
+        </Button>
+      </Box>
+      <Divider sx={{ mb: 3 }} />
+      <Box display="flex" flexDirection={{ xs: 'column', md: 'row' }} gap={2} mb={3}>
+        <Box flex={1}>
         <FilterSelect
           label="Année"
           options={yearOptions}
           value={selectedYear}
           onChange={setSelectedYear}
         />
+        </Box>
+        <Box flex={2}>
         <SearchBar onSearch={setSearchQuery} placeholder="Rechercher une UE" />
-      </div>
+        </Box>
+      </Box>
       {isLoading ? (
-        <div className="flex justify-center py-8">
-          <Spinner size="lg" />
-        </div>
+        <Box display="flex" justifyContent="center" sx={{ py: 6 }}>
+          <CircularProgress size={48} />
+        </Box>
       ) : (
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
+        <Box>
           {filteredUes.length > 0 ? (
-            filteredUes.map((ue) => <UECard key={ue.$id} ue={ue} />)
+            <List sx={{ width: '100%' }}>
+              {filteredUes.map((ue) => (
+                <Card key={ue.$id} elevation={4} sx={{ mb: 3, borderRadius: 3, background: 'linear-gradient(135deg, #e3f2fd 0%, #fff 100%)' }}>
+                  <CardContent>
+                    <Box display="flex" alignItems="center" gap={2} mb={1}>
+                      <FaBookOpen size={22} style={{ color: '#1976d2' }} />
+                      <Tooltip title={ue.nom} arrow>
+                        <Typography variant="h6" component="div" noWrap fontWeight={600} color="primary.main" sx={{ maxWidth: { xs: 180, sm: 300, md: 400 } }}>
+                          {ue.nom}
+                        </Typography>
+                      </Tooltip>
+                      <Typography variant="caption" color="text.secondary" sx={{ ml: 2 }}>
+                        {ue.anneeEnseignement && ue.anneeEnseignement.length > 0 ? `Année : ${ue.anneeEnseignement.join(", ")}` : null}
+                      </Typography>
+                    </Box>
+                    <Tooltip title={ue.description} arrow>
+                      <Typography variant="body2" color="text.secondary" sx={{ mb: 2, maxWidth: { xs: '100%', md: 600 }, whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
+                        {ue.description}
+                      </Typography>
+                    </Tooltip>
+                    <Divider sx={{ my: 1 }} />
+                    <Typography variant="subtitle2" color="primary" sx={{ mb: 1, display: 'flex', alignItems: 'center', gap: 1 }}>
+                      <FaFilePdf style={{ marginRight: 4 }} /> Ressources
+                    </Typography>
+                    <List dense disablePadding>
+                      {ue.files && ue.files.length > 0 ? (
+                        ue.files.map((file) => (
+                          <ListItem key={file.$id} sx={{ pl: 0, pr: 0 }}
+                            secondaryAction={
+                              <Box display="flex" gap={1}>
+                                <Tooltip title="Télécharger">
+                                  <IconButton component="a" href={storage.getFileDownload(bucketId, file.$id)} target="_blank" rel="noopener noreferrer">
+                                    <FaDownload />
+                                  </IconButton>
+                                </Tooltip>
+                                <Tooltip title="Aperçu">
+                                  <IconButton component="a" href={storage.getFileView(bucketId, file.$id)} target="_blank" rel="noopener noreferrer">
+                                    <FaEye />
+                                  </IconButton>
+                                </Tooltip>
+                              </Box>
+                            }
+                          >
+                            <ListItemIcon sx={{ minWidth: 32 }}>
+                              <FaFilePdf style={{ color: '#d32f2f' }} />
+                            </ListItemIcon>
+                            <Tooltip title={file.name} arrow>
+                              <ListItemText
+                                primary={file.name}
+                                primaryTypographyProps={{
+                                  sx: {
+                                    maxWidth: { xs: 120, sm: 200, md: 300 },
+                                    whiteSpace: 'nowrap',
+                                    overflow: 'hidden',
+                                    textOverflow: 'ellipsis',
+                                  }
+                                }}
+                              />
+                            </Tooltip>
+                          </ListItem>
+                        ))
+                      ) : (
+                        <ListItem>
+                          <ListItemText primary="Aucune ressource PDF." />
+                        </ListItem>
+                      )}
+                    </List>
+                  </CardContent>
+                </Card>
+              ))}
+            </List>
           ) : (
-            <div className="col-span-full text-center py-8">
-              <FaExclamationTriangle className="text-3xl sm:text-4xl text-yellow-500 mx-auto mb-4" />
-              <p className="text-base sm:text-lg text-gray-800">Aucune UE trouvée.</p>
-            </div>
+            <Alert severity="info" sx={{ my: 4 }}>Aucune UE trouvée.</Alert>
           )}
-        </div>
+        </Box>
       )}
-    </div>
+    </>
   );
 };
 

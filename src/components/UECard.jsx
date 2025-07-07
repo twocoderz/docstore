@@ -1,16 +1,34 @@
 import React from "react";
 import ResourceExplorer from "./ResourceExplorer";
+import Card from '@mui/material/Card';
+import CardContent from '@mui/material/CardContent';
+import Typography from '@mui/material/Typography';
+import Box from '@mui/material/Box';
+import Divider from '@mui/material/Divider';
+import { FaBookOpen } from "react-icons/fa";
 
 const UECard = ({ ue }) => {
   return (
-    <div className="bg-white p-4 sm:p-6 rounded-lg shadow-md">
-      <h2 className="text-lg sm:text-xl font-semibold text-gray-800 truncate">{ue.nom}</h2>
-      <p className="text-gray-600 mt-2 text-sm sm:text-base">{ue.description}</p>
-      <p className="text-xs sm:text-sm text-gray-500 mt-1">Année : {ue.anneeEnseignement.join(", ")}</p>
-      <div className="mt-4">
+    <Card elevation={3} sx={{ height: '100%' }}>
+      <CardContent>
+        <Box display="flex" alignItems="center" mb={1}>
+          <FaBookOpen size={22} style={{ marginRight: 8, color: '#1976d2' }} />
+          <Typography variant="h6" component="div" noWrap fontWeight={600} color="primary.main">
+            {ue.nom}
+          </Typography>
+        </Box>
+        <Typography variant="body2" color="text.secondary" sx={{ mb: 1 }}>
+          {ue.description}
+        </Typography>
+        <Typography variant="caption" color="text.secondary" display="block" sx={{ mb: 2 }}>
+          Année : {ue.anneeEnseignement.join(", ")}
+        </Typography>
+        <Divider sx={{ my: 1 }} />
+        <Box mt={2}>
         <ResourceExplorer files={ue.files || []} />
-      </div>
-    </div>
+        </Box>
+      </CardContent>
+    </Card>
   );
 };
 

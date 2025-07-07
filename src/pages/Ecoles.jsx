@@ -1,21 +1,31 @@
 import React, { useState, useEffect } from "react";
-import { FaExclamationTriangle } from "react-icons/fa";
 import { Link } from "react-router-dom";
 import { databases, databaseId, ecolesCollectionId } from "../appwrite";
-import Spinner from "../components/Spinner";
+import Grid from '@mui/material/Grid';
+import Card from '@mui/material/Card';
+import CardContent from '@mui/material/CardContent';
+import Typography from '@mui/material/Typography';
+import CardActionArea from '@mui/material/CardActionArea';
+import CircularProgress from '@mui/material/CircularProgress';
+import Alert from '@mui/material/Alert';
+import Box from '@mui/material/Box';
+import Chip from '@mui/material/Chip';
+import Divider from '@mui/material/Divider';
+import { FaSchool, FaMapMarkerAlt, FaUniversity, FaBook } from "react-icons/fa";
 
 const Ecoles = () => {
   const [ecoles, setEcoles] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState(null);
 
   useEffect(() => {
     const fetchEcoles = async () => {
       try {
         const response = await databases.listDocuments(databaseId, ecolesCollectionId);
         setEcoles(response.documents);
-        console.log("Écoles récupérées :", response.documents);
+        setError(null);
       } catch (error) {
-        console.error("Erreur lors de la récupération des écoles :", error);
+        setError("Erreur lors de la récupération des écoles.");
       } finally {
         setIsLoading(false);
       }
@@ -24,36 +34,67 @@ const Ecoles = () => {
   }, []);
 
   return (
-    <div className="min-h-screen bg-gray-100 p-4 sm:p-6">
-      <h1 className="text-2xl sm:text-3xl font-bold text-gray-800 mb-4 sm:mb-6">Écoles</h1>
+    <>
+      <Box display="flex" alignItems="center" mb={3} gap={2}>
+        <FaSchool size={36} style={{ color: '#1976d2' }} />
+        <Box>
+          <Typography variant="h4" component="h1" fontWeight={700} color="primary.main" gutterBottom>
+            Écoles
+          </Typography>
+          <Typography variant="subtitle1" color="text.secondary">
+            Découvrez toutes les écoles et leurs filières associées.
+          </Typography>
+        </Box>
+      </Box>
+      <Divider sx={{ mb: 3 }} />
       {isLoading ? (
-        <div className="flex justify-center py-8">
-          <Spinner size="lg" />
-        </div>
+        <Grid container justifyContent="center" sx={{ py: 6 }}>
+          <CircularProgress size={48} />
+        </Grid>
+      ) : error ? (
+        <Alert severity="error" sx={{ my: 4 }}>{error}</Alert>
       ) : (
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
+        <Grid container spacing={4}>
           {ecoles.length > 0 ? (
             ecoles.map((ecole) => (
-              <Link
-                key={ecole.$id}
-                to={`/ecole/${encodeURIComponent(ecole.nom)}`}
-                className="bg-white p-4 sm:p-6 rounded-lg shadow-md hover:shadow-lg transition duration-200"
-              >
-                <h2 className="text-lg sm:text-xl font-semibold text-gray-800 truncate">
+              <Grid item xs={12} sm={6} md={4} key={ecole.$id}>
+                <Card elevation={6} sx={{ height: '100%', borderRadius: 3, background: 'linear-gradient(135deg, #e3f2fd 0%, #fff 100%)' }}>
+                  <CardActionArea component={Link} to={`/ecole/${encodeURIComponent(ecole.nom)}`} sx={{ height: '100%' }}>
+                    <CardContent>
+                      <Box display="flex" alignItems="center" gap={1} mb={1}>
+                        <FaUniversity size={22} style={{ color: '#1976d2' }} />
+                        <Typography variant="h6" component="div" noWrap fontWeight={600} color="primary.main">
                   {ecole.nom}
-                </h2>
-                <p className="text-gray-600 mt-2 text-sm sm:text-base">{ecole.description}</p>
-              </Link>
+                        </Typography>
+                      </Box>
+                      <Typography variant="body2" color="text.secondary" sx={{ mb: 1 }}>
+                        {ecole.description}
+                      </Typography>
+                      {ecole.lieu && (
+                        <Box display="flex" alignItems="center" gap={1} mb={1}>
+                          <FaMapMarkerAlt size={16} style={{ color: '#e57373' }} />
+                          <Typography variant="caption" color="text.secondary">
+                            {ecole.lieu}
+                          </Typography>
+                        </Box>
+                      )}
+                      <Box mt={2} display="flex" gap={1} flexWrap="wrap">
+                        <Chip icon={<FaBook size={16} />} label="Filières" color="primary" variant="outlined" size="small" />
+                        {/* Ajoute d'autres chips ou infos si besoin */}
+                      </Box>
+                    </CardContent>
+                  </CardActionArea>
+                </Card>
+              </Grid>
             ))
           ) : (
-            <div className="col-span-full text-center py-8">
-              <FaExclamationTriangle className="text-3xl sm:text-4xl text-yellow-500 mx-auto mb-4" />
-              <p className="text-base sm:text-lg text-gray-800">Aucune école trouvée.</p>
-            </div>
+            <Grid item xs={12}>
+              <Alert severity="info" sx={{ my: 4 }}>Aucune école trouvée.</Alert>
+            </Grid>
           )}
-        </div>
+        </Grid>
       )}
-    </div>
+    </>
   );
 };
 
