@@ -42,6 +42,7 @@ const Filiere = () => {
   const [previewOpen, setPreviewOpen] = useState(false);
   const [page, setPage] = useState(1);
 
+  // S'exécute au démarrage de la page
   useEffect(() => {
     const fetchFiliere = async () => {
       try {
