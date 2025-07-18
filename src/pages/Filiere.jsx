@@ -27,6 +27,7 @@ import Accordion from '@mui/material/Accordion';
 import AccordionSummary from '@mui/material/AccordionSummary';
 import AccordionDetails from '@mui/material/AccordionDetails';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
+import deburr from 'lodash/deburr';
 
 const UES_PER_PAGE = 5;
 
@@ -102,9 +103,26 @@ const Filiere = () => {
   }, [filiere, error]);
 
   const yearOptions = [...new Set(ues.flatMap((ue) => ue.anneeEnseignement))];
+  // LOGS pour debug
+  console.log('UES:', ues.map(ue => ({ nom: ue.nom, anneeEnseignement: ue.anneeEnseignement })));
+  console.log('yearOptions:', yearOptions);
+  console.log('selectedYear:', selectedYear);
+
+  // Fonction utilitaire pour normaliser (casse, accents, espaces)
+  const normalize = (str) => deburr(String(str).toLowerCase().trim());
+
   const filteredUes = ues
     .filter((ue) => ue.nom.toLowerCase().includes(searchQuery.toLowerCase()))
-    .filter((ue) => (selectedYear ? ue.anneeEnseignement.includes(selectedYear) : true));
+    .filter((ue) => {
+      if (!selectedYear) return true;
+      if (!ue.anneeEnseignement) return false;
+      // Si c'est un tableau
+      if (Array.isArray(ue.anneeEnseignement)) {
+        return ue.anneeEnseignement.some(y => normalize(y) === normalize(selectedYear));
+      }
+      // Si c'est une string
+      return normalize(ue.anneeEnseignement) === normalize(selectedYear);
+    });
 
   if (error || (!filiere && !isLoading)) {
     return (
