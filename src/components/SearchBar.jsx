@@ -1,12 +1,21 @@
 import React from "react";
+import OutlinedInput from '@mui/material/OutlinedInput';
+import InputAdornment from '@mui/material/InputAdornment';
+import { FaSearch } from "react-icons/fa";
 
 const SearchBar = ({ onSearch, placeholder }) => {
   return (
-    <input
-      type="text"
+    <OutlinedInput
+      fullWidth
+      size="small"
       onChange={(e) => onSearch(e.target.value)}
       placeholder={placeholder}
-      className="w-full p-2 border rounded-md bg-white text-gray-800 placeholder-gray-400 text-sm sm:text-base"
+      startAdornment={
+        <InputAdornment position="start">
+          <FaSearch size={16} style={{ color: '#1976d2' }} />
+        </InputAdornment>
+      }
+      sx={{ borderRadius: 2, background: '#f5f5f5' }}
     />
   );
 };
