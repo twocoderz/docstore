@@ -84,9 +84,6 @@ const Filiere = () => {
           ]
         );
         
-        console.log('Nombre total d\'UE récupérées:', response.documents.length);
-        console.log('Filiere ID utilisé:', filiere.$id);
-        
         const uesWithFiles = await Promise.all(
           response.documents.map(async (ue) => {
             const fileIds = ue.ressources || [];
@@ -105,7 +102,6 @@ const Filiere = () => {
         );
         setUes(uesWithFiles);
       } catch (error) {
-        console.error('Erreur lors du chargement des UE:', error);
         setError("Erreur lors du chargement des cours");
       } finally {
         setIsLoading(false);
@@ -114,14 +110,18 @@ const Filiere = () => {
     fetchUEs();
   }, [filiere, error]);
 
-  const yearOptions = [...new Set(ues.flatMap((ue) => ue.anneeEnseignement))];
-  // LOGS pour debug
-  console.log('UES:', ues.map(ue => ({ nom: ue.nom, anneeEnseignement: ue.anneeEnseignement })));
-  console.log('yearOptions:', yearOptions);
-  console.log('selectedYear:', selectedYear);
-
   // Fonction utilitaire pour normaliser (casse, accents, espaces)
   const normalize = (str) => deburr(String(str).toLowerCase().trim());
+
+  // Extraire et trier les années par ordre croissant
+  const yearOptions = [...new Set(ues.flatMap((ue) => ue.anneeEnseignement))]
+    .filter(year => year) // Filtrer les valeurs vides
+    .sort((a, b) => {
+      // Extraire le numéro de l'année pour le tri
+      const yearA = parseInt(a.match(/\d+/)?.[0] || '0');
+      const yearB = parseInt(b.match(/\d+/)?.[0] || '0');
+      return yearA - yearB;
+    });
 
   const filteredUes = ues
     .filter((ue) => ue.nom.toLowerCase().includes(searchQuery.toLowerCase()))
