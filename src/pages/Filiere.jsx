@@ -73,9 +73,20 @@ const Filiere = () => {
     const fetchUEs = async () => {
       try {
         setIsLoading(true);
-        const response = await databases.listDocuments(databaseId, uesCollectionId, [
-          Query.equal("idFiliere", filiere.$id),
-        ]);
+        
+        // Récupérer toutes les UE de la filière avec une limite élevée
+        const response = await databases.listDocuments(
+          databaseId, 
+          uesCollectionId, 
+          [
+            Query.equal("idFiliere", filiere.$id),
+            Query.limit(1000) // Augmenter la limite pour récupérer toutes les UE
+          ]
+        );
+        
+        console.log('Nombre total d\'UE récupérées:', response.documents.length);
+        console.log('Filiere ID utilisé:', filiere.$id);
+        
         const uesWithFiles = await Promise.all(
           response.documents.map(async (ue) => {
             const fileIds = ue.ressources || [];
@@ -93,7 +104,8 @@ const Filiere = () => {
           })
         );
         setUes(uesWithFiles);
-      } catch {
+      } catch (error) {
+        console.error('Erreur lors du chargement des UE:', error);
         setError("Erreur lors du chargement des cours");
       } finally {
         setIsLoading(false);
