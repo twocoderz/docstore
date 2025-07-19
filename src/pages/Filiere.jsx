@@ -136,6 +136,18 @@ const Filiere = () => {
       return normalize(ue.anneeEnseignement) === normalize(selectedYear);
     });
 
+  // Trie les UE de la 1ère à la 3ème année
+  const sortedUes = [...filteredUes].sort((a, b) => {
+    // Trouver la plus petite année dans chaque UE
+    const getMinYear = (ue) => {
+      if (!ue.anneeEnseignement) return 99;
+      const years = Array.isArray(ue.anneeEnseignement) ? ue.anneeEnseignement : [ue.anneeEnseignement];
+      // Cherche le premier nombre trouvé dans l'année (ex: "1ère année" => 1)
+      return Math.min(...years.map(y => parseInt((y.match(/\d+/) || [99])[0], 10)));
+    };
+    return getMinYear(a) - getMinYear(b);
+  });
+
   if (error || (!filiere && !isLoading)) {
     return (
       <Alert severity="error" sx={{ my: 4 }}>{error || `Filière "${decodeURIComponent(filiereName)}" non trouvée`}</Alert>
@@ -152,7 +164,7 @@ const Filiere = () => {
   };
 
   // Pagination logic
-  const paginatedUes = filteredUes.slice((page - 1) * UES_PER_PAGE, page * UES_PER_PAGE);
+  const paginatedUes = sortedUes.slice((page - 1) * UES_PER_PAGE, page * UES_PER_PAGE);
   const pageCount = Math.ceil(filteredUes.length / UES_PER_PAGE);
   const handlePageChange = (event, value) => setPage(value);
 
