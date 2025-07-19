@@ -239,13 +239,13 @@ const Filiere = () => {
                                   secondaryAction={
                                     <Box display="flex" gap={1}>
                                       <Tooltip title="Télécharger">
-                                        <IconButton component="a" href={storage.getFileDownload(bucketId, file.$id)} target="_blank" rel="noopener noreferrer">
-                                          <FaDownload />
+                                        <IconButton component="a" href={storage.getFileDownload(bucketId, file.$id)} target="_blank" rel="noopener noreferrer" sx={{ color: '#1976d2', p: 0.5 }}>
+                                          <FaDownload size={18} />
                                         </IconButton>
                                       </Tooltip>
                                       <Tooltip title="Aperçu">
-                                        <IconButton onClick={() => handlePreview(file.$id)}>
-                                          <FaEye />
+                                        <IconButton onClick={(e) => { e.preventDefault(); handlePreview(file.$id); }} sx={{ color: '#43a047', p: 0.5 }}>
+                                          <FaEye size={18} />
                                         </IconButton>
                                       </Tooltip>
                                     </Box>
