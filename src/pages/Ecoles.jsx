@@ -80,7 +80,7 @@ const Ecoles = () => {
                       )}
                       <Box mt={2} display="flex" gap={1} flexWrap="wrap">
                         <Chip icon={<FaBook size={16} />} label="Filières" color="primary" variant="outlined" size="small" />
-                        {/* Ajoute d'autres chips ou infos si besoin */}
+                        {/* Ajoute d'autres chips ou infos si besoin. */}
                       </Box>
                     </CardContent>
                   </CardActionArea>
