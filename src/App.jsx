@@ -18,7 +18,7 @@ const App = () => {
           <LibraryBooksIcon sx={{ mr: 2 }} />
           <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
             <Link to="/ecoles" style={{ color: 'inherit', textDecoration: 'none' }}>
-              Bibliothèque EPL
+              DocStore
             </Link>
           </Typography>
         </Toolbar>
