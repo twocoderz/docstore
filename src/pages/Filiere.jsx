@@ -293,7 +293,7 @@ const Filiere = () => {
                   
                   <button
                     onClick={() => toggleUE(ue.$id)}
-                    className="ml-4 p-2 text-gray-400 hover:text-gray-600 hover:bg-gray-100 rounded-lg transition-colors duration-200"
+                    className="ml-4 p-2 cursor-pointer text-gray-400 hover:text-gray-600 hover:bg-gray-100 rounded-lg transition-colors duration-200"
                   >
                     {expandedUE === ue.$id ? (
                       <FaChevronUp className="w-5 h-5" />
