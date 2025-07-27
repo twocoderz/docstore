@@ -1,41 +1,30 @@
 import React from "react";
-import FormControl from '@mui/material/FormControl';
-import InputLabel from '@mui/material/InputLabel';
-import Select from '@mui/material/Select';
-import MenuItem from '@mui/material/MenuItem';
-import InputAdornment from '@mui/material/InputAdornment';
-import OutlinedInput from '@mui/material/OutlinedInput';
-import { FaFilter } from "react-icons/fa";
+import { FaChevronDown } from "react-icons/fa";
 
 const FilterSelect = ({ label, options, value, onChange }) => {
   return (
-    <FormControl fullWidth size="small" sx={{ minWidth: 160 }} variant="outlined">
-      <InputLabel id={`filter-select-label-${label}`}>{label}</InputLabel>
-      <Select
-        labelId={`filter-select-label-${label}`}
-        value={value}
-        label={label}
-        onChange={(e) => onChange(e.target.value)}
-        input={
-          <OutlinedInput
-            startAdornment={
-              <InputAdornment position="start">
-                <FaFilter size={16} style={{ color: '#1976d2' }} />
-              </InputAdornment>
-            }
-            label={label}
-          />
-        }
-        sx={{ borderRadius: 2, background: '#f5f5f5' }}
-      >
-        <MenuItem value="">Tous</MenuItem>
-        {options.map((option) => (
-          <MenuItem key={option} value={option}>
-            {option}
-          </MenuItem>
-        ))}
-      </Select>
-    </FormControl>
+    <div className="relative">
+      <label className="block text-sm font-medium text-gray-700 mb-2">
+        {label}
+      </label>
+      <div className="relative">
+        <select
+          value={value}
+          onChange={(e) => onChange(e.target.value)}
+          className="block w-full pl-4 pr-10 py-3 border border-gray-300 rounded-xl bg-white text-gray-900 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 hover:border-gray-400 appearance-none"
+        >
+          <option value="">Tous</option>
+          {options.map((option) => (
+            <option key={option} value={option}>
+              {option}
+            </option>
+          ))}
+        </select>
+        <div className="absolute inset-y-0 right-0 flex items-center pr-4 pointer-events-none">
+          <FaChevronDown className="h-4 w-4 text-gray-400" />
+        </div>
+      </div>
+    </div>
   );
 };
 
