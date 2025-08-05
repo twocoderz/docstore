@@ -93,7 +93,7 @@ const Filiere = () => {
                       url: fileId
                     };
                   } else {
-                    // C'est un ID Appwrite
+                    // C'est un ID Appwrite.
                     const file = await storage.getFile(bucketId, fileId);
                     return { 
                       $id: file.$id, 
