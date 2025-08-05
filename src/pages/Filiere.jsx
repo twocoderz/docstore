@@ -83,8 +83,8 @@ const Filiere = () => {
                 try {
                   // Détecter si c'est un lien Google Drive ou un ID Appwrite
                   if (isGoogleDriveUrl(fileId)) {
-                    // C'est un lien Google Drive
-                    const fileName = getGoogleDriveFileName(fileId);
+                    // C'est un lien Google Drive - récupérer le nom via API
+                    const fileName = await getGoogleDriveFileName(fileId);
                     return { 
                       $id: fileId, 
                       name: fileName, 
@@ -93,7 +93,7 @@ const Filiere = () => {
                       url: fileId
                     };
                   } else {
-                    // C'est un ID Appwrite.
+                    // C'est un ID Appwrite
                     const file = await storage.getFile(bucketId, fileId);
                     return { 
                       $id: file.$id, 
@@ -103,7 +103,8 @@ const Filiere = () => {
                       url: storage.getFileView(bucketId, file.$id)
                     };
                   }
-                } catch {
+                } catch (error) {
+                  console.error('Erreur lors de la récupération du fichier:', error);
                   return null;
                 }
               })

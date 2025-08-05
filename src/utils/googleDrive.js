@@ -1,3 +1,5 @@
+import { getRealFileName, extractFileId } from '../services/googleDriveService';
+
 // Utilitaires pour Google Drive
 
 /**
@@ -6,12 +8,11 @@
  * @returns {string} - Lien de téléchargement
  */
 export const getGoogleDriveDownloadUrl = (driveUrl) => {
-  // Extraire l'ID du fichier Google Drive
-  const fileId = driveUrl.match(/[-\w]{25,}/);
+  const fileId = extractFileId(driveUrl);
   if (!fileId) return driveUrl;
   
   // Retourner le lien de téléchargement direct
-  return `https://drive.google.com/uc?export=download&id=${fileId[0]}`;
+  return `https://drive.google.com/uc?export=download&id=${fileId}`;
 };
 
 /**
@@ -20,12 +21,11 @@ export const getGoogleDriveDownloadUrl = (driveUrl) => {
  * @returns {string} - Lien de prévisualisation
  */
 export const getGoogleDrivePreviewUrl = (driveUrl) => {
-  // Extraire l'ID du fichier Google Drive
-  const fileId = driveUrl.match(/[-\w]{25,}/);
+  const fileId = extractFileId(driveUrl);
   if (!fileId) return driveUrl;
   
   // Retourner le lien de prévisualisation
-  return `https://drive.google.com/file/d/${fileId[0]}/preview`;
+  return `https://drive.google.com/file/d/${fileId}/preview`;
 };
 
 /**
@@ -38,17 +38,16 @@ export const isGoogleDriveUrl = (url) => {
 };
 
 /**
- * Extrait le nom du fichier depuis un lien Google Drive
+ * Récupère le nom du fichier depuis un lien Google Drive (avec API)
  * @param {string} driveUrl - Lien Google Drive
- * @returns {string} - Nom du fichier
+ * @returns {Promise<string>} - Nom du fichier
  */
-export const getGoogleDriveFileName = (driveUrl) => {
+export const getGoogleDriveFileName = async (driveUrl) => {
   try {
-    const url = new URL(driveUrl);
-    const pathParts = url.pathname.split('/');
-    const fileName = pathParts[pathParts.length - 1];
-    return fileName || 'Document Google Drive';
-  } catch {
-    return 'Document Google Drive';
+    return await getRealFileName(driveUrl);
+  } catch (error) {
+    console.error('Erreur lors de la récupération du nom de fichier:', error);
+    const fileId = extractFileId(driveUrl);
+    return fileId ? `Document_${fileId.substring(0, 8)}` : 'Document Google Drive';
   }
 }; 
