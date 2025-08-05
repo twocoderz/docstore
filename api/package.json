@@ -1,0 +1,8 @@
+{
+  "name": "biblio-epl-api",
+  "version": "1.0.0",
+  "type": "module",
+  "dependencies": {
+    "googleapis": "^155.0.0"
+  }
+} 
