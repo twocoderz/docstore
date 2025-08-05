@@ -3,6 +3,8 @@ import { useParams, Link, useNavigate } from "react-router-dom";
 import FilterSelect from "../components/FilterSelect";
 import SearchBar from "../components/SearchBar";
 import { databases, storage, databaseId, filieresCollectionId, uesCollectionId, bucketId, Query } from "../appwrite";
+import { isGoogleDriveUrl, getGoogleDriveFileName, getGoogleDrivePreviewUrl, getGoogleDriveDownloadUrl } from "../utils/googleDrive";
+import deburr from 'lodash/deburr';
 import { 
   FaBook, 
   FaFilePdf, 
@@ -16,7 +18,6 @@ import {
   FaChevronUp,
   FaGraduationCap
 } from "react-icons/fa";
-import deburr from 'lodash/deburr';
 
 const UES_PER_PAGE = 6;
 
@@ -80,8 +81,28 @@ const Filiere = () => {
             const files = await Promise.all(
               fileIds.map(async (fileId) => {
                 try {
-                  const file = await storage.getFile(bucketId, fileId);
-                  return { $id: file.$id, name: file.name, mimeType: file.mimeType };
+                  // Détecter si c'est un lien Google Drive ou un ID Appwrite
+                  if (isGoogleDriveUrl(fileId)) {
+                    // C'est un lien Google Drive
+                    const fileName = getGoogleDriveFileName(fileId);
+                    return { 
+                      $id: fileId, 
+                      name: fileName, 
+                      mimeType: 'application/pdf',
+                      type: 'google-drive',
+                      url: fileId
+                    };
+                  } else {
+                    // C'est un ID Appwrite
+                    const file = await storage.getFile(bucketId, fileId);
+                    return { 
+                      $id: file.$id, 
+                      name: file.name, 
+                      mimeType: file.mimeType,
+                      type: 'appwrite',
+                      url: storage.getFileView(bucketId, file.$id)
+                    };
+                  }
                 } catch {
                   return null;
                 }
@@ -130,10 +151,27 @@ const Filiere = () => {
     return getMinYear(a) - getMinYear(b);
   });
 
-  const handlePreview = (fileId, fileName) => {
-    setPreviewUrl(storage.getFileView(bucketId, fileId));
-    setPreviewFileName(fileName);
-    setPreviewOpen(true);
+  const handlePreview = (file) => {
+    if (file.type === 'google-drive') {
+      // Pour Google Drive, on ouvre dans un nouvel onglet
+      window.open(file.url, '_blank');
+    } else {
+      // Pour Appwrite, on utilise le modal
+      setPreviewUrl(file.url);
+      setPreviewFileName(file.name);
+      setPreviewOpen(true);
+    }
+  };
+
+  const handleDownload = (file) => {
+    if (file.type === 'google-drive') {
+      // Pour Google Drive, on ouvre le lien de téléchargement
+      const downloadUrl = getGoogleDriveDownloadUrl(file.url);
+      window.open(downloadUrl, '_blank');
+    } else {
+      // Pour Appwrite, on utilise le lien de téléchargement
+      window.open(storage.getFileDownload(bucketId, file.$id), '_blank');
+    }
   };
 
   const handleClosePreview = () => {
@@ -333,22 +371,20 @@ const Filiere = () => {
                               
                               <div className="flex items-center space-x-2">
                                 <button
-                                  onClick={() => handlePreview(file.$id, file.name)}
+                                  onClick={() => handlePreview(file)}
                                   className="inline-flex items-center space-x-1 px-3 py-1.5 text-xs font-medium text-green-700 bg-green-100 rounded-lg hover:bg-green-200 transition-colors duration-200"
                                 >
                                   <FaEye className="w-3 h-3" />
                                   <span>Aperçu</span>
                                 </button>
                                 
-                                <a
-                                  href={storage.getFileDownload(bucketId, file.$id)}
-                                  target="_blank"
-                                  rel="noopener noreferrer"
+                                <button
+                                  onClick={() => handleDownload(file)}
                                   className="inline-flex items-center space-x-1 px-3 py-1.5 text-xs font-medium text-blue-700 bg-blue-100 rounded-lg hover:bg-blue-200 transition-colors duration-200"
                                 >
                                   <FaDownload className="w-3 h-3" />
                                   <span>Télécharger</span>
-                                </a>
+                                </button>
                               </div>
                             </div>
                           </div>
