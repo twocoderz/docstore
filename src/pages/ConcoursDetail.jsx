@@ -11,7 +11,10 @@ import {
   FaDownload,
   FaEye,
   FaExternalLinkAlt,
-  FaBook
+  FaBook,
+  FaFolder,
+  FaChevronDown,
+  FaChevronRight
 } from "react-icons/fa";
 import { getGoogleDrivePreviewUrl, getGoogleDriveDownloadUrl, isGoogleDriveUrl } from "../utils/googleDrive";
 
@@ -22,6 +25,11 @@ const ConcoursDetail = () => {
   const [ecoles, setEcoles] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [openFolders, setOpenFolders] = useState({});
+  const [previewFile, setPreviewFile] = useState(null);
+  const [previewError, setPreviewError] = useState(null);
+  const [isDownloading, setIsDownloading] = useState(false);
+  const [isPreviewLoading, setIsPreviewLoading] = useState(false);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -43,6 +51,125 @@ const ConcoursDetail = () => {
     };
     fetchData();
   }, [concoursId]);
+
+  const toggleFolder = (folderPath) => {
+    setOpenFolders((prev) => ({ ...prev, [folderPath]: !prev[folderPath] }));
+  };
+
+  const handleDownload = (url, filename) => {
+    if (isGoogleDriveUrl(url)) {
+      const downloadUrl = getGoogleDriveDownloadUrl(url);
+      window.open(downloadUrl, '_blank');
+    } else {
+      window.open(url, '_blank');
+    }
+  };
+
+  const handlePreview = (url) => {
+    if (isGoogleDriveUrl(url)) {
+      const previewUrl = getGoogleDrivePreviewUrl(url);
+      window.open(previewUrl, '_blank');
+    } else {
+      setPreviewError(null);
+      setIsPreviewLoading(true);
+      setPreviewFile({ url, name: 'Document' });
+    }
+  };
+
+  // Fonction pour obtenir le nom de l'école à partir de son ID
+  const getEcoleName = (ecoleId) => {
+    const ecole = ecoles.find(e => e.$id === ecoleId);
+    return ecole ? ecole.nom : ecoleId;
+  };
+
+  // Organiser les ressources en structure de dossiers
+  const organizeResources = (ressources) => {
+    if (!ressources || ressources.length === 0) return [];
+
+    return ressources.map((ressource, index) => ({
+      name: `Ressource ${index + 1}`,
+      type: "file",
+      url: ressource,
+      mimeType: "application/pdf",
+      originalName: `ressource-${index + 1}.pdf`
+    }));
+  };
+
+  const renderResourceItem = (item, path = "", level = 0) => {
+    const itemPath = path ? `${path}/${item.name}` : item.name;
+    const paddingLeft = level * 24;
+    
+    if (item.type === "file") {
+      const safeFileName = item.originalName;
+      
+      return (
+        <div 
+          key={itemPath}
+          className="flex items-center justify-between p-4 bg-white rounded-xl border border-gray-200 hover:border-blue-300 hover:shadow-md transition-all duration-200"
+          style={{ marginLeft: paddingLeft }}
+        >
+          <div className="flex items-center space-x-3 flex-1 min-w-0">
+            <FaFilePdf className="text-red-500 w-5 h-5" />
+            <span className="text-gray-800 font-medium truncate">{item.name}</span>
+          </div>
+          
+          <div className="flex items-center space-x-2">
+            <button
+              onClick={() => handlePreview(item.url)}
+              className="inline-flex items-center space-x-1 px-3 py-1.5 text-sm font-medium text-green-700 bg-green-100 rounded-lg hover:bg-green-200 transition-colors duration-200"
+              title="Prévisualiser"
+            >
+              <FaEye className="w-4 h-4" />
+              <span className="hidden sm:inline">Aperçu</span>
+            </button>
+            <button
+              onClick={() => handleDownload(item.url, safeFileName)}
+              className="inline-flex items-center space-x-1 px-3 py-1.5 text-sm font-medium text-blue-700 bg-blue-100 rounded-lg hover:bg-blue-200 transition-colors duration-200"
+              title="Télécharger"
+            >
+              <FaDownload className="w-4 h-4" />
+              <span className="hidden sm:inline">Télécharger</span>
+            </button>
+          </div>
+        </div>
+      );
+    }
+    
+    if (item.type === "folder") {
+      const isOpen = openFolders[itemPath];
+      
+      return (
+        <div key={itemPath} className="space-y-3">
+          <div 
+            className="flex items-center justify-between p-4 bg-gradient-to-r from-yellow-50 to-amber-50 rounded-xl border border-yellow-200 hover:border-yellow-300 cursor-pointer transition-all duration-200"
+            style={{ marginLeft: paddingLeft }}
+          >
+            <div 
+              className="flex items-center space-x-3 flex-1"
+              onClick={() => toggleFolder(itemPath)}
+            >
+              {isOpen ? (
+                <FaChevronDown className="w-4 h-4 text-yellow-600" />
+              ) : (
+                <FaChevronRight className="w-4 h-4 text-yellow-600" />
+              )}
+              <FaFolder className="text-yellow-500 w-5 h-5" />
+              <span className="text-gray-800 font-medium">{item.name}</span>
+              <span className="text-xs text-gray-500">({item.contents.length} élément{item.contents.length > 1 ? 's' : ''})</span>
+            </div>
+          </div>
+          
+          {isOpen && (
+            <div className="space-y-3">
+              {item.contents.map((subItem) => renderResourceItem(subItem, itemPath, level + 1))}
+            </div>
+          )}
+        </div>
+      );
+    }
+    
+    return null;
+  };
 
   if (isLoading) {
     return (
@@ -73,29 +200,7 @@ const ConcoursDetail = () => {
     );
   }
 
-  const handleDownload = (url, filename) => {
-    if (isGoogleDriveUrl(url)) {
-      const downloadUrl = getGoogleDriveDownloadUrl(url);
-      window.open(downloadUrl, '_blank');
-    } else {
-      window.open(url, '_blank');
-    }
-  };
-
-  // Fonction pour obtenir le nom de l'école à partir de son ID
-  const getEcoleName = (ecoleId) => {
-    const ecole = ecoles.find(e => e.$id === ecoleId);
-    return ecole ? ecole.nom : ecoleId;
-  };
-
-  const handlePreview = (url) => {
-    if (isGoogleDriveUrl(url)) {
-      const previewUrl = getGoogleDrivePreviewUrl(url);
-      window.open(previewUrl, '_blank');
-    } else {
-      window.open(url, '_blank');
-    }
-  };
+  const organizedResources = organizeResources(concours.ressources);
 
   return (
     <div className="space-y-8">
@@ -124,16 +229,16 @@ const ConcoursDetail = () => {
                 <h1 className="text-3xl font-bold text-white mb-2">
                   {concours.nom}
                 </h1>
-                                  <div className="flex items-center space-x-4 text-white/90">
-                    <div className="flex items-center space-x-2">
-                      <FaCalendarAlt className="w-4 h-4" />
-                      <span>{concours.annee}</span>
-                    </div>
-                    <div className="flex items-center space-x-2">
-                      <FaUniversity className="w-4 h-4" />
-                      <span>{getEcoleName(concours.idEcole)}</span>
-                    </div>
+                <div className="flex items-center space-x-4 text-white/90">
+                  <div className="flex items-center space-x-2">
+                    <FaCalendarAlt className="w-4 h-4" />
+                    <span>{concours.annee}</span>
                   </div>
+                  <div className="flex items-center space-x-2">
+                    <FaUniversity className="w-4 h-4" />
+                    <span>{getEcoleName(concours.idEcole)}</span>
+                  </div>
+                </div>
               </div>
             </div>
           </div>
@@ -142,41 +247,50 @@ const ConcoursDetail = () => {
           <div className="absolute bottom-0 left-0 w-32 h-32 bg-white/5 rounded-full translate-y-16 -translate-x-16"></div>
         </div>
 
-        {/* Contenu */}
-        <div className="p-8">
+        {/* Contenu principal */}
+        <div className="p-8 space-y-8">
+          {/* Description */}
           <div className="prose max-w-none">
-            <p className="text-lg text-gray-700 leading-relaxed mb-6">
+            <p className="text-lg text-gray-700 leading-relaxed">
               {concours.description}
             </p>
           </div>
 
-          {/* Communiqué officiel */}
+          {/* Communiqué officiel - Version améliorée */}
           {concours.communique && (
-            <div className="mb-8">
-              <h3 className="text-xl font-semibold text-gray-900 mb-4 flex items-center space-x-2">
-                <FaFilePdf className="w-5 h-5 text-red-500" />
-                <span>Communiqué Officiel</span>
-              </h3>
-              <div className="bg-gray-50 rounded-lg p-4">
+            <div className="bg-gradient-to-r from-blue-50 to-indigo-50 rounded-2xl p-6 border border-blue-200">
+              <div className="flex items-center space-x-3 mb-4">
+                <div className="p-2 bg-blue-100 rounded-lg">
+                  <FaFilePdf className="w-6 h-6 text-blue-600" />
+                </div>
+                <div>
+                  <h3 className="text-xl font-semibold text-gray-900">Communiqué Officiel</h3>
+                  <p className="text-sm text-gray-600">Document officiel de lancement du concours</p>
+                </div>
+              </div>
+              
+              <div className="bg-white rounded-xl p-4 shadow-sm border border-gray-100">
                 <div className="flex items-center justify-between">
                   <div className="flex items-center space-x-3">
-                    <FaFilePdf className="w-6 h-6 text-red-500" />
+                    <div className="p-2 bg-red-100 rounded-lg">
+                      <FaFilePdf className="w-5 h-5 text-red-600" />
+                    </div>
                     <div>
                       <p className="font-medium text-gray-900">Communiqué du concours</p>
-                      <p className="text-sm text-gray-500">Document officiel de lancement</p>
+                      <p className="text-sm text-gray-500">Informations officielles et modalités d'inscription</p>
                     </div>
                   </div>
                   <div className="flex space-x-2">
                     <button
                       onClick={() => handlePreview(concours.communique)}
-                      className="flex items-center space-x-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors duration-200"
+                      className="inline-flex items-center space-x-2 px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors duration-200 shadow-sm hover:shadow-md"
                     >
                       <FaEye className="w-4 h-4" />
-                      <span>Voir</span>
+                      <span>Prévisualiser</span>
                     </button>
                     <button
                       onClick={() => handleDownload(concours.communique, 'communique.pdf')}
-                      className="flex items-center space-x-2 px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors duration-200"
+                      className="inline-flex items-center space-x-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors duration-200 shadow-sm hover:shadow-md"
                     >
                       <FaDownload className="w-4 h-4" />
                       <span>Télécharger</span>
@@ -187,50 +301,100 @@ const ConcoursDetail = () => {
             </div>
           )}
 
-          {/* Ressources */}
-          {concours.ressources && concours.ressources.length > 0 && (
-            <div>
-              <h3 className="text-xl font-semibold text-gray-900 mb-4 flex items-center space-x-2">
-                <FaBook className="w-5 h-5 text-blue-500" />
-                <span>Ressources et Épreuves</span>
-              </h3>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                {concours.ressources.map((ressource, index) => (
-                  <div key={index} className="bg-gray-50 rounded-lg p-4">
-                    <div className="flex items-center justify-between">
-                      <div className="flex items-center space-x-3">
-                        <FaFilePdf className="w-6 h-6 text-blue-500" />
-                        <div>
-                          <p className="font-medium text-gray-900">Ressource {index + 1}</p>
-                          <p className="text-sm text-gray-500">Document de préparation</p>
-                        </div>
-                      </div>
-                      <div className="flex space-x-2">
-                        <button
-                          onClick={() => handlePreview(ressource)}
-                          className="flex items-center space-x-1 px-3 py-1 bg-blue-600 text-white rounded text-sm hover:bg-blue-700 transition-colors duration-200"
-                        >
-                          <FaEye className="w-3 h-3" />
-                          <span>Voir</span>
-                        </button>
-                        <button
-                          onClick={() => handleDownload(ressource, `ressource-${index + 1}.pdf`)}
-                          className="flex items-center space-x-1 px-3 py-1 bg-green-600 text-white rounded text-sm hover:bg-green-700 transition-colors duration-200"
-                        >
-                          <FaDownload className="w-3 h-3" />
-                          <span>DL</span>
-                        </button>
-                      </div>
-                    </div>
+          {/* Ressources et Épreuves - Version améliorée similaire aux écoles */}
+          {organizedResources.length > 0 && (
+            <div className="bg-gradient-to-r from-green-50 to-emerald-50 rounded-2xl p-6 border border-green-200">
+              <div className="flex items-center space-x-3 mb-6">
+                <div className="p-2 bg-green-100 rounded-lg">
+                  <FaBook className="w-6 h-6 text-green-600" />
+                </div>
+                <div>
+                  <h3 className="text-xl font-semibold text-gray-900">Ressources et Épreuves</h3>
+                  <p className="text-sm text-gray-600">Documents de préparation et épreuves des années précédentes</p>
+                </div>
+              </div>
+              
+              <div className="space-y-4">
+                {organizedResources.length > 0 ? (
+                  <div className="space-y-3">
+                    {organizedResources.map((item) => renderResourceItem(item))}
                   </div>
-                ))}
+                ) : (
+                  <div className="text-center py-8">
+                    <div className="w-16 h-16 mx-auto bg-gray-100 rounded-full flex items-center justify-center mb-4">
+                      <FaBook className="w-6 h-6 text-gray-400" />
+                    </div>
+                    <p className="text-gray-600">Aucune ressource disponible</p>
+                  </div>
+                )}
               </div>
             </div>
           )}
         </div>
       </div>
+
+      {/* Modal d'aperçu */}
+      {previewFile && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
+          <div className="bg-white rounded-2xl w-full max-w-6xl h-[90vh] overflow-hidden">
+            <div className="flex items-center justify-between p-6 border-b border-gray-200">
+              <h2 className="text-xl font-semibold text-gray-900 truncate">
+                Aperçu : {previewFile.name}
+              </h2>
+              <button
+                onClick={() => {
+                  setPreviewFile(null);
+                  setPreviewError(null);
+                  setIsPreviewLoading(false);
+                }}
+                className="p-2 text-gray-400 hover:text-gray-600 hover:bg-gray-100 rounded-lg transition-colors duration-200"
+              >
+                <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                </svg>
+              </button>
+            </div>
+            
+            <div className="h-full pb-6">
+              {previewError ? (
+                <div className="flex items-center justify-center h-full">
+                  <div className="text-center">
+                    <div className="w-16 h-16 mx-auto bg-red-100 rounded-full flex items-center justify-center mb-4">
+                      <FaFilePdf className="w-6 h-6 text-red-500" />
+                    </div>
+                    <p className="text-red-600 font-medium">Impossible de prévisualiser le PDF</p>
+                    <p className="text-gray-500 text-sm mt-1">{previewError}</p>
+                  </div>
+                </div>
+              ) : (
+                <div className="relative h-full">
+                  {isPreviewLoading && (
+                    <div className="absolute inset-0 flex items-center justify-center bg-white bg-opacity-75 z-10">
+                      <div className="flex flex-col items-center space-y-3">
+                        <div className="w-12 h-12 border-4 border-blue-200 border-t-blue-600 rounded-full animate-spin"></div>
+                        <p className="text-gray-600 font-medium">Chargement du PDF...</p>
+                      </div>
+                    </div>
+                  )}
+                  <iframe
+                    src={previewFile.url}
+                    className="w-full h-full"
+                    style={{ height: 'calc(100% - 80px)' }}
+                    title="PDF Preview"
+                    onLoad={() => setIsPreviewLoading(false)}
+                    onError={() => {
+                      setIsPreviewLoading(false);
+                      setPreviewError("Erreur lors du chargement du PDF : fichier introuvable ou non accessible");
+                    }}
+                  />
+                </div>
+              )}
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
 
-export default ConcoursDetail; 
+export default ConcoursDetail;
