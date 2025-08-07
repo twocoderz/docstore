@@ -73,7 +73,7 @@ const Ecole = () => {
         const concoursResponse = await databases.listDocuments(
           databaseId,
           concoursCollectionId,
-          [Query.equal("idEcole", ecole.nom)]
+          [Query.equal("idEcole", ecole.$id)]
         );
         setConcours(concoursResponse.documents);
         

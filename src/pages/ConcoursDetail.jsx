@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useParams, Link } from "react-router-dom";
-import { databases, databaseId, concoursCollectionId } from "../appwrite";
+import { databases, databaseId, concoursCollectionId, ecolesCollectionId } from "../appwrite";
 import { 
   FaTrophy, 
   FaCalendarAlt, 
@@ -18,14 +18,21 @@ import { getGoogleDrivePreviewUrl, getGoogleDriveDownloadUrl, isGoogleDriveUrl }
 const ConcoursDetail = () => {
   const { concoursId } = useParams();
   const [concours, setConcours] = useState(null);
+  const [ecoles, setEcoles] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
 
   useEffect(() => {
-    const fetchConcours = async () => {
+    const fetchData = async () => {
       try {
-        const response = await databases.getDocument(databaseId, concoursCollectionId, concoursId);
-        setConcours(response);
+        // Récupérer le concours
+        const concoursResponse = await databases.getDocument(databaseId, concoursCollectionId, concoursId);
+        setConcours(concoursResponse);
+        
+        // Récupérer les écoles pour avoir leurs noms
+        const ecolesResponse = await databases.listDocuments(databaseId, ecolesCollectionId);
+        setEcoles(ecolesResponse.documents);
+        
         setError(null);
       } catch {
         setError("Erreur lors de la récupération du concours.");
@@ -33,7 +40,7 @@ const ConcoursDetail = () => {
         setIsLoading(false);
       }
     };
-    fetchConcours();
+    fetchData();
   }, [concoursId]);
 
   if (isLoading) {
@@ -74,6 +81,12 @@ const ConcoursDetail = () => {
     }
   };
 
+  // Fonction pour obtenir le nom de l'école à partir de son ID
+  const getEcoleName = (ecoleId) => {
+    const ecole = ecoles.find(e => e.$id === ecoleId);
+    return ecole ? ecole.nom : ecoleId;
+  };
+
   const handlePreview = (url) => {
     if (isGoogleDriveUrl(url)) {
       const previewUrl = getGoogleDrivePreviewUrl(url);
@@ -108,16 +121,16 @@ const ConcoursDetail = () => {
                 <h1 className="text-3xl font-bold text-white mb-2">
                   {concours.nom}
                 </h1>
-                <div className="flex items-center space-x-4 text-white/90">
-                  <div className="flex items-center space-x-2">
-                    <FaCalendarAlt className="w-4 h-4" />
-                    <span>{concours.annee}</span>
+                                  <div className="flex items-center space-x-4 text-white/90">
+                    <div className="flex items-center space-x-2">
+                      <FaCalendarAlt className="w-4 h-4" />
+                      <span>{concours.annee}</span>
+                    </div>
+                    <div className="flex items-center space-x-2">
+                      <FaUniversity className="w-4 h-4" />
+                      <span>{getEcoleName(concours.idEcole)}</span>
+                    </div>
                   </div>
-                  <div className="flex items-center space-x-2">
-                    <FaUniversity className="w-4 h-4" />
-                    <span>{concours.idEcole}</span>
-                  </div>
-                </div>
               </div>
             </div>
           </div>

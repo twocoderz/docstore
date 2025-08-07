@@ -1,38 +1,51 @@
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
-import { databases, databaseId, concoursCollectionId } from "../appwrite";
+import { databases, databaseId, concoursCollectionId, ecolesCollectionId } from "../appwrite";
 import { FaTrophy, FaCalendarAlt, FaUniversity, FaArrowRight, FaSpinner, FaFilePdf } from "react-icons/fa";
 
 const Concours = () => {
   const [concours, setConcours] = useState([]);
+  const [ecoles, setEcoles] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
   const [selectedYear, setSelectedYear] = useState("Tous");
   const [selectedEcole, setSelectedEcole] = useState("Toutes");
 
   useEffect(() => {
-    const fetchConcours = async () => {
+    const fetchData = async () => {
       try {
-        const response = await databases.listDocuments(databaseId, concoursCollectionId);
-        setConcours(response.documents);
+        // Récupérer les concours
+        const concoursResponse = await databases.listDocuments(databaseId, concoursCollectionId);
+        setConcours(concoursResponse.documents);
+        
+        // Récupérer les écoles pour avoir leurs noms
+        const ecolesResponse = await databases.listDocuments(databaseId, ecolesCollectionId);
+        setEcoles(ecolesResponse.documents);
+        
         setError(null);
       } catch {
-        setError("Erreur lors de la récupération des concours.");
+        setError("Erreur lors de la récupération des données.");
       } finally {
         setIsLoading(false);
       }
     };
-    fetchConcours();
+    fetchData();
   }, []);
+
+  // Fonction pour obtenir le nom de l'école à partir de son ID
+  const getEcoleName = (ecoleId) => {
+    const ecole = ecoles.find(e => e.$id === ecoleId);
+    return ecole ? ecole.nom : ecoleId;
+  };
 
   // Extraire les années et écoles uniques pour les filtres
   const years = ["Tous", ...new Set(concours.map(c => c.annee))];
-  const ecoles = ["Toutes", ...new Set(concours.map(c => c.idEcole))];
+  const ecoleNames = ["Toutes", ...new Set(concours.map(c => getEcoleName(c.idEcole)))];
 
   // Filtrer les concours
   const filteredConcours = concours.filter(concour => {
     const yearMatch = selectedYear === "Tous" || concour.annee === selectedYear;
-    const ecoleMatch = selectedEcole === "Toutes" || concour.idEcole === selectedEcole;
+    const ecoleMatch = selectedEcole === "Toutes" || getEcoleName(concour.idEcole) === selectedEcole;
     return yearMatch && ecoleMatch;
   });
 
@@ -97,7 +110,7 @@ const Concours = () => {
           onChange={(e) => setSelectedEcole(e.target.value)}
           className="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-orange-500 bg-white"
         >
-          {ecoles.map(ecole => (
+          {ecoleNames.map(ecole => (
             <option key={ecole} value={ecole}>{ecole}</option>
           ))}
         </select>
@@ -145,7 +158,7 @@ const Concours = () => {
                     
                     <div className="flex items-center space-x-2 text-sm text-gray-500">
                       <FaUniversity className="w-4 h-4 text-blue-400" />
-                      <span>{concour.idEcole}</span>
+                      <span>{getEcoleName(concour.idEcole)}</span>
                     </div>
 
                     {concour.communique && (
