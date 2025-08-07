@@ -10,11 +10,7 @@ import {
   FaFilePdf, 
   FaDownload,
   FaEye,
-  FaExternalLinkAlt,
-  FaBook,
-  FaFolder,
-  FaChevronDown,
-  FaChevronRight
+  FaBook
 } from "react-icons/fa";
 import { getGoogleDrivePreviewUrl, getGoogleDriveDownloadUrl, isGoogleDriveUrl, getGoogleDriveFileName } from "../utils/googleDrive";
 
@@ -25,13 +21,11 @@ const ConcoursDetail = () => {
   const [ecoles, setEcoles] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
-  const [openFolders, setOpenFolders] = useState({});
+  const [communiques, setCommuniques] = useState([]);
+  const [ressources, setRessources] = useState([]);
+  const [isPreviewLoading, setIsPreviewLoading] = useState(false);
   const [previewFile, setPreviewFile] = useState(null);
   const [previewError, setPreviewError] = useState(null);
-  const [isDownloading, setIsDownloading] = useState(false);
-  const [isPreviewLoading, setIsPreviewLoading] = useState(false);
-  const [organizedResources, setOrganizedResources] = useState([]);
-  const [communiqueFile, setCommuniqueFile] = useState(null);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -39,21 +33,17 @@ const ConcoursDetail = () => {
         // Récupérer le concours
         const concoursResponse = await databases.getDocument(databaseId, concoursCollectionId, concoursId);
         setConcours(concoursResponse);
-        
         // Récupérer les écoles pour avoir leurs noms
         const ecolesResponse = await databases.listDocuments(databaseId, ecolesCollectionId);
         setEcoles(ecolesResponse.documents);
-        
-        // Traiter le communiqué s'il existe
-        if (concoursResponse.communique) {
-          await processCommunique(concoursResponse.communique);
+        // Traiter les communiqués
+        if (Array.isArray(concoursResponse.communiques)) {
+          setCommuniques(await processFiles(concoursResponse.communiques));
         }
-
-        // Traiter les ressources s'il y en a
-        if (concoursResponse.ressources && concoursResponse.ressources.length > 0) {
-          await processResources(concoursResponse.ressources);
+        // Traiter les ressources
+        if (Array.isArray(concoursResponse.ressources)) {
+          setRessources(await processFiles(concoursResponse.ressources));
         }
-        
         setError(null);
       } catch {
         setError("Erreur lors de la récupération du concours.");
@@ -62,195 +52,63 @@ const ConcoursDetail = () => {
       }
     };
     fetchData();
+    // eslint-disable-next-line
   }, [concoursId]);
 
-  const processCommunique = async (communiqueUrl) => {
-    try {
-      if (isGoogleDriveUrl(communiqueUrl)) {
-        const fileName = await getGoogleDriveFileName(communiqueUrl);
-        setCommuniqueFile({
-          name: fileName,
-          url: communiqueUrl,
-          type: 'google-drive',
-          mimeType: 'application/pdf'
-        });
-      } else {
-        // C'est probablement un ID Appwrite
-        const file = await storage.getFile(bucketId, communiqueUrl);
-        setCommuniqueFile({
-          name: file.name,
-          url: storage.getFileView(bucketId, file.$id),
-          type: 'appwrite',
-          mimeType: file.mimeType,
-          fileId: file.$id
-        });
+  // Fonction utilitaire pour obtenir le nom d'un fichier (Google Drive ou Appwrite)
+  const processFiles = async (files) => {
+    return Promise.all(files.map(async (fileIdOrUrl) => {
+      try {
+        if (isGoogleDriveUrl(fileIdOrUrl)) {
+          const fileName = await getGoogleDriveFileName(fileIdOrUrl);
+          return {
+            name: fileName,
+            url: fileIdOrUrl,
+            type: 'google-drive',
+          };
+        } else {
+          // C'est probablement un ID Appwrite
+          const file = await storage.getFile(bucketId, fileIdOrUrl);
+          return {
+            name: file.name,
+            url: storage.getFileView(bucketId, file.$id),
+            type: 'appwrite',
+            fileId: file.$id
+          };
+        }
+      } catch {
+        return {
+          name: 'Document',
+          url: fileIdOrUrl,
+          type: 'unknown',
+        };
       }
-    } catch (error) {
-      console.error('Erreur lors du traitement du communiqué:', error);
-      setCommuniqueFile({
-        name: 'Communiqué officiel',
-        url: communiqueUrl,
-        type: 'unknown',
-        mimeType: 'application/pdf'
-      });
-    }
+    }));
   };
 
-  const processResources = async (ressources) => {
-    try {
-      const processedResources = await Promise.all(
-        ressources.map(async (ressourceUrl, index) => {
-          try {
-            if (isGoogleDriveUrl(ressourceUrl)) {
-              const fileName = await getGoogleDriveFileName(ressourceUrl);
-              return {
-                name: fileName,
-                type: "file",
-                url: ressourceUrl,
-                mimeType: "application/pdf",
-                fileType: 'google-drive'
-              };
-            } else {
-              // C'est probablement un ID Appwrite
-              const file = await storage.getFile(bucketId, ressourceUrl);
-              return {
-                name: file.name,
-                type: "file",
-                url: storage.getFileView(bucketId, file.$id),
-                mimeType: file.mimeType,
-                fileType: 'appwrite',
-                fileId: file.$id
-              };
-            }
-          } catch (error) {
-            console.error('Erreur lors du traitement de la ressource:', error);
-            return {
-              name: `Document ${index + 1}`,
-              type: "file",
-              url: ressourceUrl,
-              mimeType: "application/pdf",
-              fileType: 'unknown'
-            };
-          }
-        })
-      );
-      
-      setOrganizedResources(processedResources);
-    } catch (error) {
-      console.error('Erreur lors du traitement des ressources:', error);
-      setOrganizedResources([]);
-    }
-  };
-
-  const toggleFolder = (folderPath) => {
-    setOpenFolders((prev) => ({ ...prev, [folderPath]: !prev[folderPath] }));
-  };
-
+  // Gestion des boutons
   const handleDownload = (file) => {
-    if (file.fileType === 'google-drive') {
-      const downloadUrl = getGoogleDriveDownloadUrl(file.url);
-      window.open(downloadUrl, '_blank');
-    } else if (file.fileType === 'appwrite' && file.fileId) {
+    if (file.type === 'google-drive') {
+      window.open(getGoogleDriveDownloadUrl(file.url), '_blank');
+    } else if (file.type === 'appwrite' && file.fileId) {
       window.open(storage.getFileDownload(bucketId, file.fileId), '_blank');
     } else {
       window.open(file.url, '_blank');
     }
   };
-
   const handlePreview = (file) => {
-    if (file.fileType === 'google-drive') {
-      const previewUrl = getGoogleDrivePreviewUrl(file.url);
-      window.open(previewUrl, '_blank');
+    if (file.type === 'google-drive') {
+      window.open(getGoogleDrivePreviewUrl(file.url), '_blank');
     } else {
       setPreviewError(null);
       setIsPreviewLoading(true);
       setPreviewFile(file);
     }
   };
-
-  // Fonction pour obtenir le nom de l'école à partir de son ID
+  // Nom de l'école
   const getEcoleName = (ecoleId) => {
     const ecole = ecoles.find(e => e.$id === ecoleId);
     return ecole ? ecole.nom : ecoleId;
-  };
-
-  // Organiser les ressources en structure de dossiers
-  const organizeResources = (ressources) => {
-    return ressources || [];
-  };
-
-  const renderResourceItem = (item, path = "", level = 0) => {
-    const itemPath = path ? `${path}/${item.name}` : item.name;
-    const paddingLeft = level * 24;
-    
-    if (item.type === "file") {
-      return (
-        <div 
-          key={itemPath}
-          className="flex items-center justify-between p-4 bg-white rounded-xl border border-gray-200 hover:border-blue-300 hover:shadow-md transition-all duration-200"
-          style={{ marginLeft: paddingLeft }}
-        >
-          <div className="flex items-center space-x-3 flex-1 min-w-0">
-            <FaFilePdf className="text-red-500 w-5 h-5" />
-            <span className="text-gray-800 font-medium truncate">{item.name}</span>
-          </div>
-          
-          <div className="flex items-center space-x-2">
-            <button
-              onClick={() => handlePreview(item)}
-              className="inline-flex items-center space-x-1 px-3 py-1.5 text-sm font-medium text-green-700 bg-green-100 rounded-lg hover:bg-green-200 transition-colors duration-200"
-              title="Prévisualiser"
-            >
-              <FaEye className="w-4 h-4" />
-              <span className="hidden sm:inline">Aperçu</span>
-            </button>
-            <button
-              onClick={() => handleDownload(item)}
-              className="inline-flex items-center space-x-1 px-3 py-1.5 text-sm font-medium text-blue-700 bg-blue-100 rounded-lg hover:bg-blue-200 transition-colors duration-200"
-              title="Télécharger"
-            >
-              <FaDownload className="w-4 h-4" />
-              <span className="hidden sm:inline">Télécharger</span>
-            </button>
-          </div>
-        </div>
-      );
-    }
-    
-    if (item.type === "folder") {
-      const isOpen = openFolders[itemPath];
-      
-      return (
-        <div key={itemPath} className="space-y-3">
-          <div 
-            className="flex items-center justify-between p-4 bg-gradient-to-r from-yellow-50 to-amber-50 rounded-xl border border-yellow-200 hover:border-yellow-300 cursor-pointer transition-all duration-200"
-            style={{ marginLeft: paddingLeft }}
-          >
-            <div 
-              className="flex items-center space-x-3 flex-1"
-              onClick={() => toggleFolder(itemPath)}
-            >
-              {isOpen ? (
-                <FaChevronDown className="w-4 h-4 text-yellow-600" />
-              ) : (
-                <FaChevronRight className="w-4 h-4 text-yellow-600" />
-              )}
-              <FaFolder className="text-yellow-500 w-5 h-5" />
-              <span className="text-gray-800 font-medium">{item.name}</span>
-              <span className="text-xs text-gray-500">({item.contents.length} élément{item.contents.length > 1 ? 's' : ''})</span>
-            </div>
-          </div>
-          
-          {isOpen && (
-            <div className="space-y-3">
-              {item.contents.map((subItem) => renderResourceItem(subItem, itemPath, level + 1))}
-            </div>
-          )}
-        </div>
-      );
-    }
-    
-    return null;
   };
 
   if (isLoading) {
@@ -264,7 +122,6 @@ const ConcoursDetail = () => {
       </div>
     );
   }
-
   if (error || !concours) {
     return (
       <div className="bg-red-50 border-l-4 border-red-400 p-6 rounded-lg">
@@ -281,8 +138,6 @@ const ConcoursDetail = () => {
       </div>
     );
   }
-
-  const organizedResourcesDisplay = organizeResources(organizedResources);
 
   return (
     <div className="space-y-8">
@@ -338,70 +193,90 @@ const ConcoursDetail = () => {
             </p>
           </div>
 
-          {/* Communiqué officiel - Version améliorée */}
-          {communiqueFile && (
-            <div className="bg-gradient-to-r from-blue-50 to-indigo-50 rounded-2xl p-6 border border-blue-200">
+          {/* Communiqués (grille comme ressources) */}
+          {communiques.length > 0 && (
+            <div>
               <div className="flex items-center space-x-3 mb-4">
                 <div className="p-2 bg-red-100 rounded-lg">
                   <FaFilePdf className="w-6 h-6 text-red-600" />
                 </div>
-                <div>
-                  <h3 className="text-xl font-semibold text-gray-900">Communiqué Officiel</h3>
-                  <p className="text-sm text-gray-600">Document officiel de lancement du concours</p>
-                </div>
+                <h3 className="text-xl font-semibold text-gray-900">Communiqués officiels</h3>
               </div>
-              
-              <div className="bg-white rounded-xl p-4 shadow-sm border border-gray-100">
-                <div className="flex items-center justify-between">
-                  <div className="flex items-center space-x-3 flex-1 min-w-0">
-                    <div className="p-2 bg-red-100 rounded-lg">
-                      <FaFilePdf className="w-5 h-5 text-red-600" />
-                    </div>
-                    <div className="flex-1 min-w-0">
-                      <p className="font-medium text-gray-900 truncate">{communiqueFile.name}</p>
-                      <p className="text-sm text-gray-500">Document officiel</p>
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+                {communiques.map((file, idx) => (
+                  <div key={idx} className="bg-white rounded-xl p-4 border border-gray-200 hover:border-blue-300 hover:shadow-md transition-all duration-200">
+                    <div className="flex items-start space-x-3">
+                      <div className="flex-shrink-0">
+                        <div className="p-2 bg-red-100 rounded-lg">
+                          <FaFilePdf className="w-5 h-5 text-red-600" />
+                        </div>
+                      </div>
+                      <div className="flex-1 min-w-0">
+                        <p className="text-sm font-medium text-gray-900 line-clamp-2 mb-2">{file.name}</p>
+                        <div className="flex items-center space-x-2">
+                          <button
+                            onClick={() => handlePreview(file)}
+                            className="inline-flex items-center space-x-1 px-3 py-1.5 text-xs font-medium text-green-700 bg-green-100 rounded-lg hover:bg-green-200 transition-colors duration-200"
+                          >
+                            <FaEye className="w-3 h-3" />
+                            <span>Aperçu</span>
+                          </button>
+                          <button
+                            onClick={() => handleDownload(file)}
+                            className="inline-flex items-center space-x-1 px-3 py-1.5 text-xs font-medium text-blue-700 bg-blue-100 rounded-lg hover:bg-blue-200 transition-colors duration-200"
+                          >
+                            <FaDownload className="w-3 h-3" />
+                            <span>Télécharger</span>
+                          </button>
+                        </div>
+                      </div>
                     </div>
                   </div>
-                  <div className="flex space-x-2">
-                    <button
-                      onClick={() => handlePreview(communiqueFile)}
-                      className="inline-flex items-center space-x-1 px-3 py-1.5 text-sm font-medium text-green-700 bg-green-100 rounded-lg hover:bg-green-200 transition-colors duration-200"
-                      title="Prévisualiser"
-                    >
-                      <FaEye className="w-4 h-4" />
-                      <span className="hidden sm:inline">Aperçu</span>
-                    </button>
-                    <button
-                      onClick={() => handleDownload(communiqueFile)}
-                      className="inline-flex items-center space-x-1 px-3 py-1.5 text-sm font-medium text-blue-700 bg-blue-100 rounded-lg hover:bg-blue-200 transition-colors duration-200"
-                      title="Télécharger"
-                    >
-                      <FaDownload className="w-4 h-4" />
-                      <span className="hidden sm:inline">Télécharger</span>
-                    </button>
-                  </div>
-                </div>
+                ))}
               </div>
             </div>
           )}
 
-          {/* Ressources et Épreuves - Version améliorée similaire aux écoles */}
-          {organizedResourcesDisplay.length > 0 && (
-            <div className="bg-gradient-to-r from-green-50 to-emerald-50 rounded-2xl p-6 border border-green-200">
-              <div className="flex items-center space-x-3 mb-6">
-                <div className="p-2 bg-red-100 rounded-lg">
-                  <FaBook className="w-6 h-6 text-red-600" />
+          {/* Ressources et Épreuves (grille identique filière) */}
+          {ressources.length > 0 && (
+            <div>
+              <div className="flex items-center space-x-3 mb-4 mt-8">
+                <div className="p-2 bg-blue-100 rounded-lg">
+                  <FaBook className="w-6 h-6 text-blue-600" />
                 </div>
-                <div>
-                  <h3 className="text-xl font-semibold text-gray-900">Ressources et Épreuves</h3>
-                  <p className="text-sm text-gray-600">Documents de préparation et épreuves des années précédentes</p>
-                </div>
+                <h3 className="text-xl font-semibold text-gray-900">Ressources et Épreuves</h3>
               </div>
-              
-              <div className="space-y-4">
-                <div className="space-y-3">
-                  {organizedResourcesDisplay.map((item) => renderResourceItem(item))}
-                </div>
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+                {ressources.map((file, idx) => (
+                  <div key={idx} className="bg-white rounded-xl p-4 border border-gray-200 hover:border-blue-300 hover:shadow-md transition-all duration-200">
+                    <div className="flex items-start space-x-3">
+                      <div className="flex-shrink-0">
+                        <div className="p-2 bg-red-100 rounded-lg">
+                          <FaFilePdf className="w-5 h-5 text-red-600" />
+                        </div>
+                      </div>
+                      <div className="flex-1 min-w-0">
+                        <p className="text-sm font-medium text-gray-900 line-clamp-2 mb-2">{file.name}</p>
+                        <div className="flex items-center space-x-2">
+                          <button
+                            onClick={() => handlePreview(file)}
+                            className="inline-flex items-center space-x-1 px-3 py-1.5 text-xs font-medium text-green-700 bg-green-100 rounded-lg hover:bg-green-200 transition-colors duration-200"
+                          >
+                            <FaEye className="w-3 h-3" />
+                            <span>Aperçu</span>
+                          </button>
+                          <button
+                            onClick={() => handleDownload(file)}
+                            className="inline-flex items-center space-x-1 px-3 py-1.5 text-xs font-medium text-blue-700 bg-blue-100 rounded-lg hover:bg-blue-200 transition-colors duration-200"
+                          >
+                            <FaDownload className="w-3 h-3" />
+                            <span>Télécharger</span>
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                ))}
               </div>
             </div>
           )}
@@ -429,7 +304,6 @@ const ConcoursDetail = () => {
                 </svg>
               </button>
             </div>
-            
             <div className="h-full pb-6">
               {previewError ? (
                 <div className="flex items-center justify-center h-full">
