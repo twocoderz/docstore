@@ -298,7 +298,7 @@ const Ecole = () => {
               <p className="text-gray-600">
                 {selectedParcours 
                   ? "Aucune filière ne correspond aux filtres sélectionnés." 
-                  : "Cette école n'a pas encore de filières disponibles."
+                  : "Cette école ne dispose pas encore de données sur les filières."
                 }
               </p>
             </div>
