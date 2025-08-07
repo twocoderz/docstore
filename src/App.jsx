@@ -3,7 +3,9 @@ import { BrowserRouter as Router, Routes, Route, Navigate, Link } from "react-ro
 import Ecoles from "./pages/Ecoles";
 import Ecole from "./pages/Ecole";
 import Filiere from "./pages/Filiere";
-import { FaBook, FaGraduationCap } from "react-icons/fa";
+import Concours from "./pages/Concours";
+import ConcoursDetail from "./pages/ConcoursDetail";
+import { FaBook, FaGraduationCap, FaTrophy } from "react-icons/fa";
 
 const App = () => {
   return (
@@ -25,13 +27,20 @@ const App = () => {
                 </div>
               </Link>
               
-              <div className="flex items-center space-x-4">
+              <div className="flex items-center space-x-6">
                 <Link 
                   to="/ecoles" 
                   className="flex items-center space-x-2 px-4 py-2 text-gray-700 hover:text-blue-600 transition-colors duration-200"
                 >
                   <FaGraduationCap className="w-4 h-4" />
                   <span className="font-medium">Écoles</span>
+                </Link>
+                <Link 
+                  to="/concours" 
+                  className="flex items-center space-x-2 px-4 py-2 text-gray-700 hover:text-orange-600 transition-colors duration-200"
+                >
+                  <FaTrophy className="w-4 h-4" />
+                  <span className="font-medium">Concours</span>
                 </Link>
               </div>
             </div>
@@ -45,6 +54,8 @@ const App = () => {
             <Route path="/ecoles" element={<Ecoles />} />
             <Route path="/ecole/:ecoleName" element={<Ecole />} />
             <Route path="/filiere/:filiereName" element={<Filiere />} />
+            <Route path="/concours" element={<Concours />} />
+            <Route path="/concours/:concoursId" element={<ConcoursDetail />} />
             <Route path="*" element={<Navigate to="/ecoles" replace />} />
           </Routes>
         </main>

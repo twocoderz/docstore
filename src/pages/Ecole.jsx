@@ -6,6 +6,7 @@ import {
   databaseId,
   ecolesCollectionId,
   filieresCollectionId,
+  concoursCollectionId,
   Query,
 } from "../appwrite";
 import { 
@@ -15,13 +16,16 @@ import {
   FaArrowLeft, 
   FaArrowRight,
   FaSpinner,
-  FaGraduationCap
+  FaGraduationCap,
+  FaTrophy,
+  FaCalendarAlt
 } from "react-icons/fa";
 
 const Ecole = () => {
   const { ecoleName } = useParams();
   const [ecole, setEcole] = useState(null);
   const [filieres, setFilieres] = useState([]);
+  const [concours, setConcours] = useState([]);
   const [selectedParcours, setSelectedParcours] = useState("");
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -53,23 +57,34 @@ const Ecole = () => {
 
   useEffect(() => {
     if (!ecole) return;
-    const fetchFilieres = async () => {
+    const fetchData = async () => {
       try {
         setIsLoading(true);
-        const response = await databases.listDocuments(
+        
+        // Récupérer les filières
+        const filieresResponse = await databases.listDocuments(
           databaseId,
           filieresCollectionId,
           [Query.equal("idEcole", ecole.$id)]
         );
-        setFilieres(response.documents);
+        setFilieres(filieresResponse.documents);
+        
+        // Récupérer les concours
+        const concoursResponse = await databases.listDocuments(
+          databaseId,
+          concoursCollectionId,
+          [Query.equal("idEcole", ecole.nom)]
+        );
+        setConcours(concoursResponse.documents);
+        
         setError(null);
       } catch {
-        setError("Erreur lors de la récupération des filières.");
+        setError("Erreur lors de la récupération des données.");
       } finally {
         setIsLoading(false);
       }
     };
-    fetchFilieres();
+    fetchData();
   }, [ecole]);
 
   const parcoursOptions = [...new Set(filieres.map((f) => f.parcours))];
@@ -234,6 +249,60 @@ const Ecole = () => {
               </p>
             </div>
           )}
+        </div>
+      )}
+
+      {/* Section Concours */}
+      {concours.length > 0 && (
+        <div className="space-y-6">
+          <div className="flex items-center space-x-3">
+            <div className="p-2 bg-gradient-to-r from-orange-100 to-yellow-100 rounded-lg">
+              <FaTrophy className="w-6 h-6 text-orange-600" />
+            </div>
+            <h2 className="text-2xl font-bold text-gray-900">Concours d'Entrée</h2>
+          </div>
+          
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {concours.map((concour) => (
+              <Link
+                key={concour.$id}
+                to={`/concours/${concour.$id}`}
+                className="group"
+              >
+                <div className="h-full bg-white rounded-2xl shadow-md hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1 border border-gray-100 overflow-hidden">
+                  {/* Header de la carte */}
+                  <div className="h-24 bg-gradient-to-br from-orange-500 to-yellow-600 relative">
+                    <div className="absolute inset-0 bg-black/10"></div>
+                    <div className="absolute bottom-3 left-4 right-4">
+                      <div className="flex items-center space-x-2">
+                        <div className="p-1.5 bg-white/20 backdrop-blur-sm rounded-lg">
+                          <FaTrophy className="w-4 h-4 text-white" />
+                        </div>
+                        <h3 className="text-lg font-semibold text-white line-clamp-1 group-hover:scale-105 transition-transform duration-200">
+                          {concour.nom}
+                        </h3>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Contenu de la carte */}
+                  <div className="p-6 space-y-4">
+                    <p className="text-gray-600 line-clamp-2 text-sm leading-relaxed">
+                      {concour.description}
+                    </p>
+                    
+                    <div className="flex items-center justify-between text-sm">
+                      <span className="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-medium bg-orange-100 text-orange-800">
+                        <FaCalendarAlt className="w-3 h-3 mr-1" />
+                        {concour.annee}
+                      </span>
+                      <FaArrowRight className="w-4 h-4 text-orange-600 group-hover:translate-x-1 transition-transform duration-200" />
+                    </div>
+                  </div>
+                </div>
+              </Link>
+            ))}
+          </div>
         </div>
       )}
     </div>
