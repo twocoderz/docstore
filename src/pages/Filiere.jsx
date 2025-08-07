@@ -185,8 +185,13 @@ const Filiere = () => {
     setExpandedUE(expandedUE === ueId ? null : ueId);
   };
 
+  // Réinitialiser la page quand la recherche ou le filtre change
+  useEffect(() => {
+    setPage(1);
+  }, [searchQuery, selectedYear]);
+
   const paginatedUes = sortedUes.slice((page - 1) * UES_PER_PAGE, page * UES_PER_PAGE);
-  const pageCount = Math.ceil(filteredUes.length / UES_PER_PAGE);
+  const pageCount = Math.ceil(sortedUes.length / UES_PER_PAGE);
 
   if (error || (!filiere && !isLoading)) {
     return (
