@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useParams, Link, useNavigate } from "react-router-dom";
-import { databases, databaseId, concoursCollectionId, ecolesCollectionId } from "../appwrite";
+import { databases, storage, databaseId, concoursCollectionId, ecolesCollectionId, bucketId } from "../appwrite";
 import { 
   FaTrophy, 
   FaCalendarAlt, 
@@ -16,7 +16,7 @@ import {
   FaChevronDown,
   FaChevronRight
 } from "react-icons/fa";
-import { getGoogleDrivePreviewUrl, getGoogleDriveDownloadUrl, isGoogleDriveUrl } from "../utils/googleDrive";
+import { getGoogleDrivePreviewUrl, getGoogleDriveDownloadUrl, isGoogleDriveUrl, getGoogleDriveFileName } from "../utils/googleDrive";
 
 const ConcoursDetail = () => {
   const { concoursId } = useParams();
@@ -30,6 +30,8 @@ const ConcoursDetail = () => {
   const [previewError, setPreviewError] = useState(null);
   const [isDownloading, setIsDownloading] = useState(false);
   const [isPreviewLoading, setIsPreviewLoading] = useState(false);
+  const [organizedResources, setOrganizedResources] = useState([]);
+  const [communiqueFile, setCommuniqueFile] = useState(null);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -42,6 +44,16 @@ const ConcoursDetail = () => {
         const ecolesResponse = await databases.listDocuments(databaseId, ecolesCollectionId);
         setEcoles(ecolesResponse.documents);
         
+        // Traiter le communiqué s'il existe
+        if (concoursResponse.communique) {
+          await processCommunique(concoursResponse.communique);
+        }
+
+        // Traiter les ressources s'il y en a
+        if (concoursResponse.ressources && concoursResponse.ressources.length > 0) {
+          await processResources(concoursResponse.ressources);
+        }
+        
         setError(null);
       } catch {
         setError("Erreur lors de la récupération du concours.");
@@ -52,27 +64,107 @@ const ConcoursDetail = () => {
     fetchData();
   }, [concoursId]);
 
+  const processCommunique = async (communiqueUrl) => {
+    try {
+      if (isGoogleDriveUrl(communiqueUrl)) {
+        const fileName = await getGoogleDriveFileName(communiqueUrl);
+        setCommuniqueFile({
+          name: fileName,
+          url: communiqueUrl,
+          type: 'google-drive',
+          mimeType: 'application/pdf'
+        });
+      } else {
+        // C'est probablement un ID Appwrite
+        const file = await storage.getFile(bucketId, communiqueUrl);
+        setCommuniqueFile({
+          name: file.name,
+          url: storage.getFileView(bucketId, file.$id),
+          type: 'appwrite',
+          mimeType: file.mimeType,
+          fileId: file.$id
+        });
+      }
+    } catch (error) {
+      console.error('Erreur lors du traitement du communiqué:', error);
+      setCommuniqueFile({
+        name: 'Communiqué officiel',
+        url: communiqueUrl,
+        type: 'unknown',
+        mimeType: 'application/pdf'
+      });
+    }
+  };
+
+  const processResources = async (ressources) => {
+    try {
+      const processedResources = await Promise.all(
+        ressources.map(async (ressourceUrl, index) => {
+          try {
+            if (isGoogleDriveUrl(ressourceUrl)) {
+              const fileName = await getGoogleDriveFileName(ressourceUrl);
+              return {
+                name: fileName,
+                type: "file",
+                url: ressourceUrl,
+                mimeType: "application/pdf",
+                fileType: 'google-drive'
+              };
+            } else {
+              // C'est probablement un ID Appwrite
+              const file = await storage.getFile(bucketId, ressourceUrl);
+              return {
+                name: file.name,
+                type: "file",
+                url: storage.getFileView(bucketId, file.$id),
+                mimeType: file.mimeType,
+                fileType: 'appwrite',
+                fileId: file.$id
+              };
+            }
+          } catch (error) {
+            console.error('Erreur lors du traitement de la ressource:', error);
+            return {
+              name: `Document ${index + 1}`,
+              type: "file",
+              url: ressourceUrl,
+              mimeType: "application/pdf",
+              fileType: 'unknown'
+            };
+          }
+        })
+      );
+      
+      setOrganizedResources(processedResources);
+    } catch (error) {
+      console.error('Erreur lors du traitement des ressources:', error);
+      setOrganizedResources([]);
+    }
+  };
+
   const toggleFolder = (folderPath) => {
     setOpenFolders((prev) => ({ ...prev, [folderPath]: !prev[folderPath] }));
   };
 
-  const handleDownload = (url, filename) => {
-    if (isGoogleDriveUrl(url)) {
-      const downloadUrl = getGoogleDriveDownloadUrl(url);
+  const handleDownload = (file) => {
+    if (file.fileType === 'google-drive') {
+      const downloadUrl = getGoogleDriveDownloadUrl(file.url);
       window.open(downloadUrl, '_blank');
+    } else if (file.fileType === 'appwrite' && file.fileId) {
+      window.open(storage.getFileDownload(bucketId, file.fileId), '_blank');
     } else {
-      window.open(url, '_blank');
+      window.open(file.url, '_blank');
     }
   };
 
-  const handlePreview = (url) => {
-    if (isGoogleDriveUrl(url)) {
-      const previewUrl = getGoogleDrivePreviewUrl(url);
+  const handlePreview = (file) => {
+    if (file.fileType === 'google-drive') {
+      const previewUrl = getGoogleDrivePreviewUrl(file.url);
       window.open(previewUrl, '_blank');
     } else {
       setPreviewError(null);
       setIsPreviewLoading(true);
-      setPreviewFile({ url, name: 'Document' });
+      setPreviewFile(file);
     }
   };
 
@@ -84,15 +176,7 @@ const ConcoursDetail = () => {
 
   // Organiser les ressources en structure de dossiers
   const organizeResources = (ressources) => {
-    if (!ressources || ressources.length === 0) return [];
-
-    return ressources.map((ressource, index) => ({
-      name: `Ressource ${index + 1}`,
-      type: "file",
-      url: ressource,
-      mimeType: "application/pdf",
-      originalName: `ressource-${index + 1}.pdf`
-    }));
+    return ressources || [];
   };
 
   const renderResourceItem = (item, path = "", level = 0) => {
@@ -100,8 +184,6 @@ const ConcoursDetail = () => {
     const paddingLeft = level * 24;
     
     if (item.type === "file") {
-      const safeFileName = item.originalName;
-      
       return (
         <div 
           key={itemPath}
@@ -115,7 +197,7 @@ const ConcoursDetail = () => {
           
           <div className="flex items-center space-x-2">
             <button
-              onClick={() => handlePreview(item.url)}
+              onClick={() => handlePreview(item)}
               className="inline-flex items-center space-x-1 px-3 py-1.5 text-sm font-medium text-green-700 bg-green-100 rounded-lg hover:bg-green-200 transition-colors duration-200"
               title="Prévisualiser"
             >
@@ -123,7 +205,7 @@ const ConcoursDetail = () => {
               <span className="hidden sm:inline">Aperçu</span>
             </button>
             <button
-              onClick={() => handleDownload(item.url, safeFileName)}
+              onClick={() => handleDownload(item)}
               className="inline-flex items-center space-x-1 px-3 py-1.5 text-sm font-medium text-blue-700 bg-blue-100 rounded-lg hover:bg-blue-200 transition-colors duration-200"
               title="Télécharger"
             >
@@ -200,7 +282,7 @@ const ConcoursDetail = () => {
     );
   }
 
-  const organizedResources = organizeResources(concours.ressources);
+  const organizedResourcesDisplay = organizeResources(organizedResources);
 
   return (
     <div className="space-y-8">
@@ -257,7 +339,7 @@ const ConcoursDetail = () => {
           </div>
 
           {/* Communiqué officiel - Version améliorée */}
-          {concours.communique && (
+          {communiqueFile && (
             <div className="bg-gradient-to-r from-blue-50 to-indigo-50 rounded-2xl p-6 border border-blue-200">
               <div className="flex items-center space-x-3 mb-4">
                 <div className="p-2 bg-blue-100 rounded-lg">
@@ -271,29 +353,31 @@ const ConcoursDetail = () => {
               
               <div className="bg-white rounded-xl p-4 shadow-sm border border-gray-100">
                 <div className="flex items-center justify-between">
-                  <div className="flex items-center space-x-3">
+                  <div className="flex items-center space-x-3 flex-1 min-w-0">
                     <div className="p-2 bg-red-100 rounded-lg">
                       <FaFilePdf className="w-5 h-5 text-red-600" />
                     </div>
-                    <div>
-                      <p className="font-medium text-gray-900">Communiqué du concours</p>
-                      <p className="text-sm text-gray-500">Informations officielles et modalités d'inscription</p>
+                    <div className="flex-1 min-w-0">
+                      <p className="font-medium text-gray-900 truncate">{communiqueFile.name}</p>
+                      <p className="text-sm text-gray-500">Document officiel</p>
                     </div>
                   </div>
                   <div className="flex space-x-2">
                     <button
-                      onClick={() => handlePreview(concours.communique)}
-                      className="inline-flex items-center space-x-2 px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors duration-200 shadow-sm hover:shadow-md"
+                      onClick={() => handlePreview(communiqueFile)}
+                      className="inline-flex items-center space-x-1 px-3 py-1.5 text-sm font-medium text-green-700 bg-green-100 rounded-lg hover:bg-green-200 transition-colors duration-200"
+                      title="Prévisualiser"
                     >
                       <FaEye className="w-4 h-4" />
-                      <span>Prévisualiser</span>
+                      <span className="hidden sm:inline">Aperçu</span>
                     </button>
                     <button
-                      onClick={() => handleDownload(concours.communique, 'communique.pdf')}
-                      className="inline-flex items-center space-x-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors duration-200 shadow-sm hover:shadow-md"
+                      onClick={() => handleDownload(communiqueFile)}
+                      className="inline-flex items-center space-x-1 px-3 py-1.5 text-sm font-medium text-blue-700 bg-blue-100 rounded-lg hover:bg-blue-200 transition-colors duration-200"
+                      title="Télécharger"
                     >
                       <FaDownload className="w-4 h-4" />
-                      <span>Télécharger</span>
+                      <span className="hidden sm:inline">Télécharger</span>
                     </button>
                   </div>
                 </div>
@@ -302,7 +386,7 @@ const ConcoursDetail = () => {
           )}
 
           {/* Ressources et Épreuves - Version améliorée similaire aux écoles */}
-          {organizedResources.length > 0 && (
+          {organizedResourcesDisplay.length > 0 && (
             <div className="bg-gradient-to-r from-green-50 to-emerald-50 rounded-2xl p-6 border border-green-200">
               <div className="flex items-center space-x-3 mb-6">
                 <div className="p-2 bg-green-100 rounded-lg">
@@ -315,18 +399,9 @@ const ConcoursDetail = () => {
               </div>
               
               <div className="space-y-4">
-                {organizedResources.length > 0 ? (
-                  <div className="space-y-3">
-                    {organizedResources.map((item) => renderResourceItem(item))}
-                  </div>
-                ) : (
-                  <div className="text-center py-8">
-                    <div className="w-16 h-16 mx-auto bg-gray-100 rounded-full flex items-center justify-center mb-4">
-                      <FaBook className="w-6 h-6 text-gray-400" />
-                    </div>
-                    <p className="text-gray-600">Aucune ressource disponible</p>
-                  </div>
-                )}
+                <div className="space-y-3">
+                  {organizedResourcesDisplay.map((item) => renderResourceItem(item))}
+                </div>
               </div>
             </div>
           )}
