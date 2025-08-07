@@ -342,8 +342,8 @@ const ConcoursDetail = () => {
           {communiqueFile && (
             <div className="bg-gradient-to-r from-blue-50 to-indigo-50 rounded-2xl p-6 border border-blue-200">
               <div className="flex items-center space-x-3 mb-4">
-                <div className="p-2 bg-blue-100 rounded-lg">
-                  <FaFilePdf className="w-6 h-6 text-blue-600" />
+                <div className="p-2 bg-red-100 rounded-lg">
+                  <FaFilePdf className="w-6 h-6 text-red-600" />
                 </div>
                 <div>
                   <h3 className="text-xl font-semibold text-gray-900">Communiqué Officiel</h3>
@@ -389,8 +389,8 @@ const ConcoursDetail = () => {
           {organizedResourcesDisplay.length > 0 && (
             <div className="bg-gradient-to-r from-green-50 to-emerald-50 rounded-2xl p-6 border border-green-200">
               <div className="flex items-center space-x-3 mb-6">
-                <div className="p-2 bg-green-100 rounded-lg">
-                  <FaBook className="w-6 h-6 text-green-600" />
+                <div className="p-2 bg-red-100 rounded-lg">
+                  <FaBook className="w-6 h-6 text-red-600" />
                 </div>
                 <div>
                   <h3 className="text-xl font-semibold text-gray-900">Ressources et Épreuves</h3>
