@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { useParams, Link } from "react-router-dom";
+import { useParams, Link, useNavigate } from "react-router-dom";
 import { databases, databaseId, concoursCollectionId, ecolesCollectionId } from "../appwrite";
 import { 
   FaTrophy, 
@@ -17,6 +17,7 @@ import { getGoogleDrivePreviewUrl, getGoogleDriveDownloadUrl, isGoogleDriveUrl }
 
 const ConcoursDetail = () => {
   const { concoursId } = useParams();
+  const navigate = useNavigate();
   const [concours, setConcours] = useState(null);
   const [ecoles, setEcoles] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
@@ -99,13 +100,15 @@ const ConcoursDetail = () => {
   return (
     <div className="space-y-8">
       {/* Bouton retour */}
-      <Link 
-        to="/concours" 
-        className="inline-flex items-center space-x-2 text-orange-600 hover:text-orange-700 transition-colors duration-200"
-      >
-        <FaArrowLeft className="w-4 h-4" />
-        <span>Retour aux concours</span>
-      </Link>
+      <div className="flex items-center justify-between">
+        <button
+          onClick={() => navigate(-1)}
+          className="inline-flex items-center space-x-2 px-4 py-2 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors duration-200 group"
+        >
+          <FaArrowLeft className="w-4 h-4 text-gray-500 group-hover:-translate-x-0.5 transition-transform duration-200" />
+          <span className="text-gray-700 font-medium">Retour</span>
+        </button>
+      </div>
 
       {/* En-tête du concours */}
       <div className="bg-white rounded-2xl shadow-lg border border-gray-100 overflow-hidden">
