@@ -241,8 +241,8 @@ const ConcoursDetail = () => {
           {ressources.length > 0 && (
             <div>
               <div className="flex items-center space-x-3 mb-4 mt-8">
-                <div className="p-2 bg-blue-100 rounded-lg">
-                  <FaBook className="w-6 h-6 text-blue-600" />
+                <div className="p-2 bg-red-100 rounded-lg">
+                  <FaBook className="w-6 h-6 text-red-600" />
                 </div>
                 <h3 className="text-xl font-semibold text-gray-900">Ressources et Épreuves</h3>
               </div>
