@@ -227,12 +227,12 @@ const Ecole = () => {
 
       {/* Filtres */}
       <div className="bg-white rounded-2xl p-6 shadow-sm border border-gray-100">
-        <div className="flex flex-col sm:flex-row gap-4 items-start sm:items-center">
+        <div className="flex flex-col sm:flex-row gap-4 items-start sm:items-center sm:justify-between">
           <h3 className="text-lg font-semibold text-gray-900 flex items-center space-x-2">
             <FaGraduationCap className="w-5 h-5 text-blue-600" />
             <span>Filtrer les filières</span>
           </h3>
-          <div className="flex-1 max-w-xs">
+          <div className="sm:w-64 sm:ml-auto">
             <FilterSelect
               label="Parcours"
               options={parcoursOptions}
