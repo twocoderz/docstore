@@ -15,9 +15,9 @@ const CourseCard = ({ course }) => {
   };
 
   return (
-    <div className="bg-white p-6 rounded-md shadow-sm hover:shadow-md transition duration-300">
-      <h3 className="text-lg font-semibold text-[#1A1A1A] mb-2">{course.title}</h3>
-      <p className="text-sm text-gray-600 mb-4">{course.description}</p>
+    <div className="card-smooth-hover bg-white p-6 rounded-md shadow-sm cursor-pointer group">
+      <h3 className="text-lg font-semibold text-[#1A1A1A] mb-2 group-hover:text-blue-600 transition-colors duration-300">{course.title}</h3>
+      <p className="text-sm text-gray-600 mb-4 group-hover:text-gray-700 transition-colors duration-300">{course.description}</p>
       <ResourceExplorer resources={resources} />
     </div>
   );
