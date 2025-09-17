@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
+import ModernSelect from "../components/ModernSelect";
 import { databases, databaseId, concoursCollectionId, ecolesCollectionId } from "../appwrite";
 import { FaTrophy, FaCalendarAlt, FaUniversity, FaArrowRight, FaSpinner, FaFilePdf } from "react-icons/fa";
 
@@ -95,25 +96,20 @@ const Concours = () => {
 
       {/* Filtres */}
       <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
-        <select
+        <ModernSelect 
           value={selectedYear}
-          onChange={(e) => setSelectedYear(e.target.value)}
-          className="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-orange-500 bg-white"
-        >
-          {years.map(year => (
-            <option key={year} value={year}>{year}</option>
-          ))}
-        </select>
-        
-        <select
+          onChange={setSelectedYear}
+          options={years}
+          variant="orange"
+          className="w-56"
+        />
+        <ModernSelect 
           value={selectedEcole}
-          onChange={(e) => setSelectedEcole(e.target.value)}
-          className="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-orange-500 bg-white"
-        >
-          {ecoleNames.map(ecole => (
-            <option key={ecole} value={ecole}>{ecole}</option>
-          ))}
-        </select>
+          onChange={setSelectedEcole}
+          options={ecoleNames}
+          variant="orange"
+          className="w-56"
+        />
       </div>
 
       {/* Grille des concours */}

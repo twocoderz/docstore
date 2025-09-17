@@ -137,11 +137,17 @@ select:focus-visible {
 
 /* Custom select styling */
 select {
-  background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%236b7280' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='M6 8l4 4 4-4'/%3e%3c/svg%3e");
-  background-position: right 0.5rem center;
-  background-repeat: no-repeat;
-  background-size: 1.5em 1.5em;
-  padding-right: 2.5rem;
+  /* Réinitialisé: nous gérons l'icône via React pour un rendu cohérent */
+  background-image: none;
+}
+
+/* Style moderne pour les selects */
+.modern-select {
+  box-shadow: 0 4px 12px rgba(17, 24, 39, 0.06);
+}
+
+.modern-select:hover {
+  box-shadow: 0 8px 20px rgba(17, 24, 39, 0.08);
 }
 
 /* Loading animation */
