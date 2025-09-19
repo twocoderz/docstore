@@ -123,52 +123,54 @@ const Ecole = () => {
 
   return (
     <div className="space-y-8">
-      {/* En-tête avec breadcrumb et bouton retour */}
-      <div className="flex items-center justify-between">
-        <div className="flex items-center space-x-4">
-          <Link
-            to="/ecoles"
-            className="inline-flex items-center space-x-2 px-4 py-2 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors duration-200 group"
-          >
-            <FaArrowLeft className="w-4 h-4 text-gray-500 group-hover:-translate-x-0.5 transition-transform duration-200" />
-            <span className="text-gray-700 font-medium">Retour</span>
-          </Link>
-        </div>
-      </div>
-
-      {/* Header de l'école */}
-      <div className="bg-gradient-to-r from-blue-600 via-blue-700 to-indigo-800 rounded-3xl p-8 text-white relative overflow-hidden">
-        <div className="relative z-10">
-          <div className="flex items-start justify-between">
-            <div className="space-y-4">
-              <div className="flex items-center space-x-3">
-                <div className="p-3 bg-white/20 backdrop-blur-sm rounded-xl">
-                  <FaUniversity className="w-8 h-8" />
-                </div>
-                <div>
-                  <h1 className="text-3xl md:text-4xl font-bold">
-                    {ecole?.nom || "Chargement..."}
-                  </h1>
-                  {ecole?.lieu && (
-                    <div className="flex items-center space-x-2 mt-2">
-                      <FaMapMarkerAlt className="w-4 h-4 text-blue-200" />
-                      <span className="text-blue-100">{ecole.lieu}</span>
-                    </div>
-                  )}
-                </div>
-              </div>
-              {ecole?.description && (
-                <p className="text-blue-100 max-w-2xl leading-relaxed">
-                  {ecole.description}
-                </p>
-              )}
-            </div>
+      <div className="sticky top-0 z-20 space-y-8 pt-4 pb-4 bg-gray-50/80 backdrop-blur">
+        {/* En-tête avec breadcrumb et bouton retour */}
+        <div className="flex items-center justify-between">
+          <div className="flex items-center space-x-4">
+            <Link
+              to="/ecoles"
+              className="inline-flex items-center space-x-2 px-4 py-2 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors duration-200 group"
+            >
+              <FaArrowLeft className="w-4 h-4 text-gray-500 group-hover:-translate-x-0.5 transition-transform duration-200" />
+              <span className="text-gray-700 font-medium">Retour</span>
+            </Link>
           </div>
         </div>
-        
-        {/* Éléments décoratifs */}
-        <div className="absolute top-0 right-0 w-64 h-64 bg-white/5 rounded-full -translate-y-32 translate-x-32"></div>
-        <div className="absolute bottom-0 left-0 w-48 h-48 bg-white/5 rounded-full translate-y-24 -translate-x-24"></div>
+
+        {/* Header de l'école */}
+        <div className="bg-gradient-to-r from-blue-600 via-blue-700 to-indigo-800 rounded-3xl p-8 text-white relative overflow-hidden">
+          <div className="relative z-10">
+            <div className="flex items-start justify-between">
+              <div className="space-y-4">
+                <div className="flex flex-col sm:flex-row items-start sm:items-center gap-3 sm:gap-3">
+                  <div className="hidden sm:block p-3 bg-white/20 backdrop-blur-sm rounded-xl">
+                    <FaUniversity className="w-8 h-8" />
+                  </div>
+                  <div>
+                    <h1 className="text-2xl md:text-4xl font-bold">
+                      {ecole?.nom || "Chargement..."}
+                    </h1>
+                    {ecole?.lieu && (
+                      <div className="flex items-center space-x-2 mt-2">
+                        <FaMapMarkerAlt className="w-4 h-4 text-blue-200" />
+                        <span className="text-blue-100">{ecole.lieu}</span>
+                      </div>
+                    )}
+                  </div>
+                </div>
+                {ecole?.description && (
+                  <p className="text-blue-100 max-w-2xl leading-relaxed">
+                    {ecole.description}
+                  </p>
+                )}
+              </div>
+            </div>
+          </div>
+          
+          {/* Éléments décoratifs */}
+          <div className="absolute top-0 right-0 w-64 h-64 bg-white/5 rounded-full -translate-y-32 translate-x-32"></div>
+          <div className="absolute bottom-0 left-0 w-48 h-48 bg-white/5 rounded-full translate-y-24 -translate-x-24"></div>
+        </div>
       </div>
 
       {/* Section Concours */}
@@ -193,11 +195,11 @@ const Ecole = () => {
                   <div className="h-24 bg-gradient-to-br from-orange-500 to-yellow-600 relative">
                     <div className="absolute inset-0 bg-black/10"></div>
                     <div className="absolute bottom-3 left-4 right-4">
-                      <div className="flex items-center space-x-2">
-                        <div className="p-1.5 bg-white/20 backdrop-blur-sm rounded-lg">
+                      <div className="flex flex-col sm:flex-row items-start sm:items-center gap-2 sm:gap-2">
+                        <div className="hidden sm:block p-1.5 bg-white/20 backdrop-blur-sm rounded-lg">
                           <FaTrophy className="w-4 h-4 text-white" />
                         </div>
-                        <h3 className="text-lg font-semibold text-white line-clamp-1 group-hover:scale-105 transition-transform duration-200">
+                        <h3 className="text-lg font-semibold text-white line-clamp-2 sm:line-clamp-1 group-hover:scale-105 transition-transform duration-200">
                           {concour.nom}
                         </h3>
                       </div>
@@ -262,11 +264,11 @@ const Ecole = () => {
                   <div className="h-24 bg-gradient-to-br from-indigo-500 to-purple-600 relative">
                     <div className="absolute inset-0 bg-black/10"></div>
                     <div className="absolute bottom-3 left-4 right-4">
-                      <div className="flex items-center space-x-2">
-                        <div className="p-1.5 bg-white/20 backdrop-blur-sm rounded-lg">
+                      <div className="flex flex-col sm:flex-row items-start sm:items-center gap-2 sm:gap-2">
+                        <div className="hidden sm:block p-1.5 bg-white/20 backdrop-blur-sm rounded-lg">
                           <FaBook className="w-4 h-4 text-white" />
                         </div>
-                        <h3 className="text-lg font-semibold text-white line-clamp-1 group-hover:scale-105 transition-transform duration-200">
+                        <h3 className="text-lg font-semibold text-white line-clamp-2 sm:line-clamp-1 group-hover:scale-105 transition-transform duration-200">
                           {filiere.nom}
                         </h3>
                       </div>

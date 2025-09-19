@@ -224,47 +224,49 @@ const Filiere = () => {
 
   return (
     <div className="space-y-8">
-      {/* En-tête avec breadcrumb */}
-      <div className="flex items-center justify-between">
-        <button
-          onClick={() => navigate(-1)}
-          className="inline-flex items-center space-x-2 px-4 py-2 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors duration-200 group"
-        >
-          <FaArrowLeft className="w-4 h-4 text-gray-500 group-hover:-translate-x-0.5 transition-transform duration-200" />
-          <span className="text-gray-700 font-medium">Retour</span>
-        </button>
-      </div>
+      <div className="sticky top-0 z-20 space-y-8 pt-4 pb-4 bg-gray-50/80 backdrop-blur">
+        {/* En-tête avec breadcrumb */}
+        <div className="flex items-center justify-between">
+          <button
+            onClick={() => navigate(-1)}
+            className="inline-flex items-center space-x-2 px-4 py-2 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors duration-200 group"
+          >
+            <FaArrowLeft className="w-4 h-4 text-gray-500 group-hover:-translate-x-0.5 transition-transform duration-200" />
+            <span className="text-gray-700 font-medium">Retour</span>
+          </button>
+        </div>
 
-      {/* Header de la filière */}
-      <div className="bg-gradient-to-r from-purple-600 via-purple-700 to-indigo-800 rounded-3xl p-8 text-white relative overflow-hidden">
-        <div className="relative z-10">
-          <div className="flex items-start justify-between">
-            <div className="space-y-4">
-              <div className="flex items-center space-x-3">
-                <div className="p-3 bg-white/20 backdrop-blur-sm rounded-xl">
-                  <FaBook className="w-8 h-8" />
+        {/* Header de la filière */}
+        <div className="bg-gradient-to-r from-purple-600 via-purple-700 to-indigo-800 rounded-3xl p-8 text-white relative overflow-hidden">
+          <div className="relative z-10">
+            <div className="flex items-start justify-between">
+              <div className="space-y-4">
+                <div className="flex flex-col sm:flex-row items-start sm:items-center gap-3 sm:gap-3">
+                  <div className="hidden sm:block p-3 bg-white/20 backdrop-blur-sm rounded-xl">
+                    <FaBook className="w-8 h-8" />
+                  </div>
+                  <div>
+                    <h1 className="text-2xl md:text-4xl font-bold">
+                      {filiere?.nom || "Chargement..."}
+                    </h1>
+                    <p className="text-purple-100 mt-2">
+                      Unités d'enseignement disponibles
+                    </p>
+                  </div>
                 </div>
-                <div>
-                  <h1 className="text-3xl md:text-4xl font-bold">
-                    {filiere?.nom || "Chargement..."}
-                  </h1>
-                  <p className="text-purple-100 mt-2">
-                    Unités d'enseignement disponibles
+                {filiere?.description && (
+                  <p className="text-purple-100 max-w-2xl leading-relaxed">
+                    {filiere.description}
                   </p>
-                </div>
+                )}
               </div>
-              {filiere?.description && (
-                <p className="text-purple-100 max-w-2xl leading-relaxed">
-                  {filiere.description}
-                </p>
-              )}
             </div>
           </div>
+          
+          {/* Éléments décoratifs */}
+          <div className="absolute top-0 right-0 w-64 h-64 bg-white/5 rounded-full -translate-y-32 translate-x-32"></div>
+          <div className="absolute bottom-0 left-0 w-48 h-48 bg-white/5 rounded-full translate-y-24 -translate-x-24"></div>
         </div>
-        
-        {/* Éléments décoratifs */}
-        <div className="absolute top-0 right-0 w-64 h-64 bg-white/5 rounded-full -translate-y-32 translate-x-32"></div>
-        <div className="absolute bottom-0 left-0 w-48 h-48 bg-white/5 rounded-full translate-y-24 -translate-x-24"></div>
       </div>
 
       {/* Section filtres et recherche */}
@@ -375,10 +377,10 @@ const Filiere = () => {
                                 {file.name}
                               </p>
                               
-                              <div className="flex items-center space-x-2">
+                              <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2 sm:gap-0 sm:space-x-2">
                                 <button
                                   onClick={() => handlePreview(file)}
-                                  className="inline-flex items-center space-x-1 px-3 py-1.5 text-xs font-medium text-green-700 bg-green-100 rounded-lg hover:bg-green-200 transition-colors duration-200"
+                                  className="inline-flex items-center justify-center space-x-1 px-3 py-1.5 text-xs font-medium text-green-700 bg-green-100 rounded-lg hover:bg-green-200 transition-colors duration-200 w-full sm:w-auto"
                                 >
                                   <FaEye className="w-3 h-3" />
                                   <span>Aperçu</span>
@@ -386,7 +388,7 @@ const Filiere = () => {
                                 
                                 <button
                                   onClick={() => handleDownload(file)}
-                                  className="inline-flex items-center space-x-1 px-3 py-1.5 text-xs font-medium text-blue-700 bg-blue-100 rounded-lg hover:bg-blue-200 transition-colors duration-200"
+                                  className="inline-flex items-center justify-center space-x-1 px-3 py-1.5 text-xs font-medium text-blue-700 bg-blue-100 rounded-lg hover:bg-blue-200 transition-colors duration-200 w-full sm:w-auto"
                                 >
                                   <FaDownload className="w-3 h-3" />
                                   <span>Télécharger</span>
