@@ -86,10 +86,10 @@ const Concours = () => {
         <div className="inline-flex items-center space-x-3 p-3 bg-gradient-to-r from-orange-100 to-yellow-100 rounded-2xl">
           <FaTrophy className="w-8 h-8 text-orange-600" />
         </div>
-        <h1 className="text-4xl font-bold bg-gradient-to-r from-gray-900 via-orange-900 to-gray-900 bg-clip-text text-transparent">
+        <h1 className="text-3xl md:text-4xl font-bold bg-gradient-to-r from-gray-900 via-orange-900 to-gray-900 bg-clip-text text-transparent">
           Concours d'Entrée
         </h1>
-        <p className="text-lg text-gray-600 max-w-2xl mx-auto leading-relaxed">
+        <p className="text-base md:text-lg text-gray-600 max-w-2xl mx-auto leading-relaxed">
           Découvrez tous les concours d'entrée disponibles pour les différentes écoles
         </p>
       </div>
@@ -127,10 +127,10 @@ const Concours = () => {
                   <div className="absolute inset-0 bg-black/10"></div>
                   <div className="absolute bottom-4 left-6 right-6">
                     <div className="flex items-center space-x-3">
-                      <div className="p-2 bg-white/20 backdrop-blur-sm rounded-lg">
+                    <div className="p-2 bg-white/20 backdrop-blur-sm rounded-lg">
                         <FaTrophy className="w-6 h-6 text-white" />
                       </div>
-                      <h3 className="text-xl font-bold text-white line-clamp-2 group-hover:scale-105 transition-transform duration-200">
+                    <h3 className="text-lg md:text-xl font-bold text-white line-clamp-2 group-hover:scale-105 transition-transform duration-200">
                         {concour.nom}
                       </h3>
                     </div>
@@ -142,7 +142,7 @@ const Concours = () => {
 
                 {/* Contenu */}
                 <div className="p-6 space-y-4">
-                  <p className="text-gray-600 line-clamp-3 leading-relaxed">
+                  <p className="text-gray-600 line-clamp-3 leading-relaxed text-sm md:text-base">
                     {concour.description}
                   </p>
                   
@@ -167,7 +167,7 @@ const Concours = () => {
 
                   {/* Call to action */}
                   <div className="flex items-center justify-between pt-2">
-                    <span className="text-sm font-medium text-orange-600">Voir les détails</span>
+                    <span className="text-xs md:text-sm font-medium text-orange-600">Voir les détails</span>
                     <FaArrowRight className="w-4 h-4 text-orange-600 group-hover:translate-x-1 transition-transform duration-200" />
                   </div>
                 </div>

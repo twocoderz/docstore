@@ -149,7 +149,7 @@ const ConcoursDetail = () => {
             className="inline-flex items-center space-x-2 px-4 py-2 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors duration-200 group"
           >
             <FaArrowLeft className="w-4 h-4 text-gray-500 group-hover:-translate-x-0.5 transition-transform duration-200" />
-            <span className="text-gray-700 font-medium">Retour</span>
+            <span className="text-gray-700 font-medium text-sm md:text-base">Retour</span>
           </button>
         </div>
 
@@ -164,10 +164,10 @@ const ConcoursDetail = () => {
                   <FaTrophy className="w-8 h-8 text-white" />
                 </div>
                 <div className="flex-1">
-                  <h1 className="text-3xl font-bold text-white mb-2">
+                  <h1 className="text-2xl md:text-3xl font-bold text-white mb-2">
                     {concours.nom}
                   </h1>
-                  <div className="flex items-center space-x-4 text-white/90">
+                  <div className="flex items-center space-x-4 text-white/90 text-sm md:text-base">
                     <div className="flex items-center space-x-2">
                       <FaCalendarAlt className="w-4 h-4" />
                       <span>{concours.annee}</span>
@@ -191,7 +191,7 @@ const ConcoursDetail = () => {
       <div className="p-8 space-y-8 bg-white rounded-2xl shadow-lg border border-gray-100">
         {/* Description */}
         <div className="prose max-w-none">
-          <p className="text-lg text-gray-700 leading-relaxed">
+          <p className="text-base md:text-lg text-gray-700 leading-relaxed">
             {concours.description}
           </p>
         </div>
@@ -203,7 +203,7 @@ const ConcoursDetail = () => {
               <div className="p-2 bg-red-100 rounded-lg">
                 <FaFilePdf className="w-6 h-6 text-red-600" />
               </div>
-              <h3 className="text-xl font-semibold text-gray-900">Communiqués officiels</h3>
+              <h3 className="text-lg md:text-xl font-semibold text-gray-900">Communiqués officiels</h3>
             </div>
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
               {communiques.map((file, idx) => (
@@ -247,7 +247,7 @@ const ConcoursDetail = () => {
               <div className="p-2 bg-red-100 rounded-lg">
                 <FaBook className="w-6 h-6 text-red-600" />
               </div>
-              <h3 className="text-xl font-semibold text-gray-900">Ressources et Épreuves</h3>
+              <h3 className="text-lg md:text-xl font-semibold text-gray-900">Ressources et Épreuves</h3>
             </div>
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
               {ressources.map((file, idx) => (

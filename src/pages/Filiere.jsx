@@ -232,7 +232,7 @@ const Filiere = () => {
             className="inline-flex items-center space-x-2 px-4 py-2 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors duration-200 group"
           >
             <FaArrowLeft className="w-4 h-4 text-gray-500 group-hover:-translate-x-0.5 transition-transform duration-200" />
-            <span className="text-gray-700 font-medium">Retour</span>
+            <span className="text-gray-700 font-medium text-sm md:text-base">Retour</span>
           </button>
         </div>
 
@@ -249,13 +249,13 @@ const Filiere = () => {
                     <h1 className="text-2xl md:text-4xl font-bold">
                       {filiere?.nom || "Chargement..."}
                     </h1>
-                    <p className="text-purple-100 mt-2">
+                    <p className="text-purple-100 mt-2 text-sm md:text-base">
                       Unités d'enseignement disponibles
                     </p>
                   </div>
                 </div>
                 {filiere?.description && (
-                  <p className="text-purple-100 max-w-2xl leading-relaxed">
+                  <p className="text-purple-100 max-w-2xl leading-relaxed text-sm md:text-base">
                     {filiere.description}
                   </p>
                 )}
@@ -274,7 +274,7 @@ const Filiere = () => {
         <div className="flex flex-col lg:flex-row gap-4 items-start lg:items-center">
           <div className="flex items-center space-x-2">
             <FaFilter className="w-5 h-5 text-blue-600" />
-            <h3 className="text-lg font-semibold text-gray-900">Filtres</h3>
+              <h3 className="text-base md:text-lg font-semibold text-gray-900">Filtres</h3>
           </div>
           
           <div className="flex flex-col sm:flex-row gap-4 flex-1">
@@ -314,12 +314,12 @@ const Filiere = () => {
                       <div className="p-2 bg-gradient-to-r from-blue-100 to-purple-100 rounded-lg">
                         <FaGraduationCap className="w-5 h-5 text-blue-600" />
                       </div>
-                      <h3 className="text-xl font-bold text-gray-900 line-clamp-2">
+                      <h3 className="text-lg md:text-xl font-bold text-gray-900 line-clamp-2">
                         {ue.nom}
                       </h3>
                     </div>
                     
-                    <p className="text-gray-600 leading-relaxed line-clamp-2">
+                    <p className="text-gray-600 leading-relaxed line-clamp-2 text-sm md:text-base">
                       {ue.description}
                     </p>
                     
@@ -355,7 +355,7 @@ const Filiere = () => {
                 <div className="p-6 bg-gray-50">
                   <div className="flex items-center space-x-2 mb-4">
                     <FaFilePdf className="w-5 h-5 text-red-500" />
-                    <h4 className="text-lg font-semibold text-gray-900">Ressources disponibles</h4>
+                    <h4 className="text-base md:text-lg font-semibold text-gray-900">Ressources disponibles</h4>
                   </div>
                   
                   {ue.files && ue.files.length > 0 ? (
@@ -416,8 +416,8 @@ const Filiere = () => {
             <div className="w-24 h-24 mx-auto bg-gray-100 rounded-full flex items-center justify-center mb-4">
               <FaSearch className="w-10 h-10 text-gray-400" />
             </div>
-            <h3 className="text-lg font-semibold text-gray-900 mb-2">Aucune UE trouvée</h3>
-            <p className="text-gray-600">
+            <h3 className="text-base md:text-lg font-semibold text-gray-900 mb-2">Aucune UE trouvée</h3>
+            <p className="text-gray-600 text-sm md:text-base">
               Essayez de modifier vos filtres de recherche ou vérifiez l'orthographe.
             </p>
           </div>
@@ -466,7 +466,7 @@ const Filiere = () => {
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
           <div className="bg-white rounded-2xl w-full max-w-6xl h-[90vh] overflow-hidden">
             <div className="flex items-center justify-between p-6 border-b border-gray-200">
-              <h2 className="text-xl font-semibold text-gray-900 truncate">
+              <h2 className="text-lg md:text-xl font-semibold text-gray-900 truncate">
                 Aperçu : {previewFileName}
               </h2>
               <button
