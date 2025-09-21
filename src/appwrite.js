@@ -1,5 +1,6 @@
 import { Client, Databases, Storage, ID, Query } from 'appwrite';
 
+// Définition du client
 const client = new Client();
 client.setProject('67efdbc8003bcb27bcaf');
 
