@@ -254,10 +254,10 @@ const Ecole = () => {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {filteredFilieres.length > 0 ? (
             filteredFilieres.map((filiere) => (
-              <Link
+              <div
                 key={filiere.$id}
-                to={`/filiere/${encodeURIComponent(filiere.nom)}`}
-                className="group"
+                onClick={() => window.open(`/filiere/${encodeURIComponent(filiere.nom)}`, '_blank', 'noopener,noreferrer')}
+                className="group cursor-pointer"
               >
                 <div className="h-full bg-white rounded-2xl shadow-md hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1 border border-gray-100 overflow-hidden">
                   {/* Header de la carte */}
@@ -289,7 +289,7 @@ const Ecole = () => {
                     </div>
                   </div>
                 </div>
-              </Link>
+              </div>
             ))
           ) : (
             <div className="col-span-full text-center py-16">
