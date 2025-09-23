@@ -312,16 +312,30 @@ html {
 /* Styles pour la pagination mobile */
 @media (max-width: 640px) {
   .pagination-mobile {
-    padding: 0 1rem;
+    padding: 0 0.5rem;
   }
 
   .pagination-mobile .flex {
-    gap: 0.25rem;
+    gap: 0.125rem;
   }
 
   .pagination-mobile button {
-    min-width: 2.5rem;
-    font-size: 0.75rem;
+    min-width: 2rem;
+    min-height: 2rem;
+    padding: 0.25rem 0.5rem;
+    font-size: 0.625rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .pagination-mobile button svg {
+    width: 0.75rem;
+    height: 0.75rem;
+  }
+
+  .pagination-mobile .space-x-1>*+* {
+    margin-left: 0.125rem;
   }
 }
 

@@ -16,7 +16,9 @@ import {
   FaFilter,
   FaChevronDown,
   FaChevronUp,
-  FaGraduationCap
+  FaGraduationCap,
+  FaChevronLeft,
+  FaChevronRight
 } from "react-icons/fa";
 
 const UES_PER_PAGE = 6;
@@ -431,9 +433,13 @@ const Filiere = () => {
             <button
               onClick={() => setPage(Math.max(1, page - 1))}
               disabled={page === 1}
-              className="px-2 sm:px-3 py-2 text-xs sm:text-sm font-medium text-gray-500 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed whitespace-nowrap"
+              className="px-1 sm:px-3 py-1 sm:py-2 text-xs sm:text-sm font-medium text-gray-500 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed whitespace-nowrap"
+              title="Page précédente"
             >
-              Précédent
+              <span className="sm:hidden">
+                <FaChevronLeft className="w-3 h-3 sm:w-4 sm:h-4" />
+              </span>
+              <span className="hidden sm:inline">Précédent</span>
             </button>
 
             {/* Mobile: Show limited page numbers */}
@@ -441,39 +447,39 @@ const Filiere = () => {
               {page > 1 && (
                 <button
                   onClick={() => setPage(1)}
-                  className="px-2 py-2 text-xs font-medium text-gray-500 bg-white border border-gray-300 rounded-lg hover:bg-gray-50"
+                  className="px-1 py-1 text-xs font-medium text-gray-500 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 min-w-[2rem]"
                 >
                   1
                 </button>
               )}
-              {page > 2 && <span className="px-2 text-gray-400">...</span>}
+              {page > 2 && <span className="px-1 text-gray-400 text-xs">...</span>}
               {page > 1 && (
                 <button
                   onClick={() => setPage(page - 1)}
-                  className="px-2 py-2 text-xs font-medium text-gray-500 bg-white border border-gray-300 rounded-lg hover:bg-gray-50"
+                  className="px-1 py-1 text-xs font-medium text-gray-500 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 min-w-[2rem]"
                 >
                   {page - 1}
                 </button>
               )}
               <button
                 onClick={() => setPage(page)}
-                className="px-2 py-2 text-xs font-medium text-white bg-blue-600 border border-blue-600 rounded-lg"
+                className="px-1 py-1 text-xs font-medium text-white bg-blue-600 border border-blue-600 rounded-lg min-w-[2rem]"
               >
                 {page}
               </button>
               {page < pageCount && (
                 <button
                   onClick={() => setPage(page + 1)}
-                  className="px-2 py-2 text-xs font-medium text-gray-500 bg-white border border-gray-300 rounded-lg hover:bg-gray-50"
+                  className="px-1 py-1 text-xs font-medium text-gray-500 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 min-w-[2rem]"
                 >
                   {page + 1}
                 </button>
               )}
-              {page < pageCount - 1 && <span className="px-2 text-gray-400">...</span>}
+              {page < pageCount - 1 && <span className="px-1 text-gray-400 text-xs">...</span>}
               {page < pageCount && (
                 <button
                   onClick={() => setPage(pageCount)}
-                  className="px-2 py-2 text-xs font-medium text-gray-500 bg-white border border-gray-300 rounded-lg hover:bg-gray-50"
+                  className="px-1 py-1 text-xs font-medium text-gray-500 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 min-w-[2rem]"
                 >
                   {pageCount}
                 </button>
@@ -499,9 +505,13 @@ const Filiere = () => {
             <button
               onClick={() => setPage(Math.min(pageCount, page + 1))}
               disabled={page === pageCount}
-              className="px-2 sm:px-3 py-2 text-xs sm:text-sm font-medium text-gray-500 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed whitespace-nowrap"
+              className="px-1 sm:px-3 py-1 sm:py-2 text-xs sm:text-sm font-medium text-gray-500 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed whitespace-nowrap"
+              title="Page suivante"
             >
-              Suivant
+              <span className="hidden sm:inline">Suivant</span>
+              <span className="sm:hidden">
+                <FaChevronRight className="w-3 h-3 sm:w-4 sm:h-4" />
+              </span>
             </button>
           </div>
         </div>
