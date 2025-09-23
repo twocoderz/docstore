@@ -121,7 +121,7 @@ select:focus-visible {
 
 .card-smooth-hover:hover {
   transform: translateY(-6px) scale(1.02);
-  box-shadow: 
+  box-shadow:
     0 25px 50px -12px rgba(0, 0, 0, 0.15),
     0 0 0 1px rgba(59, 130, 246, 0.1);
 }
@@ -133,21 +133,24 @@ select:focus-visible {
 
 .card-pulse-hover:hover {
   transform: translateY(-4px);
-  box-shadow: 
-    0 20px 25px -5px rgba(0, 0, 0, 0.1), 
+  box-shadow:
+    0 20px 25px -5px rgba(0, 0, 0, 0.1),
     0 10px 10px -5px rgba(0, 0, 0, 0.04);
   animation: gentlePulse 2s ease-in-out infinite;
 }
 
 @keyframes gentlePulse {
-  0%, 100% {
-    box-shadow: 
-      0 20px 25px -5px rgba(0, 0, 0, 0.1), 
+
+  0%,
+  100% {
+    box-shadow:
+      0 20px 25px -5px rgba(0, 0, 0, 0.1),
       0 10px 10px -5px rgba(0, 0, 0, 0.04);
   }
+
   50% {
-    box-shadow: 
-      0 25px 35px -5px rgba(0, 0, 0, 0.15), 
+    box-shadow:
+      0 25px 35px -5px rgba(0, 0, 0, 0.15),
       0 15px 15px -5px rgba(0, 0, 0, 0.08);
   }
 }
@@ -164,8 +167,8 @@ select:focus-visible {
 
 .card-link:hover .card-content {
   transform: translateY(-4px);
-  box-shadow: 
-    0 20px 25px -5px rgba(0, 0, 0, 0.1), 
+  box-shadow:
+    0 20px 25px -5px rgba(0, 0, 0, 0.1),
     0 10px 10px -5px rgba(0, 0, 0, 0.04);
 }
 
@@ -187,8 +190,8 @@ select:focus-visible {
 .card-gradient-hover:hover {
   background: linear-gradient(135deg, #ffffff 0%, #f1f5f9 100%);
   transform: translateY(-4px);
-  box-shadow: 
-    0 20px 25px -5px rgba(0, 0, 0, 0.1), 
+  box-shadow:
+    0 20px 25px -5px rgba(0, 0, 0, 0.1),
     0 10px 10px -5px rgba(0, 0, 0, 0.04);
 }
 
@@ -274,12 +277,12 @@ html {
   .mobile-text-sm {
     font-size: 0.875rem;
   }
-  
+
   /* Amélioration du header mobile */
   .mobile-header {
     padding: 0.75rem 1rem;
   }
-  
+
   /* Espacement optimisé pour mobile */
   .mobile-spacing {
     padding: 0.5rem;
@@ -291,7 +294,7 @@ html {
   .mobile-compact {
     padding: 0.5rem 0.75rem;
   }
-  
+
   .mobile-text-xs {
     font-size: 0.75rem;
   }
@@ -306,11 +309,28 @@ html {
   animation: slideUp 0.3s ease-in;
 }
 
+/* Styles pour la pagination mobile */
+@media (max-width: 640px) {
+  .pagination-mobile {
+    padding: 0 1rem;
+  }
+
+  .pagination-mobile .flex {
+    gap: 0.25rem;
+  }
+
+  .pagination-mobile button {
+    min-width: 2.5rem;
+    font-size: 0.75rem;
+  }
+}
+
 @keyframes slideDown {
   from {
     opacity: 0;
     transform: translateY(-10px);
   }
+
   to {
     opacity: 1;
     transform: translateY(0);
@@ -322,6 +342,7 @@ html {
     opacity: 1;
     transform: translateY(0);
   }
+
   to {
     opacity: 0;
     transform: translateY(-10px);
@@ -338,6 +359,7 @@ html {
 
 /* Focus visible amélioré pour mobile */
 @media (max-width: 768px) {
+
   button:focus-visible,
   a:focus-visible {
     outline: 2px solid #3b82f6;
@@ -374,6 +396,7 @@ html {
     width: 0;
     opacity: 0;
   }
+
   to {
     width: 4px;
     opacity: 1;
@@ -411,9 +434,12 @@ html {
 
 /* Animation de pulsation pour les éléments actifs */
 @keyframes activePulse {
-  0%, 100% {
+
+  0%,
+  100% {
     box-shadow: 0 0 0 0 rgba(59, 130, 246, 0.4);
   }
+
   50% {
     box-shadow: 0 0 0 8px rgba(59, 130, 246, 0);
   }
