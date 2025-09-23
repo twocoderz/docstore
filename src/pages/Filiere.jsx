@@ -228,15 +228,12 @@ const Filiere = () => {
     <div className="space-y-8">
       <div className="sticky top-0 z-20 space-y-8 pt-4 pb-4 bg-gray-50/80 backdrop-blur">
         {/* En-tête avec breadcrumb */}
-        <div className="flex items-center justify-between">
-          <button
-            onClick={() => navigate(-1)}
-            className="md:hidden inline-flex items-center space-x-2 px-4 py-2 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors duration-200 group"
-          >
-            <FaArrowLeft className="w-4 h-4 text-gray-500 group-hover:-translate-x-0.5 transition-transform duration-200" />
-            <span className="text-gray-700 font-medium text-sm md:text-base">Retour</span>
-          </button>
-        </div>
+        <button
+          onClick={() => navigate(-1)}
+          className="md:hidden inline-flex items-center justify-center w-11 h-11 rounded-full bg-gray-50 hover:bg-gray-100 active:bg-gray-200 shadow-sm hover:shadow-md transition-all duration-200 group"
+        >
+          <FaArrowLeft className="w-5 h-5 text-gray-700 group-hover:-translate-x-0.5 group-active:scale-95 transition-transform duration-200" />
+        </button>
 
         {/* Header de la filière */}
         <div className="bg-gradient-to-r from-purple-600 via-purple-700 to-indigo-800 rounded-3xl p-8 text-white relative overflow-hidden">
