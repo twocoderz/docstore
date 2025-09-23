@@ -9,11 +9,11 @@ import {
   concoursCollectionId,
   Query,
 } from "../appwrite";
-import { 
-  FaUniversity, 
-  FaBook, 
-  FaMapMarkerAlt, 
-  FaArrowLeft, 
+import {
+  FaUniversity,
+  FaBook,
+  FaMapMarkerAlt,
+  FaArrowLeft,
   FaArrowRight,
   FaSpinner,
   FaGraduationCap,
@@ -60,7 +60,7 @@ const Ecole = () => {
     const fetchData = async () => {
       try {
         setIsLoading(true);
-        
+
         // Récupérer les filières
         const filieresResponse = await databases.listDocuments(
           databaseId,
@@ -68,7 +68,7 @@ const Ecole = () => {
           [Query.equal("idEcole", ecole.$id)]
         );
         setFilieres(filieresResponse.documents);
-        
+
         // Récupérer les concours
         const concoursResponse = await databases.listDocuments(
           databaseId,
@@ -76,7 +76,7 @@ const Ecole = () => {
           [Query.equal("idEcole", ecole.$id)]
         );
         setConcours(concoursResponse.documents);
-        
+
         setError(null);
       } catch {
         setError("Erreur lors de la récupération des données.");
@@ -125,17 +125,12 @@ const Ecole = () => {
     <div className="space-y-8">
       <div className="sticky top-0 z-20 space-y-8 pt-4 pb-4 bg-gray-50/80 backdrop-blur">
         {/* En-tête avec breadcrumb et bouton retour */}
-        <div className="flex items-center justify-between">
-          <div className="flex items-center space-x-4">
-            <Link
-              to="/ecoles"
-              className="inline-flex items-center space-x-2 px-4 py-2 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors duration-200 group"
-            >
-              <FaArrowLeft className="w-4 h-4 text-gray-500 group-hover:-translate-x-0.5 transition-transform duration-200" />
-              <span className="text-gray-700 font-medium">Retour</span>
-            </Link>
-          </div>
-        </div>
+        <Link
+          to="/ecoles"
+          className="md:hidden inline-flex items-center justify-center w-11 h-11 rounded-full bg-gray-50 hover:bg-gray-100 active:bg-gray-200 shadow-sm hover:shadow-md transition-all duration-200 group"
+        >
+          <FaArrowLeft className="w-5 h-5 text-gray-700 group-hover:-translate-x-0.5 group-active:scale-95 transition-transform duration-200" />
+        </Link>
 
         {/* Header de l'école */}
         <div className="bg-gradient-to-r from-blue-600 via-blue-700 to-indigo-800 rounded-3xl p-8 text-white relative overflow-hidden">
@@ -166,7 +161,7 @@ const Ecole = () => {
               </div>
             </div>
           </div>
-          
+
           {/* Éléments décoratifs */}
           <div className="absolute top-0 right-0 w-64 h-64 bg-white/5 rounded-full -translate-y-32 translate-x-32"></div>
           <div className="absolute bottom-0 left-0 w-48 h-48 bg-white/5 rounded-full translate-y-24 -translate-x-24"></div>
@@ -182,7 +177,7 @@ const Ecole = () => {
             </div>
             <h2 className="text-2xl font-bold text-gray-900">Concours d'Entrée</h2>
           </div>
-          
+
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {concours.map((concour) => (
               <Link
@@ -211,7 +206,7 @@ const Ecole = () => {
                     <p className="text-gray-600 line-clamp-2 text-sm leading-relaxed">
                       {concour.description}
                     </p>
-                    
+
                     <div className="flex items-center justify-between text-sm">
                       <span className="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-medium bg-orange-100 text-orange-800">
                         <FaCalendarAlt className="w-3 h-3 mr-1" />
@@ -254,10 +249,10 @@ const Ecole = () => {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {filteredFilieres.length > 0 ? (
             filteredFilieres.map((filiere) => (
-              <Link
+              <div
                 key={filiere.$id}
-                to={`/filiere/${encodeURIComponent(filiere.nom)}`}
-                className="group"
+                onClick={() => window.open(`/filiere/${encodeURIComponent(filiere.nom)}`, '_blank', 'noopener,noreferrer')}
+                className="group cursor-pointer"
               >
                 <div className="h-full bg-white rounded-2xl shadow-md hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1 border border-gray-100 overflow-hidden">
                   {/* Header de la carte */}
@@ -280,7 +275,7 @@ const Ecole = () => {
                     <p className="text-gray-600 line-clamp-2 text-sm leading-relaxed">
                       {filiere.description}
                     </p>
-                    
+
                     <div className="flex items-center justify-between text-sm">
                       <span className="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
                         {filiere.parcours}
@@ -289,7 +284,7 @@ const Ecole = () => {
                     </div>
                   </div>
                 </div>
-              </Link>
+              </div>
             ))
           ) : (
             <div className="col-span-full text-center py-16">
@@ -298,8 +293,8 @@ const Ecole = () => {
               </div>
               <h3 className="text-lg font-semibold text-gray-900 mb-2">Aucune filière trouvée</h3>
               <p className="text-gray-600">
-                {selectedParcours 
-                  ? "Aucune filière ne correspond aux filtres sélectionnés." 
+                {selectedParcours
+                  ? "Aucune filière ne correspond aux filtres sélectionnés."
                   : "Cette école ne dispose pas encore de données sur les filières."
                 }
               </p>

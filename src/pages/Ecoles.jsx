@@ -3,10 +3,25 @@ import { Link } from "react-router-dom";
 import { databases, databaseId, ecolesCollectionId } from "../appwrite";
 import { FaUniversity, FaMapMarkerAlt, FaArrowRight, FaSpinner } from "react-icons/fa";
 
+// Fonction pour détecter si l'appareil est mobile
+const isMobileDevice = () => {
+  return window.innerWidth < 768; // Considère mobile si largeur < 768px
+};
+
 const Ecoles = () => {
   const [ecoles, setEcoles] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [isMobile, setIsMobile] = useState(isMobileDevice);
+
+  useEffect(() => {
+    const handleResize = () => {
+      setIsMobile(isMobileDevice());
+    };
+
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
 
   useEffect(() => {
     const fetchEcoles = async () => {
@@ -75,6 +90,7 @@ const Ecoles = () => {
               key={ecole.$id}
               to={`/ecole/${encodeURIComponent(ecole.nom)}`}
               className="group"
+              {...(!isMobile && { target: "_blank", rel: "noopener noreferrer" })}
             >
               <div className="h-full bg-white rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2 border border-gray-100 overflow-hidden">
                 {/* Header avec gradient */}
@@ -100,7 +116,7 @@ const Ecoles = () => {
                   <p className="text-gray-600 line-clamp-3 leading-relaxed">
                     {ecole.description}
                   </p>
-                  
+
                   {ecole.lieu && (
                     <div className="flex items-center space-x-2 text-sm text-gray-500">
                       <FaMapMarkerAlt className="w-4 h-4 text-red-400" />

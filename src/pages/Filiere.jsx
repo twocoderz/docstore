@@ -5,18 +5,20 @@ import SearchBar from "../components/SearchBar";
 import { databases, storage, databaseId, filieresCollectionId, uesCollectionId, bucketId, Query } from "../appwrite";
 import { isGoogleDriveUrl, getGoogleDriveFileName, getGoogleDrivePreviewUrl, getGoogleDriveDownloadUrl } from "../utils/googleDrive";
 import deburr from 'lodash/deburr';
-import { 
-  FaBook, 
-  FaFilePdf, 
-  FaDownload, 
-  FaEye, 
+import {
+  FaBook,
+  FaFilePdf,
+  FaDownload,
+  FaEye,
   FaArrowLeft,
   FaSpinner,
   FaSearch,
   FaFilter,
   FaChevronDown,
   FaChevronUp,
-  FaGraduationCap
+  FaGraduationCap,
+  FaChevronLeft,
+  FaChevronRight
 } from "react-icons/fa";
 
 const UES_PER_PAGE = 6;
@@ -65,16 +67,16 @@ const Filiere = () => {
     const fetchUEs = async () => {
       try {
         setIsLoading(true);
-        
+
         const response = await databases.listDocuments(
-          databaseId, 
-          uesCollectionId, 
+          databaseId,
+          uesCollectionId,
           [
             Query.equal("idFiliere", filiere.$id),
             Query.limit(1000)
           ]
         );
-        
+
         const uesWithFiles = await Promise.all(
           response.documents.map(async (ue) => {
             const fileIds = ue.ressources || [];
@@ -85,9 +87,9 @@ const Filiere = () => {
                   if (isGoogleDriveUrl(fileId)) {
                     // C'est un lien Google Drive - récupérer le nom via API
                     const fileName = await getGoogleDriveFileName(fileId);
-                    return { 
-                      $id: fileId, 
-                      name: fileName, 
+                    return {
+                      $id: fileId,
+                      name: fileName,
                       mimeType: 'application/pdf',
                       type: 'google-drive',
                       url: fileId
@@ -95,9 +97,9 @@ const Filiere = () => {
                   } else {
                     // C'est un ID Appwrite
                     const file = await storage.getFile(bucketId, fileId);
-                    return { 
-                      $id: file.$id, 
-                      name: file.name, 
+                    return {
+                      $id: file.$id,
+                      name: file.name,
                       mimeType: file.mimeType,
                       type: 'appwrite',
                       url: storage.getFileView(bucketId, file.$id)
@@ -226,15 +228,12 @@ const Filiere = () => {
     <div className="space-y-8">
       <div className="sticky top-0 z-20 space-y-8 pt-4 pb-4 bg-gray-50/80 backdrop-blur">
         {/* En-tête avec breadcrumb */}
-        <div className="flex items-center justify-between">
-          <button
-            onClick={() => navigate(-1)}
-            className="inline-flex items-center space-x-2 px-4 py-2 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors duration-200 group"
-          >
-            <FaArrowLeft className="w-4 h-4 text-gray-500 group-hover:-translate-x-0.5 transition-transform duration-200" />
-            <span className="text-gray-700 font-medium text-sm md:text-base">Retour</span>
-          </button>
-        </div>
+        <button
+          onClick={() => navigate(-1)}
+          className="md:hidden inline-flex items-center justify-center w-11 h-11 rounded-full bg-gray-50 hover:bg-gray-100 active:bg-gray-200 shadow-sm hover:shadow-md transition-all duration-200 group"
+        >
+          <FaArrowLeft className="w-5 h-5 text-gray-700 group-hover:-translate-x-0.5 group-active:scale-95 transition-transform duration-200" />
+        </button>
 
         {/* Header de la filière */}
         <div className="bg-gradient-to-r from-purple-600 via-purple-700 to-indigo-800 rounded-3xl p-8 text-white relative overflow-hidden">
@@ -262,7 +261,7 @@ const Filiere = () => {
               </div>
             </div>
           </div>
-          
+
           {/* Éléments décoratifs */}
           <div className="absolute top-0 right-0 w-64 h-64 bg-white/5 rounded-full -translate-y-32 translate-x-32"></div>
           <div className="absolute bottom-0 left-0 w-48 h-48 bg-white/5 rounded-full translate-y-24 -translate-x-24"></div>
@@ -274,9 +273,9 @@ const Filiere = () => {
         <div className="flex flex-col lg:flex-row gap-4 items-start lg:items-center">
           <div className="flex items-center space-x-2">
             <FaFilter className="w-5 h-5 text-blue-600" />
-              <h3 className="text-base md:text-lg font-semibold text-gray-900">Filtres</h3>
+            <h3 className="text-base md:text-lg font-semibold text-gray-900">Filtres</h3>
           </div>
-          
+
           <div className="flex flex-col sm:flex-row gap-4 flex-1">
             <div className="max-w-xs">
               <FilterSelect
@@ -286,12 +285,12 @@ const Filiere = () => {
                 onChange={setSelectedYear}
               />
             </div>
-            
+
             <div className="flex-1 max-w-md">
               <SearchBar onSearch={setSearchQuery} placeholder="Rechercher une UE..." />
             </div>
           </div>
-          
+
           <div className="text-sm text-gray-500">
             {filteredUes.length} résultat{filteredUes.length > 1 ? 's' : ''}
           </div>
@@ -318,11 +317,11 @@ const Filiere = () => {
                         {ue.nom}
                       </h3>
                     </div>
-                    
+
                     <p className="text-gray-600 leading-relaxed line-clamp-2 text-sm md:text-base">
                       {ue.description}
                     </p>
-                    
+
                     {ue.anneeEnseignement && ue.anneeEnseignement.length > 0 && (
                       <div className="flex flex-wrap gap-2">
                         {(Array.isArray(ue.anneeEnseignement) ? ue.anneeEnseignement : [ue.anneeEnseignement]).map((annee, index) => (
@@ -336,7 +335,7 @@ const Filiere = () => {
                       </div>
                     )}
                   </div>
-                  
+
                   <button
                     onClick={() => toggleUE(ue.$id)}
                     className="ml-4 p-2 cursor-pointer text-gray-400 hover:text-gray-600 hover:bg-gray-100 rounded-lg transition-colors duration-200"
@@ -357,7 +356,7 @@ const Filiere = () => {
                     <FaFilePdf className="w-5 h-5 text-red-500" />
                     <h4 className="text-base md:text-lg font-semibold text-gray-900">Ressources disponibles</h4>
                   </div>
-                  
+
                   {ue.files && ue.files.length > 0 ? (
                     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
                       {ue.files.map((file) => (
@@ -371,12 +370,12 @@ const Filiere = () => {
                                 <FaFilePdf className="w-5 h-5 text-red-600" />
                               </div>
                             </div>
-                            
+
                             <div className="flex-1 min-w-0">
                               <p className="text-sm font-medium text-gray-900 line-clamp-2 mb-2">
                                 {file.name}
                               </p>
-                              
+
                               <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2 sm:gap-0 sm:space-x-2">
                                 <button
                                   onClick={() => handlePreview(file)}
@@ -385,7 +384,7 @@ const Filiere = () => {
                                   <FaEye className="w-3 h-3" />
                                   <span>Aperçu</span>
                                 </button>
-                                
+
                                 <button
                                   onClick={() => handleDownload(file)}
                                   className="inline-flex items-center justify-center space-x-1 px-3 py-1.5 text-xs font-medium text-blue-700 bg-blue-100 rounded-lg hover:bg-blue-200 transition-colors duration-200 w-full sm:w-auto"
@@ -427,35 +426,89 @@ const Filiere = () => {
       {/* Pagination */}
       {pageCount > 1 && (
         <div className="flex justify-center">
-          <div className="flex items-center space-x-2">
+          <div className="pagination-mobile flex items-center space-x-1 sm:space-x-2 max-w-full overflow-x-auto">
             <button
               onClick={() => setPage(Math.max(1, page - 1))}
               disabled={page === 1}
-              className="px-3 py-2 text-sm font-medium text-gray-500 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed"
+              className="px-1 sm:px-3 py-1 sm:py-2 text-xs sm:text-sm font-medium text-gray-500 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed whitespace-nowrap"
+              title="Page précédente"
             >
-              Précédent
+              <span className="sm:hidden">
+                <FaChevronLeft className="w-3 h-3 sm:w-4 sm:h-4" />
+              </span>
+              <span className="hidden sm:inline">Précédent</span>
             </button>
-            
-            {Array.from({ length: pageCount }, (_, i) => i + 1).map((pageNum) => (
+
+            {/* Mobile: Show limited page numbers */}
+            <div className="flex items-center space-x-1 sm:hidden">
+              {page > 1 && (
+                <button
+                  onClick={() => setPage(1)}
+                  className="px-1 py-1 text-xs font-medium text-gray-500 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 min-w-[2rem]"
+                >
+                  1
+                </button>
+              )}
+              {page > 2 && <span className="px-1 text-gray-400 text-xs">...</span>}
+              {page > 1 && (
+                <button
+                  onClick={() => setPage(page - 1)}
+                  className="px-1 py-1 text-xs font-medium text-gray-500 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 min-w-[2rem]"
+                >
+                  {page - 1}
+                </button>
+              )}
               <button
-                key={pageNum}
-                onClick={() => setPage(pageNum)}
-                className={`px-3 py-2 text-sm font-medium rounded-lg ${
-                  page === pageNum
+                onClick={() => setPage(page)}
+                className="px-1 py-1 text-xs font-medium text-white bg-blue-600 border border-blue-600 rounded-lg min-w-[2rem]"
+              >
+                {page}
+              </button>
+              {page < pageCount && (
+                <button
+                  onClick={() => setPage(page + 1)}
+                  className="px-1 py-1 text-xs font-medium text-gray-500 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 min-w-[2rem]"
+                >
+                  {page + 1}
+                </button>
+              )}
+              {page < pageCount - 1 && <span className="px-1 text-gray-400 text-xs">...</span>}
+              {page < pageCount && (
+                <button
+                  onClick={() => setPage(pageCount)}
+                  className="px-1 py-1 text-xs font-medium text-gray-500 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 min-w-[2rem]"
+                >
+                  {pageCount}
+                </button>
+              )}
+            </div>
+
+            {/* Desktop: Show all page numbers */}
+            <div className="hidden sm:flex items-center space-x-1">
+              {Array.from({ length: pageCount }, (_, i) => i + 1).map((pageNum) => (
+                <button
+                  key={pageNum}
+                  onClick={() => setPage(pageNum)}
+                  className={`px-2 sm:px-3 py-2 text-xs sm:text-sm font-medium rounded-lg ${page === pageNum
                     ? 'text-white bg-blue-600 border border-blue-600'
                     : 'text-gray-500 bg-white border border-gray-300 hover:bg-gray-50'
-                }`}
-              >
-                {pageNum}
-              </button>
-            ))}
-            
+                    }`}
+                >
+                  {pageNum}
+                </button>
+              ))}
+            </div>
+
             <button
               onClick={() => setPage(Math.min(pageCount, page + 1))}
               disabled={page === pageCount}
-              className="px-3 py-2 text-sm font-medium text-gray-500 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed"
+              className="px-1 sm:px-3 py-1 sm:py-2 text-xs sm:text-sm font-medium text-gray-500 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed whitespace-nowrap"
+              title="Page suivante"
             >
-              Suivant
+              <span className="hidden sm:inline">Suivant</span>
+              <span className="sm:hidden">
+                <FaChevronRight className="w-3 h-3 sm:w-4 sm:h-4" />
+              </span>
             </button>
           </div>
         </div>
