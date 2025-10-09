@@ -75,7 +75,7 @@ const Ecoles = () => {
           <FaUniversity className="w-8 h-8 text-blue-600" />
         </div>
         <h1 className="text-4xl font-bold bg-gradient-to-r from-gray-900 via-blue-900 to-gray-900 bg-clip-text text-transparent">
-          Nos Écoles
+          Écoles
         </h1>
         <p className="text-lg text-gray-600 max-w-2xl mx-auto leading-relaxed">
           Découvrez toutes les écoles disponibles et explorez leurs filières académiques
