@@ -47,7 +47,7 @@ const getFileInfo = async (fileId) => {
       modifiedTime: response.data.modifiedTime
     };
 
-    // Mettre en cache pour 1 heure
+    // Mettre en cache pour 1 heure 
     fileCache.set(fileId, fileInfo);
     setTimeout(() => fileCache.delete(fileId), 60 * 60 * 1000);
 
