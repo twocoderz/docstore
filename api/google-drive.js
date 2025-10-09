@@ -1,6 +1,6 @@
 import { google } from 'googleapis';
 
-// Configuration de l'authentification
+// Configuration de l'authentification 
 const auth = new google.auth.GoogleAuth({
   credentials: {
     type: "service_account",
