@@ -9,7 +9,7 @@ const FilterSelect = ({ label, options, value, onChange }) => {
         <label className="block text-sm font-medium text-gray-700 mb-2 lg:mb-0 lg:whitespace-nowrap">
           {label}
         </label>
-        <div className="relative lg:w-64">
+        <div className="relative lg:w-34">
           <ModernSelect
             value={value}
             onChange={onChange}

@@ -186,7 +186,9 @@ const Ecole = () => {
                     <div className="absolute inset-0 bg-black/10"></div>
                     <div className="absolute bottom-3 left-4 right-4">
                       <div className="flex flex-col sm:flex-row items-start sm:items-center gap-2 sm:gap-2">
-                        <img src="/assets/icons/trophy.svg" alt="school" className="w-5 h-5" />
+                        <div className="hidden sm:block">
+                          <img src="/assets/icons/trophy.svg" alt="school" className="w-5 h-5 " />
+                        </div>
                         <h3 className="text-lg font-semibold text-white line-clamp-2 sm:line-clamp-1 group-hover:scale-105 transition-transform duration-200">
                           {concour.nom}
                         </h3>
@@ -216,22 +218,11 @@ const Ecole = () => {
       )}
 
       {/* Filtres */}
-      <div className="bg-white rounded-2xl p-6 shadow-sm border border-gray-100">
-        <div className="flex flex-col sm:flex-row gap-4 items-start sm:items-center sm:justify-between">
-          <h3 className="text-lg font-semibold text-gray-900 flex items-center space-x-2">
-            <FaGraduationCap className="w-5 h-5 text-blue-600" />
-            <span>Filtrer les filières</span>
-          </h3>
-          <div className="sm:w-64 sm:ml-auto">
-            <FilterSelect
-              label="Parcours"
-              options={parcoursOptions}
-              value={selectedParcours}
-              onChange={setSelectedParcours}
-            />
-          </div>
-        </div>
-      </div>
+      <FilterSelect
+        options={parcoursOptions}
+        value={selectedParcours}
+        onChange={setSelectedParcours}
+      />
 
       {/* Grille des filières */}
       {isLoading ? (
@@ -250,13 +241,12 @@ const Ecole = () => {
                 <div className="h-full bg-white rounded-2xl shadow-md hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1 border border-gray-100 overflow-hidden">
                   {/* Header de la carte */}
                   <div className="h-24 bg-gradient-to-br from-indigo-500 to-purple-600 relative">
-                    <div className="absolute inset-0 bg-black/10"></div>
                     <div className="absolute bottom-3 left-4 right-4">
                       <div className="flex flex-col sm:flex-row items-start sm:items-center gap-2 sm:gap-2">
-                        <div className="hidden sm:block p-1.5 bg-white/20 backdrop-blur-sm rounded-lg">
+                        <div className="hidden sm:block">
                           <FaBook className="w-4 h-4 text-white" />
                         </div>
-                        <h3 className="text-lg font-semibold text-white line-clamp-2 sm:line-clamp-1 group-hover:scale-105 transition-transform duration-200">
+                        <h3 className="text-lg font-semibold text-white line-clamp-2 sm:line-clamp-1 transition-transform duration-200">
                           {filiere.nom}
                         </h3>
                       </div>
