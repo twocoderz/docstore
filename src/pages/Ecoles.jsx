@@ -74,7 +74,7 @@ const Ecoles = () => {
         <h1 className="text-4xl md:text-6xl font-bold bg-gradient-to-r from-gray-900 via-blue-900 to-gray-900 bg-clip-text text-transparent">
           Écoles
         </h1>
-        <p className="text-lg md:text-3xl text-gray-600 max-w-2xl leading-relaxed">
+        <p className="text-lg md:text-2xl text-gray-600 max-w-2xl leading-relaxed">
           Découvrez toutes les écoles disponibles et explorez leurs filières académiques
         </p>
       </div>
@@ -98,7 +98,7 @@ const Ecoles = () => {
                       <div className="p-2 bg-white/20 backdrop-blur-sm rounded-lg">
                         <FaUniversity className="w-6 h-6 text-white" />
                       </div>
-                      <h3 className="text-xl font-bold text-white line-clamp-2 group-hover:scale-105 transition-transform duration-200">
+                      <h3 className="text-xl md:text-3xl font-bold text-white line-clamp-2 group-hover:scale-105 transition-transform duration-200">
                         {ecole.nom}
                       </h3>
                     </div>

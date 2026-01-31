@@ -30,10 +30,10 @@ const Navigation = () => {
 
   // Classes pour les liens actifs
   const getActiveClasses = (path, isMobile = false) => {
-    const baseClasses = isMobile 
+    const baseClasses = isMobile
       ? "flex items-center space-x-3 px-4 py-3 rounded-lg transition-all duration-300 font-medium nav-link"
       : "flex items-center space-x-2 px-3 lg:px-4 py-2 rounded-lg transition-all duration-300 font-medium nav-link";
-    
+
     if (isActive(path)) {
       if (path === '/ecoles') {
         return `${baseClasses} text-blue-600 bg-blue-50 border-l-4 border-blue-600 shadow-sm nav-active active`;
@@ -41,14 +41,14 @@ const Navigation = () => {
         return `${baseClasses} text-orange-600 bg-orange-50 border-l-4 border-orange-600 shadow-sm nav-active nav-active-concours active nav-link-concours`;
       }
     }
-    
+
     // Classes par défaut
     if (path === '/ecoles') {
       return `${baseClasses} text-gray-700 hover:text-blue-600 hover:bg-blue-50`;
     } else if (path === '/concours') {
       return `${baseClasses} text-gray-700 hover:text-orange-600 hover:bg-orange-50 nav-link-concours`;
     }
-    
+
     return baseClasses;
   };
 
@@ -72,8 +72,8 @@ const Navigation = () => {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center h-16 lg:h-20">
             {/* Logo et nom de l'app */}
-            <Link 
-              to="/ecoles" 
+            <Link
+              to="/ecoles"
               className="flex items-center space-x-2 sm:space-x-3 group flex-shrink-0"
               onClick={closeMobileMenu}
             >
@@ -87,18 +87,18 @@ const Navigation = () => {
                 <p className="text-xs text-gray-500 hidden sm:block">Bibliothèque numérique</p>
               </div>
             </Link>
-            
+
             {/* Navigation desktop */}
             <div className="hidden md:flex items-center space-x-1 lg:space-x-6">
-              <Link 
-                to="/ecoles" 
+              <Link
+                to="/ecoles"
                 className={getActiveClasses('/ecoles')}
               >
                 <FaGraduationCap className={`w-4 h-4 ${getIconClasses('/ecoles')}`} />
                 <span>Écoles</span>
               </Link>
-              <Link 
-                to="/concours" 
+              <Link
+                to="/concours"
                 className={getActiveClasses('/concours')}
               >
                 <FaTrophy className={`w-4 h-4 ${getIconClasses('/concours')}`} />
@@ -121,22 +121,21 @@ const Navigation = () => {
           </div>
 
           {/* Menu mobile */}
-          <div className={`md:hidden transition-all duration-300 ease-in-out ${
-            isMobileMenuOpen 
-              ? 'max-h-64 opacity-100 border-t border-gray-200/60' 
+          <div className={`md:hidden transition-all duration-300 ease-in-out ${isMobileMenuOpen
+              ? 'max-h-64 opacity-100 border-t border-gray-200/60'
               : 'max-h-0 opacity-0 overflow-hidden'
-          }`}>
+            }`}>
             <div className="py-4 space-y-2">
-              <Link 
-                to="/ecoles" 
+              <Link
+                to="/ecoles"
                 className={getActiveClasses('/ecoles', true)}
                 onClick={closeMobileMenu}
               >
                 <FaGraduationCap className={`w-5 h-5 ${getIconClasses('/ecoles')}`} />
                 <span className="text-base">Écoles</span>
               </Link>
-              <Link 
-                to="/concours" 
+              <Link
+                to="/concours"
                 className={getActiveClasses('/concours', true)}
                 onClick={closeMobileMenu}
               >
