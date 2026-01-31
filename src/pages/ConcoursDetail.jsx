@@ -161,7 +161,7 @@ const ConcoursDetail = () => {
                   <h1 className="text-2xl md:text-3xl font-bold text-white mb-2">
                     {concours.nom}
                   </h1>
-                  <div className="flex items-center space-x-4 text-white text-sm md:text-base">
+                  <div className="flex items-center space-x-4 text-gray-800 text-sm md:text-base">
                     <div className="flex items-center space-x-2">
                       <img src="/assets/icons/calendar.svg" alt="calendar" className="w-4 h-4" />
                       <span>{concours.annee}</span>
