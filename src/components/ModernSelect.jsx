@@ -34,7 +34,7 @@ const ModernSelect = ({
       <select
         value={value}
         onChange={(e) => onChange(e.target.value)}
-        className={`modern-select block w-full pl-4 pr-10 py-3 rounded-xl bg-white/90 text-gray-900 border border-gray-200 shadow-sm ${v.hover} ${v.focus} focus:outline-none transition-all duration-200 appearance-none`}
+        className={`modern-select cursor-pointer block w-full pl-4 pr-10 py-3 rounded-xl bg-white/90 text-gray-900 border border-gray-200 ${v.hover} ${v.focus} focus:outline-none transition-all duration-200 appearance-none`}
       >
         {placeholder && (
           <option value="" disabled hidden>
@@ -47,7 +47,7 @@ const ModernSelect = ({
           </option>
         ))}
       </select>
-      <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-4">
+      <div className="pointer-events-none cursor-pointer absolute inset-y-0 right-0 flex items-center pr-4">
         <FaChevronDown className={`h-4 w-4 ${v.icon}`} />
       </div>
     </div>

@@ -87,7 +87,7 @@ const Ecoles = () => {
               key={ecole.$id}
               to={`/ecole/${encodeURIComponent(ecole.nom)}`}
               className="group"
-              {...(!isMobile && { target: "_blank", rel: "noopener noreferrer" })}
+              {...(!isMobile && { rel: "noopener noreferrer" })}
             >
               <div className="h-full bg-white rounded-2xl shadow-lg hover:shadow-2xl transform hover:-translate-y-1 border border-gray-100 overflow-hidden transition-all duration-500 ease-out">
                 {/* Header avec gradient */}

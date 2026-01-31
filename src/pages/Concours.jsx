@@ -108,7 +108,6 @@ const Concours = () => {
               {/* Desktop: Open in new tab */}
               <a
                 href={`/concours/${concour.$id}`}
-                target="_blank"
                 rel="noopener noreferrer"
                 className="hidden md:block h-full"
               >
@@ -132,8 +131,8 @@ const Concours = () => {
                   {/* Contenu */}
                   <div className="p-6 space-y-4">
                     <div className="space-y-2">
-                      <div className="flex items-center space-x-2 text-sm text-gray-500">
-                        <img src="/assets/icons/calendar.svg" alt="calendar" className="w-5 h-5" />
+                      <div className="flex items-center space-x-2 text-sm text-gray-900">
+                        <img src="/assets/icons/calendar.svg" alt="calendar" className="w-4 h-4" />
                         <span>{concour.annee}</span>
                       </div>
 
