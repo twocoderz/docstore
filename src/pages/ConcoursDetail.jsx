@@ -153,7 +153,7 @@ const ConcoursDetail = () => {
         {/* En-tête du concours */}
         <div className="bg-white rounded-2xl shadow-lg border border-gray-100 overflow-hidden">
           {/* Header avec gradient */}
-          <div className="h-38 bg-gradient-to-br from-orange-500 via-orange-600 to-yellow-600 relative overflow-hidden">
+          <div className="h-26 bg-gradient-to-br from-orange-500 via-orange-600 to-yellow-600 relative overflow-hidden">
             <div className="absolute bottom-4 left-8 right-8">
               <div className="flex flex-col sm:flex-row items-start sm:items-center gap-3 sm:gap-4">
                 <img src="/assets/icons/trophy.svg" alt="trophy" className="w-12 h-12" />
@@ -182,7 +182,7 @@ const ConcoursDetail = () => {
       </div>
 
       {/* Contenu principal */}
-      <div className="p-8 space-y-8 bg-white rounded-2xl shadow-lg border border-gray-100">
+      <div className="p-8 space-y-8 bg-white rounded-2xl border border-gray-100">
         {/* Communiqués (grille comme ressources) */}
         {communiques.length > 0 && (
           <div>
@@ -237,23 +237,21 @@ const ConcoursDetail = () => {
                 <div key={idx} className="bg-white rounded-xl p-4 border border-gray-200 hover:border-blue-300 hover:shadow-md transition-all duration-200">
                   <div className="flex items-start space-x-3">
                     <div className="flex-shrink-0">
-                      <div className="p-2 bg-red-100 rounded-lg">
-                        <FaFilePdf className="w-5 h-5 text-red-600" />
-                      </div>
+                      <FaFilePdf className="w-5 h-5 text-red-600" />
                     </div>
                     <div className="flex-1 min-w-0">
                       <p className="text-sm font-medium text-gray-900 line-clamp-2 mb-2">{file.name}</p>
                       <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2 sm:gap-0 sm:space-x-2">
                         <button
                           onClick={() => handlePreview(file)}
-                          className="inline-flex items-center justify-center space-x-1 px-3 py-1.5 text-xs font-medium text-green-700 bg-green-100 rounded-lg hover:bg-green-200 transition-colors duration-200 w-full sm:w-auto"
+                          className="inline-flex cursor-pointer items-center justify-center space-x-1 px-3 py-1.5 text-xs font-medium text-green-700 bg-green-100 rounded-lg hover:bg-green-200 transition-colors duration-200 w-full sm:w-auto"
                         >
                           <FaEye className="w-3 h-3" />
                           <span>Aperçu</span>
                         </button>
                         <button
                           onClick={() => handleDownload(file)}
-                          className="inline-flex items-center justify-center space-x-1 px-3 py-1.5 text-xs font-medium text-blue-700 bg-blue-100 rounded-lg hover:bg-blue-200 transition-colors duration-200 w-full sm:w-auto"
+                          className="inline-flex cursor-pointer items-center justify-center space-x-1 px-3 py-1.5 text-xs font-medium text-blue-700 bg-blue-100 rounded-lg hover:bg-blue-200 transition-colors duration-200 w-full sm:w-auto"
                         >
                           <FaDownload className="w-3 h-3" />
                           <span>Télécharger</span>

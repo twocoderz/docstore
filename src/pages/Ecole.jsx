@@ -138,9 +138,7 @@ const Ecole = () => {
             <div className="flex items-start justify-between">
               <div className="space-y-4">
                 <div className="flex flex-col sm:flex-row items-start sm:items-center gap-3 sm:gap-3">
-                  <div className="hidden sm:block p-3 bg-white/20 backdrop-blur-sm rounded-xl">
-                    <FaUniversity className="w-8 h-8" />
-                  </div>
+                  <img src="/assets/icons/graduation.svg" alt="school" className="w-12 h-12" />
                   <div>
                     <h1 className="text-2xl md:text-4xl font-bold">
                       {ecole?.nom || "Chargement..."}

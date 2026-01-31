@@ -89,7 +89,7 @@ const Ecoles = () => {
               className="group"
               {...(!isMobile && { rel: "noopener noreferrer" })}
             >
-              <div className="h-full bg-white rounded-2xl shadow-lg hover:shadow-2xl transform hover:-translate-y-1 border border-gray-100 overflow-hidden transition-all duration-500 ease-out">
+              <div className="h-full bg-white rounded-2xl shadow-lg hover:shadow-xl transform hover:-translate-y-1 border border-gray-100 overflow-hidden transition-all duration-500 ease-out">
                 {/* Header avec gradient */}
                 <div className="h-18 md:h-22 bg-gradient-to-br from-blue-500 via-blue-600 to-indigo-700 relative overflow-hidden">
                   <div className="absolute bottom-2 left-6 right-6">
