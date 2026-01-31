@@ -123,7 +123,7 @@ const Ecole = () => {
 
   return (
     <div className="space-y-8">
-      <div className="sticky top-0 z-20 space-y-8 pt-4 pb-4 bg-gray-50/80 backdrop-blur">
+      <div className="space-y-8 pt-4 pb-4 bg-gray-50/80 backdrop-blur">
         {/* En-tête avec breadcrumb et bouton retour */}
         <Link
           to="/ecoles"
@@ -152,14 +152,13 @@ const Ecole = () => {
                   </div>
                 </div>
                 {ecole?.description && (
-                  <p className="text-blue-100 max-w-2xl leading-relaxed">
+                  <p className="text-lg md:text-2xl text-blue-100 max-w-2xl leading-relaxed">
                     {ecole.description}
                   </p>
                 )}
               </div>
             </div>
           </div>
-
           {/* Éléments décoratifs */}
           <div className="absolute top-0 right-0 w-64 h-64 bg-white/5 rounded-full -translate-y-32 translate-x-32"></div>
           <div className="absolute bottom-0 left-0 w-48 h-48 bg-white/5 rounded-full translate-y-24 -translate-x-24"></div>
@@ -170,10 +169,8 @@ const Ecole = () => {
       {concours.length > 0 && (
         <div className="space-y-6">
           <div className="flex items-center space-x-3">
-            <div className="p-2 bg-gradient-to-r from-orange-100 to-yellow-100 rounded-lg">
-              <FaTrophy className="w-6 h-6 text-orange-600" />
-            </div>
-            <h2 className="text-2xl font-bold text-gray-900">Concours d'Entrée</h2>
+            <img src="/assets/icons/trophy.svg" alt="school" className="w-12 h-12" />
+            <h2 className="text-2xl md:text-3xl font-bold text-gray-900">Concours d'Entrée</h2>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -185,13 +182,11 @@ const Ecole = () => {
               >
                 <div className="h-full bg-white rounded-2xl shadow-md hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1 border border-gray-100 overflow-hidden">
                   {/* Header de la carte */}
-                  <div className="h-24 bg-gradient-to-br from-orange-500 to-yellow-600 relative">
+                  <div className="h-14 bg-gradient-to-br from-orange-500 to-yellow-600 relative">
                     <div className="absolute inset-0 bg-black/10"></div>
                     <div className="absolute bottom-3 left-4 right-4">
                       <div className="flex flex-col sm:flex-row items-start sm:items-center gap-2 sm:gap-2">
-                        <div className="hidden sm:block p-1.5 bg-white/20 backdrop-blur-sm rounded-lg">
-                          <FaTrophy className="w-4 h-4 text-white" />
-                        </div>
+                        <img src="/assets/icons/trophy.svg" alt="school" className="w-5 h-5" />
                         <h3 className="text-lg font-semibold text-white line-clamp-2 sm:line-clamp-1 group-hover:scale-105 transition-transform duration-200">
                           {concour.nom}
                         </h3>
