@@ -5,7 +5,7 @@ import Ecole from "./pages/Ecole";
 import Filiere from "./pages/Filiere";
 import Concours from "./pages/Concours";
 import ConcoursDetail from "./pages/ConcoursDetail";
-import { FaBook, FaGraduationCap, FaTrophy, FaBars, FaTimes } from "react-icons/fa";
+import { FaGraduationCap, FaTrophy, FaBars, FaTimes } from "react-icons/fa";
 
 // Composant de navigation séparé pour utiliser useLocation
 const Navigation = () => {
@@ -70,22 +70,17 @@ const Navigation = () => {
       {/* Navigation responsive moderne */}
       <nav className="bg-white/95 backdrop-blur-lg border-b border-gray-200/60 sticky top-0 z-50 shadow-sm">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex justify-between items-center h-16 lg:h-20">
+          <div className="flex justify-between items-center h-13 lg:h-16">
             {/* Logo et nom de l'app */}
             <Link
               to="/ecoles"
-              className="flex items-center space-x-2 sm:space-x-3 group flex-shrink-0"
+              className="flex items-center group flex-shrink-0"
               onClick={closeMobileMenu}
             >
-              <div className="p-2 sm:p-2.5 bg-gradient-to-r from-blue-600 to-indigo-600 rounded-xl group-hover:scale-105 transition-all duration-300 shadow-lg">
-                <FaBook className="w-5 h-5 sm:w-6 sm:h-6 text-white" />
-              </div>
-              <div className="hidden xs:block">
-                <h1 className="text-lg sm:text-xl font-bold bg-gradient-to-r from-gray-900 to-gray-600 bg-clip-text text-transparent">
-                  DocStore
-                </h1>
-                <p className="text-xs text-gray-500 hidden sm:block">Bibliothèque numérique</p>
-              </div>
+              <img src="/assets/icons/logo.svg" alt="DocStore logo" className="w-12 h-12" />
+              <h1 className="text-lg mt-3 uppercase sm:text-xl font-bold bg-gradient-to-r from-blue-500 to-blue-600 bg-clip-text text-transparent">
+                Store
+              </h1>
             </Link>
 
             {/* Navigation desktop */}
@@ -122,8 +117,8 @@ const Navigation = () => {
 
           {/* Menu mobile */}
           <div className={`md:hidden transition-all duration-300 ease-in-out ${isMobileMenuOpen
-              ? 'max-h-64 opacity-100 border-t border-gray-200/60'
-              : 'max-h-0 opacity-0 overflow-hidden'
+            ? 'max-h-64 opacity-100 border-t border-gray-200/60'
+            : 'max-h-0 opacity-0 overflow-hidden'
             }`}>
             <div className="py-4 space-y-2">
               <Link
