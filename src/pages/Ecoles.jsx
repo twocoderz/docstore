@@ -95,9 +95,7 @@ const Ecoles = () => {
                   <div className="absolute inset-0 bg-black/10"></div>
                   <div className="absolute bottom-4 left-6 right-6">
                     <div className="flex items-center space-x-3">
-                      <div className="p-2 bg-white/20 backdrop-blur-sm rounded-lg">
-                        <FaUniversity className="w-6 h-6 text-white" />
-                      </div>
+                      <img src="/assets/icons/graduation.svg" alt="school" className="w-12 h-12" />
                       <h3 className="text-xl md:text-3xl font-bold text-white line-clamp-2 group-hover:scale-105 transition-transform duration-200">
                         {ecole.nom}
                       </h3>
