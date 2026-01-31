@@ -235,7 +235,7 @@ const Ecole = () => {
             filteredFilieres.map((filiere) => (
               <div
                 key={filiere.$id}
-                onClick={() => window.open(`/filiere/${encodeURIComponent(filiere.nom)}`, '_blank', 'noopener,noreferrer')}
+                onClick={() => window.open(`/filiere/${encodeURIComponent(filiere.nom)}`, 'noopener,noreferrer')}
                 className="group cursor-pointer"
               >
                 <div className="h-full bg-white rounded-2xl shadow-md hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1 border border-gray-100 overflow-hidden">
