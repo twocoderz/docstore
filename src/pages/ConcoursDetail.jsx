@@ -153,24 +153,21 @@ const ConcoursDetail = () => {
         {/* En-tête du concours */}
         <div className="bg-white rounded-2xl shadow-lg border border-gray-100 overflow-hidden">
           {/* Header avec gradient */}
-          <div className="h-48 bg-gradient-to-br from-orange-500 via-orange-600 to-yellow-600 relative overflow-hidden">
-            <div className="absolute inset-0 bg-black/10"></div>
-            <div className="absolute bottom-6 left-8 right-8">
+          <div className="h-38 bg-gradient-to-br from-orange-500 via-orange-600 to-yellow-600 relative overflow-hidden">
+            <div className="absolute bottom-4 left-8 right-8">
               <div className="flex flex-col sm:flex-row items-start sm:items-center gap-3 sm:gap-4">
-                <div className="hidden sm:block p-3 bg-white/20 backdrop-blur-sm rounded-xl">
-                  <FaTrophy className="w-8 h-8 text-white" />
-                </div>
+                <img src="/assets/icons/trophy.svg" alt="trophy" className="w-12 h-12" />
                 <div className="flex-1">
                   <h1 className="text-2xl md:text-3xl font-bold text-white mb-2">
                     {concours.nom}
                   </h1>
-                  <div className="flex items-center space-x-4 text-white/90 text-sm md:text-base">
+                  <div className="flex items-center space-x-4 text-white text-sm md:text-base">
                     <div className="flex items-center space-x-2">
-                      <FaCalendarAlt className="w-4 h-4" />
+                      <img src="/assets/icons/calendar.svg" alt="calendar" className="w-4 h-4" />
                       <span>{concours.annee}</span>
                     </div>
                     <div className="flex items-center space-x-2">
-                      <FaUniversity className="w-4 h-4" />
+                      <img src="/assets/icons/graduation.svg" alt="graduation" className="w-5 h-5" />
                       <span>{getEcoleName(concours.idEcole)}</span>
                     </div>
                   </div>
@@ -186,20 +183,11 @@ const ConcoursDetail = () => {
 
       {/* Contenu principal */}
       <div className="p-8 space-y-8 bg-white rounded-2xl shadow-lg border border-gray-100">
-        {/* Description */}
-        <div className="prose max-w-none">
-          <p className="text-base md:text-lg text-gray-700 leading-relaxed">
-            {concours.description}
-          </p>
-        </div>
-
         {/* Communiqués (grille comme ressources) */}
         {communiques.length > 0 && (
           <div>
             <div className="flex items-center space-x-3 mb-4">
-              <div className="p-2 bg-red-100 rounded-lg">
-                <FaFilePdf className="w-6 h-6 text-red-600" />
-              </div>
+              <FaFilePdf className="w-6 h-6 text-red-600" />
               <h3 className="text-lg md:text-xl font-semibold text-gray-900">Communiqués officiels</h3>
             </div>
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
@@ -207,23 +195,21 @@ const ConcoursDetail = () => {
                 <div key={idx} className="bg-white rounded-xl p-4 border border-gray-200 hover:border-blue-300 hover:shadow-md transition-all duration-200">
                   <div className="flex items-start space-x-3">
                     <div className="flex-shrink-0">
-                      <div className="p-2 bg-red-100 rounded-lg">
-                        <FaFilePdf className="w-5 h-5 text-red-600" />
-                      </div>
+                      <FaFilePdf className="w-5 h-5 text-red-600" />
                     </div>
                     <div className="flex-1 min-w-0">
                       <p className="text-sm font-medium text-gray-900 line-clamp-2 mb-2">{file.name}</p>
                       <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2 sm:gap-0 sm:space-x-2">
                         <button
                           onClick={() => handlePreview(file)}
-                          className="inline-flex items-center justify-center space-x-1 px-3 py-1.5 text-xs font-medium text-green-700 bg-green-100 rounded-lg hover:bg-green-200 transition-colors duration-200 w-full sm:w-auto"
+                          className="inline-flex cursor-pointer items-center justify-center space-x-1 px-3 py-1.5 text-xs font-medium text-green-700 bg-green-100 rounded-lg hover:bg-green-200 transition-colors duration-200 w-full sm:w-auto"
                         >
                           <FaEye className="w-3 h-3" />
                           <span>Aperçu</span>
                         </button>
                         <button
                           onClick={() => handleDownload(file)}
-                          className="inline-flex items-center justify-center space-x-1 px-3 py-1.5 text-xs font-medium text-blue-700 bg-blue-100 rounded-lg hover:bg-blue-200 transition-colors duration-200 w-full sm:w-auto"
+                          className="inline-flex cursor-pointer items-center justify-center space-x-1 px-3 py-1.5 text-xs font-medium text-blue-700 bg-blue-100 rounded-lg hover:bg-blue-200 transition-colors duration-200 w-full sm:w-auto"
                         >
                           <FaDownload className="w-3 h-3" />
                           <span>Télécharger</span>
