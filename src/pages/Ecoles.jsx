@@ -70,14 +70,11 @@ const Ecoles = () => {
   return (
     <div className="space-y-8">
       {/* En-tête avec style moderne */}
-      <div className="text-center space-y-4">
-        <div className="inline-flex items-center space-x-3 p-3 bg-gradient-to-r from-blue-100 to-indigo-100 rounded-2xl">
-          <FaUniversity className="w-8 h-8 text-blue-600" />
-        </div>
-        <h1 className="text-4xl font-bold bg-gradient-to-r from-gray-900 via-blue-900 to-gray-900 bg-clip-text text-transparent">
+      <div className="text-start space-y-4">
+        <h1 className="text-4xl md:text-6xl font-bold bg-gradient-to-r from-gray-900 via-blue-900 to-gray-900 bg-clip-text text-transparent">
           Écoles
         </h1>
-        <p className="text-lg text-gray-600 max-w-2xl mx-auto leading-relaxed">
+        <p className="text-lg md:text-3xl text-gray-600 max-w-2xl leading-relaxed">
           Découvrez toutes les écoles disponibles et explorez leurs filières académiques
         </p>
       </div>
