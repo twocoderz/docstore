@@ -8,7 +8,7 @@ Une application web pour explorer les ressources de l'École Polytechnique de Lo
 
 Pour que l'API Google Drive fonctionne, vous devez configurer les variables d'environnement suivantes dans votre projet Vercel :
 
-1. Allez dans votre dashboard Vercel
+1. Allez dans votre dashboard Vercel.
 2. Sélectionnez votre projet
 3. Allez dans "Settings" > "Environment Variables"
 4. Ajoutez les variables suivantes :
