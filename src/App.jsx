@@ -5,6 +5,7 @@ import Ecole from "./pages/Ecole";
 import Filiere from "./pages/Filiere";
 import Concours from "./pages/Concours";
 import ConcoursDetail from "./pages/ConcoursDetail";
+import Infos from "./pages/Infos";
 import { FaGraduationCap, FaTrophy, FaBars, FaTimes } from "react-icons/fa";
 
 // Composant de navigation séparé pour utiliser useLocation
@@ -39,6 +40,8 @@ const Navigation = () => {
         return `${baseClasses} text-blue-600 bg-blue-50 border-l-4 border-blue-600 shadow-sm nav-active active`;
       } else if (path === '/concours') {
         return `${baseClasses} text-orange-600 bg-orange-50 border-l-4 border-orange-600 shadow-sm nav-active nav-active-concours active nav-link-concours`;
+      } else if (path === '/infos') {
+        return `${baseClasses} text-indigo-600 bg-indigo-50 border-l-4 border-indigo-600 shadow-sm nav-active active`;
       }
     }
 
@@ -47,6 +50,8 @@ const Navigation = () => {
       return `${baseClasses} text-gray-700 hover:text-blue-600 hover:bg-blue-50`;
     } else if (path === '/concours') {
       return `${baseClasses} text-gray-700 hover:text-orange-600 hover:bg-orange-50 nav-link-concours`;
+    } else if (path === '/infos') {
+      return `${baseClasses} text-gray-700 hover:text-indigo-600 hover:bg-indigo-50`;
     }
 
     return baseClasses;
@@ -60,6 +65,8 @@ const Navigation = () => {
         return `${baseClasses} nav-icon-active`;
       } else if (path === '/concours') {
         return `${baseClasses} nav-icon-active-concours`;
+      } else if (path === '/infos') {
+        return `${baseClasses} nav-icon-active`;
       }
     }
     return baseClasses;
@@ -99,6 +106,13 @@ const Navigation = () => {
                 <FaTrophy className={`w-4 h-4 ${getIconClasses('/concours')}`} />
                 <span>Concours</span>
               </Link>
+              <Link
+                to="/infos"
+                className={getActiveClasses('/infos')}
+              >
+                <img src="/assets/icons/info.svg" alt="info" className={`w-4 h-4 ${getIconClasses('/infos')}`} />
+                <span>Infos</span>
+              </Link>
             </div>
 
             {/* Bouton menu mobile */}
@@ -137,6 +151,14 @@ const Navigation = () => {
                 <FaTrophy className={`w-5 h-5 ${getIconClasses('/concours')}`} />
                 <span className="text-base">Concours</span>
               </Link>
+              <Link
+                to="/infos"
+                className={getActiveClasses('/infos', true)}
+                onClick={closeMobileMenu}
+              >
+                <img src="/assets/icons/info.svg" alt="info" className={`w-5 h-5 ${getIconClasses('/infos')}`} />
+                <span className="text-base">Infos</span>
+              </Link>
             </div>
           </div>
         </div>
@@ -151,6 +173,7 @@ const Navigation = () => {
           <Route path="/filiere/:filiereName" element={<Filiere />} />
           <Route path="/concours" element={<Concours />} />
           <Route path="/concours/:concoursId" element={<ConcoursDetail />} />
+          <Route path="/infos" element={<Infos />} />
           <Route path="*" element={<Navigate to="/ecoles" replace />} />
         </Routes>
       </main>
