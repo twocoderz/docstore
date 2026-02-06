@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { useParams, Link } from "react-router-dom";
-import FilterSelect from "../components/FilterSelect";
+import { useParams } from "react-router-dom";
 import {
   databases,
   databaseId,
@@ -9,17 +8,12 @@ import {
   concoursCollectionId,
   Query,
 } from "../appwrite";
-import {
-  FaUniversity,
-  FaBook,
-  FaMapMarkerAlt,
-  FaArrowLeft,
-  FaArrowRight,
-  FaSpinner,
-  FaGraduationCap,
-  FaTrophy,
-  FaCalendarAlt
-} from "react-icons/fa";
+import LoadingState from "../components/filiere/LoadingState";
+import ErrorState from "../components/filiere/ErrorState";
+import EcoleHeader from "../components/ecole/EcoleHeader";
+import ConcoursSection from "../components/ecole/ConcoursSection";
+import ParcoursFilter from "../components/ecole/ParcoursFilter";
+import FiliereGrid from "../components/ecole/FiliereGrid";
 
 const Ecole = () => {
   const { ecoleName } = useParams();
@@ -93,198 +87,32 @@ const Ecole = () => {
   );
 
   if (isLoading) {
-    return (
-      <div className="flex flex-col items-center justify-center py-24">
-        <div className="relative">
-          <div className="w-16 h-16 border-4 border-blue-200 border-t-blue-600 rounded-full animate-spin"></div>
-          <FaSpinner className="absolute inset-0 m-auto w-6 h-6 text-blue-600 animate-pulse" />
-        </div>
-        <p className="mt-4 text-gray-600 font-medium">Chargement de l'école...</p>
-      </div>
-    );
+    return <LoadingState message="Chargement de l'école..." />;
   }
 
   if (error && !isLoading) {
-    return (
-      <div className="bg-red-50 border-l-4 border-red-400 p-6 rounded-lg">
-        <div className="flex">
-          <div className="flex-shrink-0">
-            <svg className="h-5 w-5 text-red-400" viewBox="0 0 20 20" fill="currentColor">
-              <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clipRule="evenodd" />
-            </svg>
-          </div>
-          <div className="ml-3">
-            <p className="text-sm text-red-700">{error}</p>
-          </div>
-        </div>
-      </div>
-    );
+    return <ErrorState message={error} />;
   }
 
   return (
     <div className="space-y-8">
-      <div className="space-y-8 pt-4 pb-4 bg-gray-50/80 backdrop-blur">
-        {/* En-tête avec breadcrumb et bouton retour */}
-        <Link
-          to="/ecoles"
-          className="md:hidden inline-flex items-center justify-center w-11 h-11 rounded-full bg-gray-50 hover:bg-gray-100 active:bg-gray-200 shadow-sm hover:shadow-md transition-all duration-200 group"
-        >
-          <FaArrowLeft className="w-5 h-5 text-gray-700 group-hover:-translate-x-0.5 group-active:scale-95 transition-transform duration-200" />
-        </Link>
+      <EcoleHeader ecole={ecole} />
 
-        {/* Header de l'école */}
-        <div className="bg-gradient-to-r from-blue-600 via-blue-700 to-indigo-800 rounded-3xl p-8 text-white relative overflow-hidden">
-          <div className="relative z-10">
-            <div className="flex items-start justify-between">
-              <div className="space-y-4">
-                <div className="flex flex-col sm:flex-row items-start sm:items-center gap-3 sm:gap-3">
-                  <img src="/assets/icons/graduation.svg" alt="school" className="w-12 h-12" />
-                  <div>
-                    <h1 className="text-2xl md:text-4xl font-bold">
-                      {ecole?.nom || "Chargement..."}
-                    </h1>
-                    {ecole?.lieu && (
-                      <div className="flex items-center space-x-2 mt-2">
-                        <FaMapMarkerAlt className="w-4 h-4 text-blue-200" />
-                        <span className="text-blue-100">{ecole.lieu}</span>
-                      </div>
-                    )}
-                  </div>
-                </div>
-                {ecole?.description && (
-                  <p className="text-lg md:text-2xl text-blue-100 max-w-2xl leading-relaxed">
-                    {ecole.description}
-                  </p>
-                )}
-              </div>
-            </div>
-          </div>
-          {/* Éléments décoratifs */}
-          <div className="absolute top-0 right-0 w-64 h-64 bg-white/5 rounded-full -translate-y-32 translate-x-32"></div>
-          <div className="absolute bottom-0 left-0 w-48 h-48 bg-white/5 rounded-full translate-y-24 -translate-x-24"></div>
-        </div>
-      </div>
+      <ConcoursSection concours={concours} />
 
-      {/* Section Concours */}
-      {concours.length > 0 && (
-        <div className="space-y-6">
-          <div className="flex items-center space-x-3">
-            <img src="/assets/icons/trophy.svg" alt="school" className="w-12 h-12" />
-            <h2 className="text-2xl md:text-3xl font-bold text-gray-900">Concours d'Entrée</h2>
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {concours.map((concour) => (
-              <Link
-                key={concour.$id}
-                to={`/concours/${concour.$id}`}
-                className="group"
-              >
-                <div className="h-full bg-white rounded-2xl shadow-md hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1 border border-gray-100 overflow-hidden">
-                  {/* Header de la carte */}
-                  <div className="h-14 bg-gradient-to-br from-orange-500 to-yellow-600 relative">
-                    <div className="absolute inset-0 bg-black/10"></div>
-                    <div className="absolute bottom-3 left-4 right-4">
-                      <div className="flex flex-col sm:flex-row items-start sm:items-center gap-2 sm:gap-2">
-                        <div className="hidden sm:block">
-                          <img src="/assets/icons/trophy.svg" alt="school" className="w-5 h-5 " />
-                        </div>
-                        <h3 className="text-lg font-semibold text-white line-clamp-2 sm:line-clamp-1 group-hover:scale-105 transition-transform duration-200">
-                          {concour.nom}
-                        </h3>
-                      </div>
-                    </div>
-                  </div>
-
-                  {/* Contenu de la carte */}
-                  <div className="p-6 space-y-4">
-                    <p className="text-gray-600 line-clamp-2 text-sm leading-relaxed">
-                      {concour.description}
-                    </p>
-
-                    <div className="flex items-center justify-between text-sm">
-                      <span className="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-medium bg-orange-100 text-orange-800">
-                        <FaCalendarAlt className="w-3 h-3 mr-1" />
-                        {concour.annee}
-                      </span>
-                      <FaArrowRight className="w-4 h-4 text-orange-600 group-hover:translate-x-1 transition-transform duration-200" />
-                    </div>
-                  </div>
-                </div>
-              </Link>
-            ))}
-          </div>
-        </div>
-      )}
-
-      {/* Filtres */}
-      <FilterSelect
+      <ParcoursFilter
         options={parcoursOptions}
         value={selectedParcours}
         onChange={setSelectedParcours}
       />
 
-      {/* Grille des filières */}
-      {isLoading ? (
-        <div className="flex justify-center py-12">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
-        </div>
-      ) : (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {filteredFilieres.length > 0 ? (
-            filteredFilieres.map((filiere) => (
-              <div
-                key={filiere.$id}
-                onClick={() => window.open(`/filiere/${encodeURIComponent(filiere.nom)}`, 'noopener,noreferrer')}
-                className="group cursor-pointer"
-              >
-                <div className="h-full bg-white rounded-2xl shadow-md hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1 border border-gray-100 overflow-hidden">
-                  {/* Header de la carte */}
-                  <div className="h-24 bg-gradient-to-br from-indigo-500 to-purple-600 relative">
-                    <div className="absolute bottom-3 left-4 right-4">
-                      <div className="flex flex-col sm:flex-row items-start sm:items-center gap-2 sm:gap-2">
-                        <div className="hidden sm:block">
-                          <FaBook className="w-4 h-4 text-white" />
-                        </div>
-                        <h3 className="text-lg font-semibold text-white line-clamp-2 sm:line-clamp-1 transition-transform duration-200">
-                          {filiere.nom}
-                        </h3>
-                      </div>
-                    </div>
-                  </div>
-
-                  {/* Contenu de la carte */}
-                  <div className="p-6 space-y-4">
-                    <p className="text-gray-600 line-clamp-2 text-sm leading-relaxed">
-                      {filiere.description}
-                    </p>
-
-                    <div className="flex items-center justify-between text-sm">
-                      <span className="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
-                        {filiere.parcours}
-                      </span>
-                      <FaArrowRight className="w-4 h-4 text-blue-600 group-hover:translate-x-1 transition-transform duration-200" />
-                    </div>
-                  </div>
-                </div>
-              </div>
-            ))
-          ) : (
-            <div className="col-span-full text-center py-16">
-              <div className="w-24 h-24 mx-auto bg-gray-100 rounded-full flex items-center justify-center mb-4">
-                <FaBook className="w-10 h-10 text-gray-400" />
-              </div>
-              <h3 className="text-lg font-semibold text-gray-900 mb-2">Aucune filière trouvée</h3>
-              <p className="text-gray-600">
-                {selectedParcours
-                  ? "Aucune filière ne correspond aux filtres sélectionnés."
-                  : "Cette école ne dispose pas encore de données sur les filières."
-                }
-              </p>
-            </div>
-          )}
-        </div>
-      )}
+      <FiliereGrid
+        filieres={filteredFilieres}
+        selectedParcours={selectedParcours}
+        onOpenFiliere={(filiere) =>
+          window.open(`/filiere/${encodeURIComponent(filiere.nom)}`, "noopener,noreferrer")
+        }
+      />
     </div>
   );
 };
