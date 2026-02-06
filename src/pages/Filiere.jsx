@@ -1,25 +1,16 @@
 import React, { useState, useEffect } from "react";
-import { useParams, Link, useNavigate } from "react-router-dom";
-import FilterSelect from "../components/FilterSelect";
-import SearchBar from "../components/SearchBar";
+import { useParams, useNavigate } from "react-router-dom";
 import { databases, storage, databaseId, filieresCollectionId, uesCollectionId, bucketId, Query } from "../appwrite";
 import { isGoogleDriveUrl, getGoogleDriveFileName, getGoogleDriveDownloadUrl } from "../utils/googleDrive";
-import deburr from 'lodash/deburr';
-import {
-  FaBook,
-  FaFilePdf,
-  FaDownload,
-  FaEye,
-  FaArrowLeft,
-  FaSpinner,
-  FaSearch,
-  FaFilter,
-  FaChevronDown,
-  FaChevronUp,
-  FaGraduationCap,
-  FaChevronLeft,
-  FaChevronRight
-} from "react-icons/fa";
+import deburr from "lodash/deburr";
+import ErrorState from "../components/filiere/ErrorState";
+import LoadingState from "../components/filiere/LoadingState";
+import FiliereHeader from "../components/filiere/FiliereHeader";
+import FiliereFilters from "../components/filiere/FiliereFilters";
+import UeCard from "../components/filiere/UeCard";
+import EmptyState from "../components/filiere/EmptyState";
+import Pagination from "../components/filiere/Pagination";
+import PdfPreviewModal from "../components/filiere/PdfPreviewModal";
 
 const UES_PER_PAGE = 6;
 
@@ -197,353 +188,51 @@ const Filiere = () => {
 
   if (error || (!filiere && !isLoading)) {
     return (
-      <div className="bg-red-50 border-l-4 border-red-400 p-6 rounded-lg">
-        <div className="flex">
-          <div className="flex-shrink-0">
-            <svg className="h-5 w-5 text-red-400" viewBox="0 0 20 20" fill="currentColor">
-              <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clipRule="evenodd" />
-            </svg>
-          </div>
-          <div className="ml-3">
-            <p className="text-sm text-red-700">{error || `Filière "${decodeURIComponent(filiereName)}" non trouvée`}</p>
-          </div>
-        </div>
-      </div>
+      <ErrorState message={error || `Filière "${decodeURIComponent(filiereName)}" non trouvée`} />
     );
   }
 
   if (isLoading) {
-    return (
-      <div className="flex flex-col items-center justify-center py-24">
-        <div className="relative">
-          <div className="w-16 h-16 border-4 border-blue-200 border-t-blue-600 rounded-full animate-spin"></div>
-          <FaSpinner className="absolute inset-0 m-auto w-6 h-6 text-blue-600 animate-pulse" />
-        </div>
-        <p className="mt-4 text-gray-600 font-medium">Chargement de la filière...</p>
-      </div>
-    );
+    return <LoadingState message="Chargement de la filière..." />;
   }
 
   return (
     <div className="space-y-8">
-      <div className="sticky top-0 z-20 space-y-8 pt-4 pb-4 bg-gray-50/80 backdrop-blur">
-        {/* En-tête avec breadcrumb */}
-        <button
-          onClick={() => navigate(-1)}
-          className="md:hidden inline-flex items-center justify-center w-11 h-11 rounded-full bg-gray-50 hover:bg-gray-100 active:bg-gray-200 shadow-sm hover:shadow-md transition-all duration-200 group"
-        >
-          <FaArrowLeft className="w-5 h-5 text-gray-700 group-hover:-translate-x-0.5 group-active:scale-95 transition-transform duration-200" />
-        </button>
+      <FiliereHeader filiere={filiere} onBack={() => navigate(-1)} />
 
-        {/* Header de la filière */}
-        <div className="bg-gradient-to-r from-purple-600 via-purple-700 to-indigo-800 rounded-3xl p-8 text-white relative overflow-hidden">
-          <div className="relative z-10">
-            <div className="flex items-start justify-between">
-              <div className="space-y-4">
-                <div className="flex flex-col sm:flex-row items-start sm:items-center gap-3 sm:gap-3">
-                  <div className="hidden sm:block p-3 bg-white/20 backdrop-blur-sm rounded-xl">
-                    <FaBook className="w-8 h-8" />
-                  </div>
-                  <div>
-                    <h1 className="text-2xl md:text-4xl font-bold">
-                      {filiere?.nom || "Chargement..."}
-                    </h1>
-                    <p className="text-purple-100 mt-2 text-sm md:text-base">
-                      Unités d'enseignement disponibles
-                    </p>
-                  </div>
-                </div>
-                {filiere?.description && (
-                  <p className="text-purple-100 max-w-2xl leading-relaxed text-sm md:text-base">
-                    {filiere.description}
-                  </p>
-                )}
-              </div>
-            </div>
-          </div>
+      <FiliereFilters
+        yearOptions={yearOptions}
+        selectedYear={selectedYear}
+        onYearChange={setSelectedYear}
+        onSearch={setSearchQuery}
+        resultCount={filteredUes.length}
+      />
 
-          {/* Éléments décoratifs */}
-          <div className="absolute top-0 right-0 w-64 h-64 bg-white/5 rounded-full -translate-y-32 translate-x-32"></div>
-          <div className="absolute bottom-0 left-0 w-48 h-48 bg-white/5 rounded-full translate-y-24 -translate-x-24"></div>
-        </div>
-      </div>
-
-      {/* Section filtres et recherche */}
-      <div className="bg-white rounded-2xl p-6 shadow-sm border border-gray-100">
-        <div className="flex flex-col lg:flex-row gap-4 items-start lg:items-center">
-          <div className="flex items-center space-x-2">
-            <FaFilter className="w-5 h-5 text-blue-600" />
-            <h3 className="text-base md:text-lg font-semibold text-gray-900">Filtres</h3>
-          </div>
-
-          <div className="flex flex-col sm:flex-row gap-4 flex-1">
-            <div className="max-w-xs">
-              <FilterSelect
-                label="Année"
-                options={yearOptions}
-                value={selectedYear}
-                onChange={setSelectedYear}
-              />
-            </div>
-
-            <div className="flex-1 max-w-md">
-              <SearchBar onSearch={setSearchQuery} placeholder="Rechercher une UE..." />
-            </div>
-          </div>
-
-          <div className="text-sm text-gray-500">
-            {filteredUes.length} résultat{filteredUes.length > 1 ? 's' : ''}
-          </div>
-        </div>
-      </div>
-
-      {/* Liste des UE */}
       <div className="space-y-6">
         {paginatedUes.length > 0 ? (
           paginatedUes.map((ue) => (
-            <div
+            <UeCard
               key={ue.$id}
-              className="bg-white rounded-2xl shadow-md border border-gray-100 overflow-hidden hover:shadow-lg transition-shadow duration-300"
-            >
-              {/* En-tête de l'UE */}
-              <div className="p-6 border-b border-gray-100">
-                <div className="flex items-start justify-between">
-                  <div className="flex-1 space-y-2">
-                    <div className="flex items-center space-x-3">
-                      <div className="p-2 bg-gradient-to-r from-blue-100 to-purple-100 rounded-lg">
-                        <FaGraduationCap className="w-5 h-5 text-blue-600" />
-                      </div>
-                      <h3 className="text-lg md:text-xl font-bold text-gray-900 line-clamp-2">
-                        {ue.nom}
-                      </h3>
-                    </div>
-
-                    <p className="text-gray-600 leading-relaxed line-clamp-2 text-sm md:text-base">
-                      {ue.description}
-                    </p>
-
-                    {ue.anneeEnseignement && ue.anneeEnseignement.length > 0 && (
-                      <div className="flex flex-wrap gap-2">
-                        {(Array.isArray(ue.anneeEnseignement) ? ue.anneeEnseignement : [ue.anneeEnseignement]).map((annee, index) => (
-                          <span
-                            key={index}
-                            className="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-medium bg-blue-100 text-blue-800"
-                          >
-                            {annee}
-                          </span>
-                        ))}
-                      </div>
-                    )}
-                  </div>
-
-                  <button
-                    onClick={() => toggleUE(ue.$id)}
-                    className="ml-4 p-2 cursor-pointer text-gray-400 hover:text-gray-600 hover:bg-gray-100 rounded-lg transition-colors duration-200"
-                  >
-                    {expandedUE === ue.$id ? (
-                      <FaChevronUp className="w-5 h-5" />
-                    ) : (
-                      <FaChevronDown className="w-5 h-5" />
-                    )}
-                  </button>
-                </div>
-              </div>
-
-              {/* Section ressources (collapsible) */}
-              {expandedUE === ue.$id && (
-                <div className="p-6 bg-gray-50">
-                  <div className="flex items-center space-x-2 mb-4">
-                    <FaFilePdf className="w-5 h-5 text-red-500" />
-                    <h4 className="text-base md:text-lg font-semibold text-gray-900">Ressources disponibles</h4>
-                  </div>
-
-                  {ue.files && ue.files.length > 0 ? (
-                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-                      {ue.files.map((file) => (
-                        <div
-                          key={file.$id}
-                          className="bg-white rounded-xl p-4 border border-gray-200 hover:border-blue-300 hover:shadow-md transition-all duration-200"
-                        >
-                          <div className="flex items-start space-x-3">
-                            <div className="flex-shrink-0">
-                              <div className="p-2 bg-red-100 rounded-lg">
-                                <FaFilePdf className="w-5 h-5 text-red-600" />
-                              </div>
-                            </div>
-
-                            <div className="flex-1 min-w-0">
-                              <p className="text-sm font-medium text-gray-900 line-clamp-2 mb-2">
-                                {file.name}
-                              </p>
-
-                              <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2 sm:gap-0 sm:space-x-2">
-                                <button
-                                  onClick={() => handlePreview(file)}
-                                  className="inline-flex items-center justify-center space-x-1 px-3 py-1.5 text-xs font-medium text-green-700 bg-green-100 rounded-lg hover:bg-green-200 transition-colors duration-200 w-full sm:w-auto"
-                                >
-                                  <FaEye className="w-3 h-3" />
-                                  <span>Aperçu</span>
-                                </button>
-
-                                <button
-                                  onClick={() => handleDownload(file)}
-                                  className="inline-flex items-center justify-center space-x-1 px-3 py-1.5 text-xs font-medium text-blue-700 bg-blue-100 rounded-lg hover:bg-blue-200 transition-colors duration-200 w-full sm:w-auto"
-                                >
-                                  <FaDownload className="w-3 h-3" />
-                                  <span>Télécharger</span>
-                                </button>
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-                      ))}
-                    </div>
-                  ) : (
-                    <div className="text-center py-8">
-                      <div className="w-16 h-16 mx-auto bg-gray-200 rounded-full flex items-center justify-center mb-4">
-                        <FaFilePdf className="w-6 h-6 text-gray-400" />
-                      </div>
-                      <p className="text-gray-600">Aucune ressource disponible pour cette UE</p>
-                    </div>
-                  )}
-                </div>
-              )}
-            </div>
+              ue={ue}
+              expanded={expandedUE === ue.$id}
+              onToggle={toggleUE}
+              onPreview={handlePreview}
+              onDownload={handleDownload}
+            />
           ))
         ) : (
-          <div className="text-center py-16">
-            <div className="w-24 h-24 mx-auto bg-gray-100 rounded-full flex items-center justify-center mb-4">
-              <FaSearch className="w-10 h-10 text-gray-400" />
-            </div>
-            <h3 className="text-base md:text-lg font-semibold text-gray-900 mb-2">Aucune UE trouvée</h3>
-            <p className="text-gray-600 text-sm md:text-base">
-              Essayez de modifier vos filtres de recherche ou vérifiez l'orthographe.
-            </p>
-          </div>
+          <EmptyState />
         )}
       </div>
 
-      {/* Pagination */}
-      {pageCount > 1 && (
-        <div className="flex justify-center">
-          <div className="pagination-mobile flex items-center space-x-1 sm:space-x-2 max-w-full overflow-x-auto">
-            <button
-              onClick={() => setPage(Math.max(1, page - 1))}
-              disabled={page === 1}
-              className="px-1 sm:px-3 py-1 sm:py-2 text-xs sm:text-sm font-medium text-gray-500 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed whitespace-nowrap"
-              title="Page précédente"
-            >
-              <span className="sm:hidden">
-                <FaChevronLeft className="w-3 h-3 sm:w-4 sm:h-4" />
-              </span>
-              <span className="hidden sm:inline">Précédent</span>
-            </button>
+      <Pagination page={page} pageCount={pageCount} onPageChange={setPage} />
 
-            {/* Mobile: Show limited page numbers */}
-            <div className="flex items-center space-x-1 sm:hidden">
-              {page > 1 && (
-                <button
-                  onClick={() => setPage(1)}
-                  className="px-1 py-1 text-xs font-medium text-gray-500 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 min-w-[2rem]"
-                >
-                  1
-                </button>
-              )}
-              {page > 2 && <span className="px-1 text-gray-400 text-xs">...</span>}
-              {page > 1 && (
-                <button
-                  onClick={() => setPage(page - 1)}
-                  className="px-1 py-1 text-xs font-medium text-gray-500 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 min-w-[2rem]"
-                >
-                  {page - 1}
-                </button>
-              )}
-              <button
-                onClick={() => setPage(page)}
-                className="px-1 py-1 text-xs font-medium text-white bg-blue-600 border border-blue-600 rounded-lg min-w-[2rem]"
-              >
-                {page}
-              </button>
-              {page < pageCount && (
-                <button
-                  onClick={() => setPage(page + 1)}
-                  className="px-1 py-1 text-xs font-medium text-gray-500 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 min-w-[2rem]"
-                >
-                  {page + 1}
-                </button>
-              )}
-              {page < pageCount - 1 && <span className="px-1 text-gray-400 text-xs">...</span>}
-              {page < pageCount && (
-                <button
-                  onClick={() => setPage(pageCount)}
-                  className="px-1 py-1 text-xs font-medium text-gray-500 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 min-w-[2rem]"
-                >
-                  {pageCount}
-                </button>
-              )}
-            </div>
-
-            {/* Desktop: Show all page numbers */}
-            <div className="hidden sm:flex items-center space-x-1">
-              {Array.from({ length: pageCount }, (_, i) => i + 1).map((pageNum) => (
-                <button
-                  key={pageNum}
-                  onClick={() => setPage(pageNum)}
-                  className={`px-2 sm:px-3 py-2 text-xs sm:text-sm font-medium rounded-lg ${page === pageNum
-                    ? 'text-white bg-blue-600 border border-blue-600'
-                    : 'text-gray-500 bg-white border border-gray-300 hover:bg-gray-50'
-                    }`}
-                >
-                  {pageNum}
-                </button>
-              ))}
-            </div>
-
-            <button
-              onClick={() => setPage(Math.min(pageCount, page + 1))}
-              disabled={page === pageCount}
-              className="px-1 sm:px-3 py-1 sm:py-2 text-xs sm:text-sm font-medium text-gray-500 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed whitespace-nowrap"
-              title="Page suivante"
-            >
-              <span className="hidden sm:inline">Suivant</span>
-              <span className="sm:hidden">
-                <FaChevronRight className="w-3 h-3 sm:w-4 sm:h-4" />
-              </span>
-            </button>
-          </div>
-        </div>
-      )}
-
-      {/* Modal d'aperçu PDF */}
-      {previewOpen && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
-          <div className="bg-white rounded-2xl w-full max-w-6xl h-[90vh] overflow-hidden">
-            <div className="flex items-center justify-between p-6 border-b border-gray-200">
-              <h2 className="text-lg md:text-xl font-semibold text-gray-900 truncate">
-                Aperçu : {previewFileName}
-              </h2>
-              <button
-                onClick={handleClosePreview}
-                className="p-2 text-gray-400 hover:text-gray-600 hover:bg-gray-100 rounded-lg transition-colors duration-200"
-              >
-                <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-                </svg>
-              </button>
-            </div>
-            <div className="h-full pb-6">
-              {previewUrl && (
-                <iframe
-                  src={previewUrl}
-                  title="Aperçu PDF"
-                  className="w-full h-full"
-                  style={{ height: 'calc(100% - 80px)' }}
-                />
-              )}
-            </div>
-          </div>
-        </div>
-      )}
+      <PdfPreviewModal
+        open={previewOpen}
+        previewUrl={previewUrl}
+        fileName={previewFileName}
+        onClose={handleClosePreview}
+      />
     </div>
   );
 };
