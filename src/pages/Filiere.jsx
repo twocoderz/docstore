@@ -3,7 +3,7 @@ import { useParams, Link, useNavigate } from "react-router-dom";
 import FilterSelect from "../components/FilterSelect";
 import SearchBar from "../components/SearchBar";
 import { databases, storage, databaseId, filieresCollectionId, uesCollectionId, bucketId, Query } from "../appwrite";
-import { isGoogleDriveUrl, getGoogleDriveFileName, getGoogleDrivePreviewUrl, getGoogleDriveDownloadUrl } from "../utils/googleDrive";
+import { isGoogleDriveUrl, getGoogleDriveFileName, getGoogleDriveDownloadUrl } from "../utils/googleDrive";
 import deburr from 'lodash/deburr';
 import {
   FaBook,
@@ -115,7 +115,7 @@ const Filiere = () => {
           })
         );
         setUes(uesWithFiles);
-      } catch (error) {
+      } catch {
         setError("Erreur lors du chargement des cours");
       } finally {
         setIsLoading(false);
