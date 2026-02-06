@@ -12,7 +12,6 @@ const Concours = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
   const [selectedYear, setSelectedYear] = useState("Tous");
-  const [selectedEcole, setSelectedEcole] = useState("Toutes");
 
   useEffect(() => {
     const fetchData = async () => {
@@ -43,13 +42,10 @@ const Concours = () => {
 
   // Extraire les années et écoles uniques pour les filtres
   const years = ["Tous", ...new Set(concours.map(c => c.annee))];
-  const ecoleNames = ["Toutes", ...new Set(concours.map(c => getEcoleName(c.idEcole)))];
-
   // Filtrer les concours
   const filteredConcours = concours.filter(concour => {
     const yearMatch = selectedYear === "Tous" || concour.annee === selectedYear;
-    const ecoleMatch = selectedEcole === "Toutes" || getEcoleName(concour.idEcole) === selectedEcole;
-    return yearMatch && ecoleMatch;
+    return yearMatch;
   });
 
   if (isLoading) {
