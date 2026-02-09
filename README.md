@@ -39,7 +39,7 @@ GOOGLE_CLIENT_X509_CERT_URL=https://www.googleapis.com/robot/v1/metadata/x509/vo
    - Allez dans l'onglet "Keys"
    - Cliquez sur "Add Key" > "Create new key"
    - Sélectionnez "JSON"
-   - Téléchargez le fichier JSON
+   - Téléchargez le fichier JSON.
 6. Utilisez les informations du fichier JSON pour configurer vos variables d'environnement.
 
 ## Installation
