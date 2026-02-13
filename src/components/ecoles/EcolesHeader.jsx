@@ -6,7 +6,7 @@ const EcolesHeader = () => (
       Écoles
     </h1>
     <p className="text-lg md:text-2xl text-gray-600 max-w-2xl leading-relaxed">
-      Découvrez toutes les écoles disponibles et explorez leurs filières académiques
+      Découvrez toutes les écoles disponibles et explorez leurs filières académiques.
     </p>
   </div>
 );

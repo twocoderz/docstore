@@ -11,7 +11,6 @@ const Infos = () => {
       <div className="bg-gradient-to-r from-indigo-600 via-purple-600 to-blue-700 rounded-3xl p-8 text-white relative overflow-hidden">
         <div className="relative z-10 space-y-4">
           <div className="flex items-center space-x-3">
-            <img src="/assets/icons/info.svg" alt="info" className="w-10 h-10" />
             <h1 className="text-3xl md:text-5xl font-bold">À propos du site</h1>
           </div>
           <p className="text-indigo-100 text-base md:text-lg max-w-3xl leading-relaxed">
