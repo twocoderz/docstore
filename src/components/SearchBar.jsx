@@ -11,7 +11,7 @@ const SearchBar = ({ onSearch, placeholder }) => {
         type="text"
         onChange={(e) => onSearch(e.target.value)}
         placeholder={placeholder}
-        className="block w-full pl-11 pr-4 py-3 border border-gray-300 rounded-xl bg-white text-gray-900 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 hover:border-gray-400"
+        className="block w-full pl-11 pr-4 py-3 border-b border-gray-300 bg-white text-gray-900 placeholder-gray-500 focus:outline-none focus:border-transparent transition-all duration-200 hover:border-gray-400"
       />
     </div>
   );
