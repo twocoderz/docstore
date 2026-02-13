@@ -2,7 +2,7 @@ import React from "react";
 import { FaArrowLeft, FaBook } from "react-icons/fa";
 
 const FiliereHeader = ({ filiere, onBack }) => (
-  <div className="sticky top-0 z-20 space-y-8 pt-4 pb-4 bg-gray-50/80 backdrop-blur">
+  <div className="space-y-8 pt-4 pb-4 bg-gray-50/80 backdrop-blur">
     <button
       onClick={onBack}
       className="md:hidden inline-flex items-center justify-center w-11 h-11 rounded-full bg-gray-50 hover:bg-gray-100 active:bg-gray-200 shadow-sm hover:shadow-md transition-all duration-200 group"
@@ -15,9 +15,7 @@ const FiliereHeader = ({ filiere, onBack }) => (
         <div className="flex items-start justify-between">
           <div className="space-y-4">
             <div className="flex flex-col sm:flex-row items-start sm:items-center gap-3 sm:gap-3">
-              <div className="hidden sm:block p-3 bg-white/20 backdrop-blur-sm rounded-xl">
-                <FaBook className="w-8 h-8" />
-              </div>
+              <img src="/assets/icons/book.svg" alt="school" className="w-9 h-9" />
               <div>
                 <h1 className="text-2xl md:text-4xl font-bold">
                   {filiere?.nom || "Chargement..."}
@@ -27,11 +25,6 @@ const FiliereHeader = ({ filiere, onBack }) => (
                 </p>
               </div>
             </div>
-            {filiere?.description && (
-              <p className="text-purple-100 max-w-2xl leading-relaxed text-sm md:text-base">
-                {filiere.description}
-              </p>
-            )}
           </div>
         </div>
       </div>

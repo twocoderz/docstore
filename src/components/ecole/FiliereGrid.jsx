@@ -14,9 +14,7 @@ const FiliereGrid = ({ filieres, selectedParcours, onOpenFiliere }) => (
             <div className="h-24 bg-gradient-to-br from-indigo-500 to-purple-600 relative">
               <div className="absolute bottom-3 left-4 right-4">
                 <div className="flex flex-col sm:flex-row items-start sm:items-center gap-2 sm:gap-2">
-                  <div className="hidden sm:block">
-                    <FaBook className="w-4 h-4 text-white" />
-                  </div>
+                  <img src="/assets/icons/book.svg" alt="school" className="w-9 h-9" />
                   <h3 className="text-lg font-semibold text-white line-clamp-2 sm:line-clamp-1 transition-transform duration-200">
                     {filiere.nom}
                   </h3>

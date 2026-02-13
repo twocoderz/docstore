@@ -7,7 +7,7 @@ const ConcoursSection = ({ concours }) => {
   return (
     <div className="space-y-6">
       <div className="flex items-center space-x-3">
-        <img src="/assets/icons/trophy.svg" alt="school" className="w-12 h-12" />
+        <img src="/assets/icons/trophy.svg" alt="school" className="w-9 h-9" />
         <h2 className="text-2xl md:text-3xl font-bold text-gray-900">Concours d'Entrée</h2>
       </div>
 
