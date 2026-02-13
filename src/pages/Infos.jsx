@@ -1,5 +1,4 @@
 import React from "react";
-import { FaUsers, FaSitemap, FaMobileAlt, FaHeart } from "react-icons/fa";
 
 const Infos = () => {
   const mobileUrl = typeof window !== "undefined"
@@ -27,7 +26,7 @@ const Infos = () => {
       {/* Ce qui peut intéresser les visiteurs */}
       <section className="bg-white rounded-2xl p-6 md:p-8 shadow-sm border border-gray-100">
         <div className="flex items-center space-x-3 mb-4">
-          <FaHeart className="w-6 h-6 text-pink-500" />
+          <img src="/assets/icons/love.svg" alt="love" className="w-6 h-6 text-pink-500" />
           <h2 className="text-xl md:text-2xl font-semibold text-gray-900">Ce qui peut vous intéresser</h2>
         </div>
         <ul className="grid grid-cols-1 md:grid-cols-2 gap-4 text-gray-700">
@@ -49,7 +48,7 @@ const Infos = () => {
       {/* Organisation */}
       <section className="bg-white rounded-2xl p-6 md:p-8 shadow-sm border border-gray-100">
         <div className="flex items-center space-x-3 mb-4">
-          <FaSitemap className="w-6 h-6 text-indigo-600" />
+          <img src="/assets/icons/info.svg" alt="sitemap" className="w-6 h-6 text-indigo-600" />
           <h2 className="text-xl md:text-2xl font-semibold text-gray-900">Comment tout est organisé</h2>
         </div>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6 text-gray-700">
@@ -75,7 +74,7 @@ const Infos = () => {
       {/* Équipe */}
       <section className="bg-white rounded-2xl p-6 md:p-8 shadow-sm border border-gray-100">
         <div className="flex items-center space-x-3 mb-4">
-          <FaUsers className="w-6 h-6 text-green-600" />
+          <img src="/assets/icons/team.svg" alt="team" className="w-6 h-6 text-green-600" />
           <h2 className="text-xl md:text-2xl font-semibold text-gray-900">Développé par</h2>
         </div>
         <p className="text-gray-700 leading-relaxed">
@@ -87,7 +86,7 @@ const Infos = () => {
       {/* Version mobile */}
       <section className="bg-white rounded-2xl p-6 md:p-8 shadow-sm border border-gray-100">
         <div className="flex items-center space-x-3 mb-4">
-          <FaMobileAlt className="w-6 h-6 text-blue-600" />
+          <img src="/assets/icons/phone.svg" alt="phone" className="w-6 h-6 text-blue-600" />
           <h2 className="text-xl md:text-2xl font-semibold text-gray-900">Version mobile</h2>
         </div>
         <p className="text-gray-700 mb-4">

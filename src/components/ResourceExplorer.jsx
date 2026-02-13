@@ -83,13 +83,13 @@ const ResourceExplorer = ({ files }) => {
   const renderItem = (item, path = "", level = 0) => {
     const itemPath = path ? `${path}/${item.name}` : item.name;
     const paddingLeft = level * 24;
-    
+
     if (item.type === "file") {
       const fileUrl = storage.getFileDownload(bucketId, item.fileId);
       const safeFileName = item.originalName.replace(/_/g, "-");
-      
+
       return (
-        <div 
+        <div
           key={itemPath}
           className="flex items-center justify-between p-4 bg-white rounded-xl border border-gray-200 hover:border-blue-300 hover:shadow-md transition-all duration-200"
           style={{ marginLeft: paddingLeft }}
@@ -98,7 +98,7 @@ const ResourceExplorer = ({ files }) => {
             {getFileIcon(item.mimeType)}
             <span className="text-gray-800 font-medium truncate">{item.name}</span>
           </div>
-          
+
           <div className="flex items-center space-x-2">
             {item.mimeType === "application/pdf" && (
               <button
@@ -127,17 +127,17 @@ const ResourceExplorer = ({ files }) => {
         </div>
       );
     }
-    
+
     if (item.type === "folder") {
       const isOpen = openFolders[itemPath];
-      
+
       return (
         <div key={itemPath} className="space-y-3">
-          <div 
+          <div
             className="flex items-center justify-between p-4 bg-gradient-to-r from-yellow-50 to-amber-50 rounded-xl border border-yellow-200 hover:border-yellow-300 cursor-pointer transition-all duration-200"
             style={{ marginLeft: paddingLeft }}
           >
-            <div 
+            <div
               className="flex items-center space-x-3 flex-1"
               onClick={() => toggleFolder(itemPath)}
             >
@@ -150,7 +150,7 @@ const ResourceExplorer = ({ files }) => {
               <span className="text-gray-800 font-medium">{item.name}</span>
               <span className="text-xs text-gray-500">({item.contents.length} élément{item.contents.length > 1 ? 's' : ''})</span>
             </div>
-            
+
             <button
               onClick={() => downloadFolder(item, itemPath)}
               className="inline-flex items-center space-x-1 px-3 py-1.5 text-sm font-medium text-blue-700 bg-blue-100 rounded-lg hover:bg-blue-200 transition-colors duration-200"
@@ -165,7 +165,7 @@ const ResourceExplorer = ({ files }) => {
               <span className="hidden sm:inline">Dossier</span>
             </button>
           </div>
-          
+
           {isOpen && (
             <div className="space-y-3">
               {item.contents.map((subItem) => renderItem(subItem, itemPath, level + 1))}
@@ -174,7 +174,7 @@ const ResourceExplorer = ({ files }) => {
         </div>
       );
     }
-    
+
     return null;
   };
 
@@ -186,7 +186,7 @@ const ResourceExplorer = ({ files }) => {
         <FaFolder className="w-5 h-5 text-blue-600" />
         <h3 className="text-lg font-semibold text-gray-900">Ressources</h3>
       </div>
-      
+
       {fileTree.contents.length > 0 ? (
         <div className="space-y-3">
           {fileTree.contents.map((item) => renderItem(item))}
@@ -221,7 +221,7 @@ const ResourceExplorer = ({ files }) => {
                 </svg>
               </button>
             </div>
-            
+
             <div className="h-full pb-6">
               {previewError ? (
                 <div className="flex items-center justify-center h-full">
