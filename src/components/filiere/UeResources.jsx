@@ -17,9 +17,7 @@ const UeResources = ({ files, onPreview, onDownload }) => (
           >
             <div className="flex items-start space-x-3">
               <div className="flex-shrink-0">
-                <div className="p-2 bg-red-100 rounded-lg">
-                  <FaFilePdf className="w-5 h-5 text-red-600" />
-                </div>
+                <FaFilePdf className="w-5 h-5 text-red-600" />
               </div>
 
               <div className="flex-1 min-w-0">
@@ -30,7 +28,7 @@ const UeResources = ({ files, onPreview, onDownload }) => (
                 <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2 sm:gap-0 sm:space-x-2">
                   <button
                     onClick={() => onPreview(file)}
-                    className="inline-flex items-center justify-center space-x-1 px-3 py-1.5 text-xs font-medium text-green-700 bg-green-100 rounded-lg hover:bg-green-200 transition-colors duration-200 w-full sm:w-auto"
+                    className="inline-flex items-center cursor-pointer justify-center space-x-1 px-3 py-1.5 text-xs font-medium text-green-700 bg-green-100 rounded-lg hover:bg-green-200 transition-colors duration-200 w-full sm:w-auto"
                   >
                     <FaEye className="w-3 h-3" />
                     <span>Aperçu</span>
@@ -38,7 +36,7 @@ const UeResources = ({ files, onPreview, onDownload }) => (
 
                   <button
                     onClick={() => onDownload(file)}
-                    className="inline-flex items-center justify-center space-x-1 px-3 py-1.5 text-xs font-medium text-blue-700 bg-blue-100 rounded-lg hover:bg-blue-200 transition-colors duration-200 w-full sm:w-auto"
+                    className="inline-flex items-center cursor-pointer justify-center space-x-1 px-3 py-1.5 text-xs font-medium text-blue-700 bg-blue-100 rounded-lg hover:bg-blue-200 transition-colors duration-200 w-full sm:w-auto"
                   >
                     <FaDownload className="w-3 h-3" />
                     <span>Télécharger</span>
@@ -52,7 +50,7 @@ const UeResources = ({ files, onPreview, onDownload }) => (
     ) : (
       <div className="text-center py-8">
         <div className="w-16 h-16 mx-auto bg-gray-200 rounded-full flex items-center justify-center mb-4">
-          <FaFilePdf className="w-6 h-6 text-gray-400" />
+          <FaFilePdf className="w-9 h-9 text-gray-400" />
         </div>
         <p className="text-gray-600">Aucune ressource disponible pour cette UE</p>
       </div>

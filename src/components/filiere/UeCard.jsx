@@ -1,4 +1,3 @@
-import React from "react";
 import { FaChevronDown, FaChevronUp, FaGraduationCap } from "react-icons/fa";
 import UeResources from "./UeResources";
 

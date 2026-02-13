@@ -10,7 +10,7 @@ const Pagination = ({ page, pageCount, onPageChange }) => {
         <button
           onClick={() => onPageChange(Math.max(1, page - 1))}
           disabled={page === 1}
-          className="px-1 sm:px-3 py-1 sm:py-2 text-xs sm:text-sm font-medium text-gray-500 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed whitespace-nowrap"
+          className="px-1 sm:px-3 py-1 sm:py-2 text-xs sm:text-sm cursor-pointer font-medium text-gray-500 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed whitespace-nowrap"
           title="Page précédente"
         >
           <span className="sm:hidden">
@@ -23,7 +23,7 @@ const Pagination = ({ page, pageCount, onPageChange }) => {
           {page > 1 && (
             <button
               onClick={() => onPageChange(1)}
-              className="px-1 py-1 text-xs font-medium text-gray-500 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 min-w-[2rem]"
+              className="px-1 py-1 text-xs cursor-pointer font-medium text-gray-500 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 min-w-[2rem]"
             >
               1
             </button>
@@ -32,21 +32,21 @@ const Pagination = ({ page, pageCount, onPageChange }) => {
           {page > 1 && (
             <button
               onClick={() => onPageChange(page - 1)}
-              className="px-1 py-1 text-xs font-medium text-gray-500 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 min-w-[2rem]"
+              className="px-1 py-1 text-xs cursor-pointer font-medium text-gray-500 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 min-w-[2rem]"
             >
               {page - 1}
             </button>
           )}
           <button
             onClick={() => onPageChange(page)}
-            className="px-1 py-1 text-xs font-medium text-white bg-blue-600 border border-blue-600 rounded-lg min-w-[2rem]"
+            className="px-1 py-1 text-xs cursor-pointer font-medium text-white bg-blue-600 border border-blue-600 rounded-lg min-w-[2rem]"
           >
             {page}
           </button>
           {page < pageCount && (
             <button
               onClick={() => onPageChange(page + 1)}
-              className="px-1 py-1 text-xs font-medium text-gray-500 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 min-w-[2rem]"
+              className="px-1 py-1 text-xs cursor-pointer font-medium text-gray-500 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 min-w-[2rem]"
             >
               {page + 1}
             </button>
@@ -55,7 +55,7 @@ const Pagination = ({ page, pageCount, onPageChange }) => {
           {page < pageCount && (
             <button
               onClick={() => onPageChange(pageCount)}
-              className="px-1 py-1 text-xs font-medium text-gray-500 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 min-w-[2rem]"
+              className="px-1 py-1 text-xs cursor-pointer font-medium text-gray-500 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 min-w-[2rem]"
             >
               {pageCount}
             </button>
@@ -67,11 +67,10 @@ const Pagination = ({ page, pageCount, onPageChange }) => {
             <button
               key={pageNum}
               onClick={() => onPageChange(pageNum)}
-              className={`px-2 sm:px-3 py-2 text-xs sm:text-sm font-medium rounded-lg ${
-                page === pageNum
-                  ? "text-white bg-blue-600 border border-blue-600"
-                  : "text-gray-500 bg-white border border-gray-300 hover:bg-gray-50"
-              }`}
+              className={`px-2 sm:px-3 py-2 text-xs cursor-pointer sm:text-sm font-medium rounded-lg ${page === pageNum
+                ? "text-white bg-blue-600 border border-blue-600"
+                : "text-gray-500 bg-white border border-gray-300 hover:bg-gray-50"
+                }`}
             >
               {pageNum}
             </button>
@@ -81,7 +80,7 @@ const Pagination = ({ page, pageCount, onPageChange }) => {
         <button
           onClick={() => onPageChange(Math.min(pageCount, page + 1))}
           disabled={page === pageCount}
-          className="px-1 sm:px-3 py-1 sm:py-2 text-xs sm:text-sm font-medium text-gray-500 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed whitespace-nowrap"
+          className="px-1 sm:px-3 py-1 sm:py-2 text-xs cursor-pointer sm:text-sm font-medium text-gray-500 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed whitespace-nowrap"
           title="Page suivante"
         >
           <span className="hidden sm:inline">Suivant</span>
