@@ -1,4 +1,4 @@
-# Biblio EPL
+# DocStore
 
 Your gateway to academic success at university of Lome.
 ## Discover. Learn. Succeed.
@@ -14,7 +14,7 @@ DocStore is a Web application for exploring a university's academic offer: schoo
 - **Preview Before Download** – Preview PDF documents directly before downloading
 - **Mobile-Friendly** – Access your study materials anytime, anywhere, on any device
 
-### Why Choose Biblio EPL?
+### Why Choose DocStore?
 
 - **Save Time** – No more digging through endless folders. Find materials in seconds, not hours.
 - **Stay Organized** – All your academic resources in one place, neatly categorized and easy to navigate.
@@ -32,3 +32,18 @@ Ready to transform your study experience? Visit **[docstore-univ.vercel.app](htt
 ---
 
 *Empowering engineering students to achieve their full potential.*
+
+---
+
+### About the Team
+
+DocStore was developed by **[twocoderz](https://twocoderz-team.vercel.app)** – a passionate team dedicated to building tools that make life easier.
+
+- 🌐 [Visit our website](https://twocoderz-team.vercel.app)
+- 💻 [Check our GitHub](https://github.com/twocoderz)
+
+### Mobile App
+
+Prefer studying on the go? Download the mobile version of DocStore for an optimized experience on your smartphone.
+
+**[Get the Mobile App](https://docstore-download.vercel.app)**
