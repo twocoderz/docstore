@@ -84,10 +84,7 @@ const Navigation = () => {
               className="flex items-center group flex-shrink-0"
               onClick={closeMobileMenu}
             >
-              <img src="/assets/icons/logo.svg" alt="DocStore logo" className="w-12 h-12" />
-              <h1 className="text-lg mt-3 uppercase sm:text-xl font-bold bg-gradient-to-r from-blue-500 to-blue-600 bg-clip-text text-transparent">
-                Store
-              </h1>
+              <img src="/assets/icons/logo.svg" alt="DocStore logo" className="w-24 h-24" />
             </Link>
 
             {/* Navigation desktop */}
