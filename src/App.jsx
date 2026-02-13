@@ -7,6 +7,7 @@ import Concours from "./pages/Concours";
 import ConcoursDetail from "./pages/ConcoursDetail";
 import Infos from "./pages/Infos";
 import Navigation from "./components/Navigation";
+import ROUTES from "./constants/routes";
 
 const App = () => {
   return (
@@ -15,14 +16,14 @@ const App = () => {
         <Navigation />
         <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
           <Routes>
-            <Route path="/" element={<Navigate to="/ecoles" replace />} />
-            <Route path="/ecoles" element={<Ecoles />} />
-            <Route path="/ecole/:ecoleName" element={<Ecole />} />
-            <Route path="/filiere/:filiereName" element={<Filiere />} />
-            <Route path="/concours" element={<Concours />} />
-            <Route path="/concours/:concoursId" element={<ConcoursDetail />} />
-            <Route path="/infos" element={<Infos />} />
-            <Route path="*" element={<Navigate to="/ecoles" replace />} />
+            <Route path={ROUTES.HOME} element={<Navigate to={ROUTES.ECOLES} replace />} />
+            <Route path={ROUTES.ECOLES} element={<Ecoles />} />
+            <Route path={ROUTES.ECOLE_DETAIL} element={<Ecole />} />
+            <Route path={ROUTES.FILIERE_DETAIL} element={<Filiere />} />
+            <Route path={ROUTES.CONCOURS} element={<Concours />} />
+            <Route path={ROUTES.CONCOURS_DETAIL} element={<ConcoursDetail />} />
+            <Route path={ROUTES.INFOS} element={<Infos />} />
+            <Route path="*" element={<Navigate to={ROUTES.ECOLES} replace />} />
           </Routes>
         </main>
       </div>
