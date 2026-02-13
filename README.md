@@ -27,7 +27,7 @@ We understand the challenges of engineering studies. DocStore was created to mak
 
 ### Get Started
 
-Ready to transform your study experience? Simply browse the platform, search for your courses or exams, and download the materials you need.
+Ready to transform your study experience? Visit **[docstore-univ.vercel.app](https://docstore-univ.vercel.app/)** to browse the platform, search for your courses or exams, and download the materials you need.
 
 ---
 
