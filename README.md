@@ -1,61 +1,34 @@
 # Biblio EPL
 
-Une application web pour explorer les ressources de l'École Polytechnique de Louvain.
+Your gateway to academic success at university of Lome.
+## Discover. Learn. Succeed.
 
-## Configuration
+DocStore is a Web application for exploring a university's academic offer: schools/faculties, programs, study tracks, courses, PDF resources, and entrance exams.
 
-### Variables d'environnement
+### Key Features
 
-Pour que l'API Google Drive fonctionne, vous devez configurer les variables d'environnement suivantes dans votre projet Vercel :
+- **Comprehensive Course Resources** – Access detailed materials for every teaching unit (UE) across all semesters
+- **Smart Search & Filtering** – Find exactly what you need with powerful search, semester filters, and category filters
+- **Competition Resources** – Explore past exam papers and preparation materials for competitive entrance exams
+- **School Directory** – Discover engineering schools and their specific programs
+- **Preview Before Download** – Preview PDF documents directly before downloading
+- **Mobile-Friendly** – Access your study materials anytime, anywhere, on any device
 
-1. Allez dans votre dashboard Vercel.
-2. Sélectionnez votre projet
-3. Allez dans "Settings" > "Environment Variables"
-4. Ajoutez les variables suivantes :
+### Why Choose Biblio EPL?
 
-```
-GOOGLE_PROJECT_ID=votre-project-id
-GOOGLE_PRIVATE_KEY_ID=votre-private-key-id
-GOOGLE_PRIVATE_KEY="-----BEGIN PRIVATE KEY-----\nvotre-clé-privée-ici\n-----END PRIVATE KEY-----\n"
-GOOGLE_CLIENT_EMAIL=votre-service-account@votre-project.iam.gserviceaccount.com
-GOOGLE_CLIENT_ID=votre-client-id
-GOOGLE_CLIENT_X509_CERT_URL=https://www.googleapis.com/robot/v1/metadata/x509/votre-service-account%40votre-project.iam.gserviceaccount.com
-```
+- **Save Time** – No more digging through endless folders. Find materials in seconds, not hours.
+- **Stay Organized** – All your academic resources in one place, neatly categorized and easy to navigate.
+- **Study Smarter** – Access previous exam papers and comprehensive course materials to prepare effectively.
+- **Always Up to Date** – New resources are regularly added to keep you ahead.
 
-### Configuration Google Service Account
+### Built for Students, by Students
 
-1. Allez sur [Google Cloud Console](https://console.cloud.google.com/)
-2. Créez un nouveau projet ou sélectionnez un projet existant
-3. Activez l'API Google Drive
-4. Créez un compte de service :
-   - Allez dans "IAM & Admin" > "Service Accounts"
-   - Cliquez sur "Create Service Account"
-   - Donnez un nom à votre compte de service
-   - Cliquez sur "Create and Continue"
-   - Pour les rôles, sélectionnez "Editor" (ou un rôle plus restrictif selon vos besoins)
-   - Cliquez sur "Done"
-5. Créez une clé pour le compte de service :
-   - Cliquez sur votre compte de service
-   - Allez dans l'onglet "Keys"
-   - Cliquez sur "Add Key" > "Create new key"
-   - Sélectionnez "JSON"
-   - Téléchargez le fichier JSON.
-6. Utilisez les informations du fichier JSON pour configurer vos variables d'environnement.
+We understand the challenges of engineering studies. DocStore was created to make your academic journey smoother and help you focus on what matters most—learning and succeeding.
 
-## Installation
+### Get Started
 
-```bash
-npm install
-```
+Ready to transform your study experience? Simply browse the platform, search for your courses or exams, and download the materials you need.
 
-## Développement
+---
 
-```bash
-npm run dev
-```
-
-## Build
-
-```bash
-npm run build
-```
+*Empowering engineering students to achieve their full potential.*
