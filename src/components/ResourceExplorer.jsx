@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { FaFilePdf, FaFileWord, FaFolder, FaDownload, FaFileArchive, FaEye, FaChevronDown, FaChevronRight } from "react-icons/fa";
 import JSZip from "jszip";
 import { saveAs } from "file-saver";
@@ -53,7 +53,7 @@ const ResourceExplorer = ({ files }) => {
     }
   };
 
-  const downloadFolder = async (folder, folderPath) => {
+  const downloadFolder = async (folder) => {
     setIsDownloading(true);
     const zip = new JSZip();
     const collectFiles = (items, zipFolder, path) => {

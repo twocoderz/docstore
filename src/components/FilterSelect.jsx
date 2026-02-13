@@ -1,7 +1,7 @@
 import React from "react";
 import ModernSelect from "./ModernSelect";
 
-const FilterSelect = ({ label, options, value, onChange }) => {
+const FilterSelect = ({ options, value, onChange }) => {
   return (
     <div className="relative">
       {/* Layout responsive : vertical sur mobile, horizontal sur grand écran */}
