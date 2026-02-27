@@ -1,12 +1,16 @@
 import React from "react";
+import Popup from "../components/Popup";
 
 const Infos = () => {
   const mobileUrl = typeof window !== "undefined"
     ? `https://m.${window.location.hostname}`
     : "https://m.example.com";
+
+  const [isTwocoderzPopupOpen, setIsTwocoderzPopupOpen] = React.useState(false);
+
   const handleTwocoderzClick = (event) => {
     event.preventDefault();
-    window.alert("Le site Twocoderz est en cours de développement.");
+    setIsTwocoderzPopupOpen(true);
   };
 
   return (
@@ -132,6 +136,13 @@ const Infos = () => {
           Lien direct vers la version mobile pour une navigation fluide sur votre téléphone.
         </p>
       </section>
+
+      <Popup
+        open={isTwocoderzPopupOpen}
+        title="Site en cours de développement"
+        message="Le site Twocoderz est en cours de développement. Merci pour votre intérêt, revenez bientôt."
+        onClose={() => setIsTwocoderzPopupOpen(false)}
+      />
     </div>
   );
 };
