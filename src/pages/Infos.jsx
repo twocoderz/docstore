@@ -4,6 +4,10 @@ const Infos = () => {
   const mobileUrl = typeof window !== "undefined"
     ? `https://m.${window.location.hostname}`
     : "https://m.example.com";
+  const handleTwocoderzClick = (event) => {
+    event.preventDefault();
+    window.alert("Le site Twocoderz est en cours de développement.");
+  };
 
   return (
     <div className="space-y-10">
@@ -78,7 +82,11 @@ const Infos = () => {
         </div>
         <p className="text-gray-700 leading-relaxed mb-4">
           Cette plateforme a été conçue avec amour par l'équipe{" "}
-          <a href="https://twocoderz.com" target="_blank" rel="noopener noreferrer" className="text-indigo-600 font-semibold hover:underline">
+          <a
+            href="https://twocoderz.com"
+            onClick={handleTwocoderzClick}
+            className="text-indigo-600 font-semibold hover:underline"
+          >
             Twocoderz
           </a>{" "}
           pour vous offrir la meilleure expérience possible. Votre réussite est notre motivation !
@@ -86,8 +94,7 @@ const Infos = () => {
         <div className="flex flex-wrap gap-4">
           <a
             href="https://twocoderz.com"
-            target="_blank"
-            rel="noopener noreferrer"
+            onClick={handleTwocoderzClick}
             className="inline-flex items-center px-4 py-2 rounded-lg bg-indigo-600 text-white font-medium hover:bg-indigo-700 transition-colors"
           >
             Visitez notre site
