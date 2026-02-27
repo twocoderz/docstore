@@ -1,6 +1,7 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import { FaArrowRight, FaCalendarAlt } from "react-icons/fa";
+import { TrophyIcon } from "../icons/TrophyIcon";
 
 const ConcoursCard = ({ concours }) => (
   <Link key={concours.$id} to={`/concours/${concours.$id}`} className="group">
@@ -10,7 +11,11 @@ const ConcoursCard = ({ concours }) => (
         <div className="absolute bottom-3 left-4 right-4">
           <div className="flex flex-col sm:flex-row items-start sm:items-center gap-2 sm:gap-2">
             <div className="hidden sm:block">
-              <img src="/assets/icons/trophy.svg" alt="school" className="w-5 h-5" />
+              <TrophyIcon
+                className="w-5 h-5"
+                stroke="white"
+                aria-hidden="true"
+              />
             </div>
             <h3 className="text-lg font-semibold text-white line-clamp-2 sm:line-clamp-1 group-hover:scale-105 transition-transform duration-200">
               {concours.nom}

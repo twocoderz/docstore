@@ -1,6 +1,9 @@
 import React from "react";
 import Popup from "../components/Popup";
 import { TeamIcon } from "../components/icons/TeamIcon";
+import { InfoIcon } from "../components/icons/InfoIcon";
+import { LoveIcon } from "../components/icons/LoveIcon";
+import { PhoneIcon } from "../components/icons/PhoneIcon";
 
 const Infos = () => {
   const mobileUrl =
@@ -34,13 +37,9 @@ const Infos = () => {
       </div>
 
       {/* Ce qui peut intéresser les visiteurs */}
-      <section className="bg-white rounded-2xl p-6 md:p-8 shadow-sm border border-gray-100">
+      <section className="p-6 md:p-8">
         <div className="flex items-center space-x-3 mb-4">
-          <img
-            src="/assets/icons/love.svg"
-            alt="love"
-            className="w-6 h-6 text-pink-500"
-          />
+          <LoveIcon className="w-6 h-6" fill="black" aria-hidden="true" />
           <h2 className="text-xl md:text-2xl font-semibold text-gray-900">
             Pourquoi vous allez adorer cette plateforme
           </h2>
@@ -64,13 +63,9 @@ const Infos = () => {
       </section>
 
       {/* Organisation */}
-      <section className="bg-white rounded-2xl p-6 md:p-8 shadow-sm border border-gray-100">
+      <section className="p-6 md:p-8">
         <div className="flex items-center space-x-3 mb-4">
-          <img
-            src="/assets/icons/info.svg"
-            alt="sitemap"
-            className="w-6 h-6 text-indigo-600"
-          />
+          <InfoIcon className="w-6 h-6" fill="black" aria-hidden="true" />
           <h2 className="text-xl md:text-2xl font-semibold text-gray-900">
             Une organisation pensée pour vous
           </h2>
@@ -99,7 +94,7 @@ const Infos = () => {
       </section>
 
       {/* Équipe */}
-      <section className="bg-white rounded-2xl p-6 md:p-8 shadow-sm border border-gray-100">
+      <section className="p-6 md:p-8">
         <div className="flex items-center space-x-3 mb-4">
           <TeamIcon className="w-6 h-6" fill="black" aria-hidden="true" />
           <h2 className="text-xl md:text-2xl font-semibold text-gray-900">
@@ -138,13 +133,9 @@ const Infos = () => {
       </section>
 
       {/* Version mobile */}
-      <section className="bg-white rounded-2xl p-6 md:p-8 shadow-sm border border-gray-100">
+      <section className="p-6 md:p-8">
         <div className="flex items-center space-x-3 mb-4">
-          <img
-            src="/assets/icons/phone.svg"
-            alt="phone"
-            className="w-6 h-6 text-blue-600"
-          />
+          <PhoneIcon className="w-6 h-6" fill="black" aria-hidden="true" />
           <h2 className="text-xl md:text-2xl font-semibold text-gray-900">
             Restez connecté partout
           </h2>

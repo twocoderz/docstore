@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { FaGraduationCap, FaTrophy, FaBars, FaTimes } from "react-icons/fa";
 import ROUTES from "../constants/routes";
+import { InfoIcon } from "./icons/InfoIcon";
 
 const Navigation = () => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
@@ -81,23 +82,37 @@ const Navigation = () => {
             className="flex items-center group flex-shrink-0"
             onClick={closeMobileMenu}
           >
-            <img src="/assets/icons/logo.svg" alt="DocStore logo" className="w-24 h-24" />
+            <img
+              src="/assets/icons/logo.svg"
+              alt="DocStore logo"
+              className="w-24 h-24"
+            />
           </Link>
 
           <div className="hidden md:flex items-center space-x-1 lg:space-x-6">
-            <Link to={ROUTES.ECOLES} className={getActiveClasses(ROUTES.ECOLES)}>
-              <FaGraduationCap className={`w-4 h-4 ${getIconClasses(ROUTES.ECOLES)}`} />
+            <Link
+              to={ROUTES.ECOLES}
+              className={getActiveClasses(ROUTES.ECOLES)}
+            >
+              <FaGraduationCap
+                className={`w-4 h-4 ${getIconClasses(ROUTES.ECOLES)}`}
+              />
               <span>Écoles</span>
             </Link>
-            <Link to={ROUTES.CONCOURS} className={getActiveClasses(ROUTES.CONCOURS)}>
-              <FaTrophy className={`w-4 h-4 ${getIconClasses(ROUTES.CONCOURS)}`} />
+            <Link
+              to={ROUTES.CONCOURS}
+              className={getActiveClasses(ROUTES.CONCOURS)}
+            >
+              <FaTrophy
+                className={`w-4 h-4 ${getIconClasses(ROUTES.CONCOURS)}`}
+              />
               <span>Concours</span>
             </Link>
             <Link to={ROUTES.INFOS} className={getActiveClasses(ROUTES.INFOS)}>
-              <img
-                src="/assets/icons/info.svg"
-                alt="info"
+              <InfoIcon
                 className={`w-4 h-4 ${getIconClasses(ROUTES.INFOS)}`}
+                fill="white"
+                aria-hidden="true"
               />
               <span>Infos</span>
             </Link>
@@ -108,7 +123,11 @@ const Navigation = () => {
             className="md:hidden p-2 rounded-lg text-gray-600 hover:text-gray-900 hover:bg-gray-100 transition-colors duration-200 touch-target"
             aria-label="Ouvrir le menu"
           >
-            {isMobileMenuOpen ? <FaTimes className="w-6 h-6" /> : <FaBars className="w-6 h-6" />}
+            {isMobileMenuOpen ? (
+              <FaTimes className="w-6 h-6" />
+            ) : (
+              <FaBars className="w-6 h-6" />
+            )}
           </button>
         </div>
 
@@ -125,7 +144,9 @@ const Navigation = () => {
               className={getActiveClasses(ROUTES.ECOLES, true)}
               onClick={closeMobileMenu}
             >
-              <FaGraduationCap className={`w-5 h-5 ${getIconClasses(ROUTES.ECOLES)}`} />
+              <FaGraduationCap
+                className={`w-5 h-5 ${getIconClasses(ROUTES.ECOLES)}`}
+              />
               <span className="text-base">Écoles</span>
             </Link>
             <Link
@@ -133,7 +154,9 @@ const Navigation = () => {
               className={getActiveClasses(ROUTES.CONCOURS, true)}
               onClick={closeMobileMenu}
             >
-              <FaTrophy className={`w-5 h-5 ${getIconClasses(ROUTES.CONCOURS)}`} />
+              <FaTrophy
+                className={`w-5 h-5 ${getIconClasses(ROUTES.CONCOURS)}`}
+              />
               <span className="text-base">Concours</span>
             </Link>
             <Link
@@ -141,10 +164,10 @@ const Navigation = () => {
               className={getActiveClasses(ROUTES.INFOS, true)}
               onClick={closeMobileMenu}
             >
-              <img
-                src="/assets/icons/info.svg"
-                alt="info"
+              <InfoIcon
                 className={`w-5 h-5 ${getIconClasses(ROUTES.INFOS)}`}
+                fill="white"
+                aria-hidden="true"
               />
               <span className="text-base">Infos</span>
             </Link>

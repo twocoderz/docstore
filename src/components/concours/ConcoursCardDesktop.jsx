@@ -2,6 +2,7 @@ import React from "react";
 import { FaArrowRight, FaFilePdf } from "react-icons/fa";
 import { CalendarIcon } from "../icons/CalendarIcon";
 import { GraduationIcon } from "../icons/GraduationIcon";
+import { TrophyIcon } from "../icons/TrophyIcon";
 
 const ConcoursCardDesktop = ({ concour, ecoleName }) => (
   <a
@@ -13,10 +14,10 @@ const ConcoursCardDesktop = ({ concour, ecoleName }) => (
       <div className="h-18 md:h-22 bg-gradient-to-br from-orange-500 via-orange-600 to-yellow-600 relative overflow-hidden">
         <div className="absolute bottom-2 left-6 right-6">
           <div className="flex items-center space-x-3">
-            <img
-              src="/assets/icons/trophy.svg"
-              alt="trophy"
+            <TrophyIcon
               className="w-12 h-12"
+              stroke="white"
+              aria-hidden="true"
             />
             <h3 className="text-lg md:text-xl font-bold text-white line-clamp-2 group-hover:scale-105 transition-transform duration-200">
               {concour.nom}

@@ -2,6 +2,7 @@ import React from "react";
 import { FaArrowLeft } from "react-icons/fa";
 import { CalendarIcon } from "../icons/CalendarIcon";
 import { GraduationIcon } from "../icons/GraduationIcon";
+import { TrophyIcon } from "../icons/TrophyIcon";
 
 const ConcoursDetailHeader = ({ concours, ecoleName, onBack }) => (
   <div className="space-y-8 pt-4 pb-4 bg-gray-50/80 backdrop-blur">
@@ -16,10 +17,10 @@ const ConcoursDetailHeader = ({ concours, ecoleName, onBack }) => (
       <div className="h-28 bg-gradient-to-br from-orange-500 via-orange-600 to-yellow-600 relative overflow-hidden">
         <div className="absolute bottom-4 left-8 right-8">
           <div className="flex flex-col sm:flex-row items-start sm:items-center gap-3 sm:gap-4">
-            <img
-              src="/assets/icons/trophy.svg"
-              alt="trophy"
+            <TrophyIcon
               className="w-12 h-12"
+              stroke="white"
+              aria-hidden="true"
             />
             <div className="flex-1">
               <h1 className="text-2xl md:text-3xl font-bold text-white mb-2">
