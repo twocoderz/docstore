@@ -1,5 +1,6 @@
 import React from "react";
-import { FaArrowLeft, FaBook } from "react-icons/fa";
+import { FaArrowLeft } from "react-icons/fa";
+import { BookIcon } from "../icons/BookIcon";
 
 const FiliereHeader = ({ filiere, onBack }) => (
   <div className="space-y-8 pt-4 pb-4 bg-gray-50/80 backdrop-blur">
@@ -15,7 +16,7 @@ const FiliereHeader = ({ filiere, onBack }) => (
         <div className="flex items-start justify-between">
           <div className="space-y-4">
             <div className="flex flex-col sm:flex-row items-start sm:items-center gap-3 sm:gap-3">
-              <img src="/assets/icons/book.svg" alt="school" className="w-9 h-9" />
+              <BookIcon className="w-9 h-9" fill="white" aria-hidden="true" />
               <div>
                 <h1 className="text-2xl md:text-4xl font-bold">
                   {filiere?.nom || "Chargement..."}

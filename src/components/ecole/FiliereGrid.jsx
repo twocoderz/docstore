@@ -1,5 +1,6 @@
 import React from "react";
 import { FaArrowRight, FaBook } from "react-icons/fa";
+import { BookIcon } from "../icons/BookIcon";
 
 const FiliereGrid = ({ filieres, selectedParcours, onOpenFiliere }) => (
   <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -14,7 +15,11 @@ const FiliereGrid = ({ filieres, selectedParcours, onOpenFiliere }) => (
             <div className="h-24 bg-gradient-to-br from-indigo-500 to-purple-600 relative">
               <div className="absolute bottom-3 left-4 right-4">
                 <div className="flex flex-col sm:flex-row items-start sm:items-center gap-2 sm:gap-2">
-                  <img src="/assets/icons/book.svg" alt="school" className="w-9 h-9" />
+                  <BookIcon
+                    className="w-9 h-9"
+                    fill="white"
+                    aria-hidden="true"
+                  />
                   <h3 className="text-lg font-semibold text-white line-clamp-2 sm:line-clamp-1 transition-transform duration-200">
                     {filiere.nom}
                   </h3>
@@ -42,7 +47,9 @@ const FiliereGrid = ({ filieres, selectedParcours, onOpenFiliere }) => (
         <div className="w-24 h-24 mx-auto bg-gray-100 rounded-full flex items-center justify-center mb-4">
           <FaBook className="w-10 h-10 text-gray-400" />
         </div>
-        <h3 className="text-lg font-semibold text-gray-900 mb-2">Aucune filière trouvée</h3>
+        <h3 className="text-lg font-semibold text-gray-900 mb-2">
+          Aucune filière trouvée
+        </h3>
         <p className="text-gray-600">
           {selectedParcours
             ? "Aucune filière ne correspond aux filtres sélectionnés."

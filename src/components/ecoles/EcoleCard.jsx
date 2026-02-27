@@ -1,6 +1,7 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import { FaArrowRight, FaMapMarkerAlt } from "react-icons/fa";
+import { GraduationIcon } from "../icons/GraduationIcon";
 
 const EcoleCard = ({ ecole, isMobile }) => (
   <Link
@@ -12,8 +13,14 @@ const EcoleCard = ({ ecole, isMobile }) => (
       <div className="h-18 md:h-22 bg-gradient-to-br from-blue-500 via-blue-600 to-indigo-700 relative overflow-hidden">
         <div className="absolute bottom-2 left-6 right-6">
           <div className="flex items-center space-x-3">
-            <img src="/assets/icons/graduation.svg" alt="school" className="w-12 h-12" />
-            <h3 className="text-xl md:text-3xl font-bold text-white">{ecole.nom}</h3>
+            <GraduationIcon
+              className="w-12 h-12"
+              fill="white"
+              aria-hidden="true"
+            />
+            <h3 className="text-xl md:text-3xl font-bold text-white">
+              {ecole.nom}
+            </h3>
           </div>
         </div>
         <div className="absolute top-0 right-0 w-32 h-32 bg-white/5 rounded-full -translate-y-16 translate-x-16"></div>
@@ -21,7 +28,9 @@ const EcoleCard = ({ ecole, isMobile }) => (
       </div>
 
       <div className="p-6 space-y-4">
-        <p className="text-gray-600 line-clamp-3 leading-relaxed">{ecole.description}</p>
+        <p className="text-gray-600 line-clamp-3 leading-relaxed">
+          {ecole.description}
+        </p>
 
         {ecole.lieu && (
           <div className="flex items-center space-x-2 text-sm text-gray-500">
@@ -31,7 +40,9 @@ const EcoleCard = ({ ecole, isMobile }) => (
         )}
 
         <div className="flex items-center justify-between pt-2">
-          <span className="text-sm font-medium text-blue-600">Voir les filières</span>
+          <span className="text-sm font-medium text-blue-600">
+            Voir les filières
+          </span>
           <FaArrowRight className="w-4 h-4 text-blue-600 group-hover:translate-x-1 transition-transform duration-300 ease-out" />
         </div>
       </div>

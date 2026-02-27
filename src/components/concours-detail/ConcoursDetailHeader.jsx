@@ -1,5 +1,7 @@
 import React from "react";
 import { FaArrowLeft } from "react-icons/fa";
+import { CalendarIcon } from "../icons/CalendarIcon";
+import { GraduationIcon } from "../icons/GraduationIcon";
 
 const ConcoursDetailHeader = ({ concours, ecoleName, onBack }) => (
   <div className="space-y-8 pt-4 pb-4 bg-gray-50/80 backdrop-blur">
@@ -14,18 +16,30 @@ const ConcoursDetailHeader = ({ concours, ecoleName, onBack }) => (
       <div className="h-28 bg-gradient-to-br from-orange-500 via-orange-600 to-yellow-600 relative overflow-hidden">
         <div className="absolute bottom-4 left-8 right-8">
           <div className="flex flex-col sm:flex-row items-start sm:items-center gap-3 sm:gap-4">
-            <img src="/assets/icons/trophy.svg" alt="trophy" className="w-12 h-12" />
+            <img
+              src="/assets/icons/trophy.svg"
+              alt="trophy"
+              className="w-12 h-12"
+            />
             <div className="flex-1">
               <h1 className="text-2xl md:text-3xl font-bold text-white mb-2">
                 {concours.nom}
               </h1>
               <div className="flex items-center space-x-4 text-gray-800 text-sm md:text-base">
                 <div className="flex items-center space-x-2">
-                  <img src="/assets/icons/calendar.svg" alt="calendar" className="w-4 h-4" />
+                  <CalendarIcon
+                    className="w-4 h-4"
+                    fill="white"
+                    aria-hidden="true"
+                  />
                   <span>{concours.annee}</span>
                 </div>
                 <div className="flex items-center space-x-2">
-                  <img src="/assets/icons/graduation.svg" alt="graduation" className="w-5 h-5" />
+                  <GraduationIcon
+                    className="w-5 h-5"
+                    fill="white"
+                    aria-hidden="true"
+                  />
                   <span>{ecoleName}</span>
                 </div>
               </div>
