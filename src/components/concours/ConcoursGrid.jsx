@@ -10,8 +10,12 @@ const ConcoursGrid = ({ concours, getEcoleName }) => {
         <div className="w-24 h-24 mx-auto bg-gray-100 rounded-full flex items-center justify-center mb-4">
           <FaTrophy className="w-10 h-10 text-gray-400" />
         </div>
-        <h3 className="text-lg font-semibold text-gray-900 mb-2">Aucun concours disponible</h3>
-        <p className="text-gray-600">Les concours seront affichés ici une fois ajoutés.</p>
+        <h3 className="text-lg font-semibold text-gray-900 mb-2">
+          Aucun concours disponible
+        </h3>
+        <p className="text-gray-600">
+          Les concours seront affichés ici une fois ajoutés.
+        </p>
       </div>
     );
   }
