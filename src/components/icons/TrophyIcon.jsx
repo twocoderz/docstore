@@ -1,6 +1,8 @@
 import PropTypes from "prop-types";
 
-export function TrophyIcon(props) {
+export function TrophyIcon({ stroke, color, ...props }) {
+  const strokeColor = stroke || color || "currentColor";
+
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"
@@ -11,7 +13,7 @@ export function TrophyIcon(props) {
     >
       <path
         fill="none"
-        stroke="currentColor"
+        stroke={strokeColor}
         strokeLinecap="round"
         strokeLinejoin="round"
         strokeWidth="3"
@@ -19,7 +21,7 @@ export function TrophyIcon(props) {
       />
       <path
         fill="none"
-        stroke="currentColor"
+        stroke={strokeColor}
         strokeLinecap="round"
         strokeLinejoin="round"
         strokeWidth="3"
@@ -27,7 +29,7 @@ export function TrophyIcon(props) {
       />
       <path
         fill="none"
-        stroke="currentColor"
+        stroke={strokeColor}
         strokeLinecap="round"
         strokeLinejoin="round"
         strokeWidth="3"
@@ -35,7 +37,7 @@ export function TrophyIcon(props) {
       />
       <path
         fill="none"
-        stroke="currentColor"
+        stroke={strokeColor}
         strokeLinecap="round"
         strokeLinejoin="round"
         strokeWidth="3"
@@ -43,7 +45,7 @@ export function TrophyIcon(props) {
       />
       <path
         fill="none"
-        stroke="currentColor"
+        stroke={strokeColor}
         strokeLinecap="round"
         strokeLinejoin="round"
         strokeWidth="3"
@@ -51,7 +53,7 @@ export function TrophyIcon(props) {
       />
       <path
         fill="none"
-        stroke="currentColor"
+        stroke={strokeColor}
         strokeLinecap="round"
         strokeLinejoin="round"
         strokeWidth="3"
@@ -63,7 +65,7 @@ export function TrophyIcon(props) {
         y1="41.5"
         y2="41.5"
         fill="none"
-        stroke="currentColor"
+        stroke={strokeColor}
         strokeLinecap="round"
         strokeLinejoin="round"
         strokeWidth="3"
@@ -73,5 +75,6 @@ export function TrophyIcon(props) {
 }
 
 TrophyIcon.propTypes = {
-  props: PropTypes.object,
+  stroke: PropTypes.string,
+  color: PropTypes.string,
 };
