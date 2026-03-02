@@ -37,14 +37,14 @@ const Infos = () => {
       </div>
 
       {/* Ce qui peut intéresser les visiteurs */}
-      <section className="p-6 md:p-8">
+      <section className="mt-12 mb-12">
         <div className="flex items-center space-x-3 mb-4">
           <LoveIcon className="w-6 h-6" fill="black" aria-hidden="true" />
-          <h2 className="text-xl md:text-2xl font-semibold text-gray-900">
+          <h2 className="text-xl md:text-3xl font-medium text-gray-700">
             Pourquoi vous allez adorer cette plateforme
           </h2>
         </div>
-        <ul className="grid grid-cols-1 md:grid-cols-2 gap-4 text-gray-700">
+        <ul className="grid grid-cols-1 md:grid-cols-2 gap-4 text-lg md:text-xl text-gray-700">
           <li className="bg-gray-50 rounded-xl p-4 border border-gray-100">
             Accédez instantanément aux concours et informations des écoles
           </li>
@@ -63,32 +63,44 @@ const Infos = () => {
       </section>
 
       {/* Organisation */}
-      <section className="p-6 md:p-8">
+      <section className="mb-12">
         <div className="flex items-center space-x-3 mb-4">
           <InfoIcon className="w-6 h-6" fill="black" aria-hidden="true" />
-          <h2 className="text-xl md:text-2xl font-semibold text-gray-900">
+          <h2 className="text-xl md:text-3xl font-medium text-gray-700">
             Une organisation pensée pour vous
           </h2>
         </div>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6 text-gray-700">
           <div className="bg-indigo-50 rounded-xl p-5 border border-indigo-100">
-            <h3 className="font-semibold text-gray-900 mb-2">Écoles</h3>
-            <p>Découvrez les écoles qui correspondent à vos ambitions.</p>
+            <h3 className="font-semibold text-lg text-gray-800 mb-2">Écoles</h3>
+            <p className="text-lg">
+              Découvrez les écoles qui correspondent à vos ambitions.
+            </p>
           </div>
           <div className="bg-orange-50 rounded-xl p-5 border border-orange-100">
-            <h3 className="font-semibold text-gray-900 mb-2">Concours</h3>
-            <p>Préparez-vous sereinement avec tous les documents officiels.</p>
+            <h3 className="font-sem className='text-lg'ibold text-lg text-gray-800 mb-2">
+              Concours
+            </h3>
+            <p className="text-lg">
+              Préparez-vous sereinement avec tous les documents officiels.
+            </p>
           </div>
           <div className="bg-purple-50 rounded-xl p-5 border border-purple-100">
-            <h3 className="font-semibold text-gray-900 mb-2">Filières</h3>
-            <p>
+            <h3 className="font-semibold text-lg text-gray-800 mb-2">
+              Filières
+            </h3>
+            <p className="text-lg">
               Explorez les filières et leurs unités d'enseignement (UE) en
               détail.
             </p>
           </div>
           <div className="bg-blue-50 rounded-xl p-5 border border-blue-100">
-            <h3 className="font-semibold text-gray-900 mb-2">Ressources</h3>
-            <p>Chaque UE met à votre disposition des ressources précieuses.</p>
+            <h3 className="font-semibold text-lg text-gray-800 mb-2">
+              Ressources
+            </h3>
+            <p className="text-lg">
+              Chaque UE met à votre disposition des ressources précieuses.
+            </p>
           </div>
         </div>
       </section>
@@ -115,19 +127,19 @@ const Infos = () => {
         </p>
         <div className="flex flex-wrap gap-4">
           <a
-            href="https://twocoderz.com"
-            onClick={handleTwocoderzClick}
-            className="inline-flex items-center px-4 py-2 rounded-lg bg-indigo-600 text-white font-medium hover:bg-indigo-700 transition-colors"
-          >
-            Visitez notre site
-          </a>
-          <a
             href="https://github.com/twocoderz"
             target="_blank"
             rel="noopener noreferrer"
             className="inline-flex items-center px-4 py-2 rounded-lg bg-gray-800 text-white font-medium hover:bg-gray-900 transition-colors"
           >
             Notre GitHub
+          </a>
+          <a
+            href="https://twocoderz.com"
+            onClick={handleTwocoderzClick}
+            className="inline-flex items-center text-indigo-700 font-medium underline transition-colors"
+          >
+            Visitez notre site
           </a>
         </div>
       </section>
@@ -150,7 +162,7 @@ const Infos = () => {
           rel="noopener noreferrer"
           className="inline-flex items-center px-4 py-2 rounded-lg bg-blue-600 text-white font-medium hover:bg-blue-700 transition-colors"
         >
-          Ouvrir la version mobile
+          Téléchargez la version mobile
         </a>
         <p className="text-xs text-gray-500 mt-2">
           Lien direct vers la version mobile pour une navigation fluide sur
