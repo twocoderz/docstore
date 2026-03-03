@@ -14,7 +14,7 @@ const EcoleCard = ({ ecole, isMobile }) => (
         <div className="absolute bottom-2 left-6 right-6">
           <div className="flex items-center space-x-3">
             <GraduationIcon
-              className="w-12 h-12"
+              className="hidden md:block w-12 h-12"
               fill="white"
               aria-hidden="true"
             />

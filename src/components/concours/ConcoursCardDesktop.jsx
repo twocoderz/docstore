@@ -31,14 +31,18 @@ const ConcoursCardDesktop = ({ concour, ecoleName }) => (
       <div className="p-6 space-y-4">
         <div className="space-y-2">
           <div className="flex items-center space-x-2 text-sm text-gray-900">
-            <CalendarIcon className="w-4 h-4" fill="white" aria-hidden="true" />
+            <CalendarIcon
+              className="w-4 h-4"
+              fill="currentColor"
+              aria-hidden="true"
+            />
             <span>{concour.annee}</span>
           </div>
 
           <div className="flex items-center space-x-2 text-sm text-gray-500">
             <GraduationIcon
               className="w-5 h-5"
-              fill="white"
+              fill="currentColor"
               aria-hidden="true"
             />
             <span>{ecoleName}</span>
