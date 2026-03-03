@@ -6,9 +6,8 @@ import { CalendarIcon } from "../icons/CalendarIcon";
 
 const ConcoursCard = ({ concours }) => (
   <Link key={concours.$id} to={`/concours/${concours.$id}`} className="group">
-    <div className="h-full bg-white rounded-2xl shadow-md transition-all duration-300 transform hover:-translate-y-1 border border-gray-100 overflow-hidden">
-      <div className="h-8 bg-gradient-to-br from-orange-500 to-yellow-600 relative">
-        <div className="absolute inset-0 bg-black/10"></div>
+    <div className="h-full bg-white rounded-2xl shadow-md hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1 border border-gray-100 overflow-hidden">
+      <div className="h-16 md:h-24 bg-gradient-to-br from-orange-500 to-yellow-600 relative">
         <div className="absolute bottom-3 left-4 right-4">
           <div className="flex flex-col sm:flex-row items-start sm:items-center gap-2 sm:gap-2">
             <div className="hidden md:block">
