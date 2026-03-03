@@ -1,9 +1,5 @@
 import React from "react";
 import Popup from "../components/Popup";
-import { TeamIcon } from "../components/icons/TeamIcon";
-import { InfoIcon } from "../components/icons/InfoIcon";
-import { LoveIcon } from "../components/icons/LoveIcon";
-import { PhoneIcon } from "../components/icons/PhoneIcon";
 
 const Infos = () => {
   const mobileUrl =
@@ -19,156 +15,126 @@ const Infos = () => {
   };
 
   return (
-    <div className="space-y-10">
-      {/* En-tête */}
-      <div className="bg-gradient-to-r from-indigo-600 via-purple-600 to-blue-700 rounded-3xl p-8 text-white relative overflow-hidden">
-        <div className="relative z-10 space-y-4">
-          <div className="flex items-center space-x-3">
-            <h1 className="text-3xl md:text-5xl font-bold">À propos du site</h1>
-          </div>
-          <p className="text-indigo-100 text-base md:text-lg max-w-3xl leading-relaxed">
-            Votre guide essentiel pour explorer le monde éducatif ! Trouvez les
-            écoles de vos rêves, préparez vos concours avec confiance et accédez
-            à des ressources de qualité.
-          </p>
-        </div>
-        <div className="absolute top-0 right-0 w-64 h-64 bg-white/5 rounded-full -translate-y-32 translate-x-32"></div>
-        <div className="absolute bottom-0 left-0 w-48 h-48 bg-white/5 rounded-full translate-y-24 -translate-x-24"></div>
+    <div className="max-w-7xl mx-auto px-4 py-10 space-y-12">
+      {/* Intro */}
+      <div>
+        <h1 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
+          À propos
+        </h1>
+        <p className="text-gray-600 text-base md:text-lg leading-relaxed">
+          Biblio EPL est une plateforme pensée pour les étudiants des classes
+          préparatoires. Elle regroupe les annales de concours, les ressources
+          par filière et les informations pratiques sur les écoles — le tout
+          accessible en quelques clics.
+        </p>
       </div>
 
-      {/* Ce qui peut intéresser les visiteurs */}
-      <section className="mt-12 mb-12">
-        <div className="flex items-center space-x-3 mb-4">
-          <LoveIcon className="w-6 h-6" fill="black" aria-hidden="true" />
-          <h2 className="text-xl md:text-3xl font-medium text-gray-700">
-            Pourquoi vous allez adorer cette plateforme
-          </h2>
-        </div>
-        <ul className="grid grid-cols-1 md:grid-cols-2 gap-4 text-lg md:text-xl text-gray-700">
-          <li className="bg-gray-50 rounded-xl p-4 border border-gray-100">
-            Accédez instantanément aux concours et informations des écoles
+      {/* Ce que tu trouveras ici */}
+      <div>
+        <h2 className="text-lg font-semibold text-gray-900 mb-4">
+          Ce que tu trouveras ici
+        </h2>
+        <ul className="space-y-3 text-gray-600 text-base">
+          <li className="flex gap-3">
+            <span className="text-indigo-500 mt-0.5 shrink-0">→</span>
+            <span>
+              Les fiches et annales des{" "}
+              <strong className="text-gray-800">concours</strong> classés par
+              école et par année
+            </span>
           </li>
-          <li className="bg-gray-50 rounded-xl p-4 border border-gray-100">
-            Des ressources organisées par filière et par UE pour apprendre
-            efficacement
+          <li className="flex gap-3">
+            <span className="text-indigo-500 mt-0.5 shrink-0">→</span>
+            <span>
+              Les <strong className="text-gray-800">ressources par UE</strong>{" "}
+              organisées selon les filières (MP, PC, PSI…)
+            </span>
           </li>
-          <li className="bg-gray-50 rounded-xl p-4 border border-gray-100">
-            Une navigation simple et intuitive, pensée pour vous
-          </li>
-          <li className="bg-gray-50 rounded-xl p-4 border border-gray-100">
-            Des contenus régulièrement mis à jour pour vous accompagner au
-            quotidien
+          <li className="flex gap-3">
+            <span className="text-indigo-500 mt-0.5 shrink-0">→</span>
+            <span>
+              Des infos sur les{" "}
+              <strong className="text-gray-800">écoles</strong> : filières
+              proposées, parcours, etc.
+            </span>
           </li>
         </ul>
-      </section>
+      </div>
 
-      {/* Organisation */}
-      <section className="mb-12">
-        <div className="flex items-center space-x-3 mb-4">
-          <InfoIcon className="w-6 h-6" fill="black" aria-hidden="true" />
-          <h2 className="text-xl md:text-3xl font-medium text-gray-700">
-            Une organisation pensée pour vous
-          </h2>
-        </div>
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 text-gray-700">
-          <div className="bg-indigo-50 rounded-xl p-5 border border-indigo-100">
-            <h3 className="font-semibold text-lg text-gray-800 mb-2">Écoles</h3>
-            <p className="text-lg">
-              Découvrez les écoles qui correspondent à vos ambitions.
-            </p>
-          </div>
-          <div className="bg-orange-50 rounded-xl p-5 border border-orange-100">
-            <h3 className="font-sem className='text-lg'ibold text-lg text-gray-800 mb-2">
-              Concours
-            </h3>
-            <p className="text-lg">
-              Préparez-vous sereinement avec tous les documents officiels.
-            </p>
-          </div>
-          <div className="bg-purple-50 rounded-xl p-5 border border-purple-100">
-            <h3 className="font-semibold text-lg text-gray-800 mb-2">
-              Filières
-            </h3>
-            <p className="text-lg">
-              Explorez les filières et leurs unités d'enseignement (UE) en
-              détail.
-            </p>
-          </div>
-          <div className="bg-blue-50 rounded-xl p-5 border border-blue-100">
-            <h3 className="font-semibold text-lg text-gray-800 mb-2">
-              Ressources
-            </h3>
-            <p className="text-lg">
-              Chaque UE met à votre disposition des ressources précieuses.
-            </p>
-          </div>
-        </div>
-      </section>
+      <hr className="border-gray-100" />
 
-      {/* Équipe */}
-      <section className="p-6 md:p-8">
-        <div className="flex items-center space-x-3 mb-4">
-          <TeamIcon className="w-6 h-6" fill="black" aria-hidden="true" />
-          <h2 className="text-xl md:text-2xl font-semibold text-gray-900">
-            Fait avec passion par
-          </h2>
-        </div>
-        <p className="text-gray-700 leading-relaxed mb-4">
-          Cette plateforme a été conçue avec amour par l'équipe{" "}
+      {/* Qui a fait ça */}
+      <div>
+        <h2 className="text-lg font-semibold text-gray-900 mb-3">
+          Qui a fait ça ?
+        </h2>
+        <p className="text-gray-600 text-base leading-relaxed mb-5">
+          Ce site a été créé par{" "}
           <a
             href="https://twocoderz.com"
             onClick={handleTwocoderzClick}
-            className="text-indigo-600 font-semibold hover:underline"
+            className="text-indigo-600 font-medium hover:underline"
           >
             Twocoderz
-          </a>{" "}
-          pour vous offrir la meilleure expérience possible. Votre réussite est
-          notre motivation !
+          </a>
+          , un petit studio de deux développeurs passionnés. Le projet est
+          open-source, les contributions sont les bienvenues.
         </p>
-        <div className="flex flex-wrap gap-4">
+        <div className="flex flex-wrap gap-3">
           <a
             href="https://github.com/twocoderz"
             target="_blank"
             rel="noopener noreferrer"
-            className="inline-flex items-center px-4 py-2 rounded-lg bg-gray-800 text-white font-medium hover:bg-gray-900 transition-colors"
+            className="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-gray-900 text-white text-sm font-medium hover:bg-gray-700 transition-colors"
           >
-            Notre GitHub
+            <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
+              <path d="M12 0C5.37 0 0 5.37 0 12c0 5.3 3.44 9.8 8.2 11.38.6.1.82-.26.82-.58v-2.03c-3.34.72-4.04-1.61-4.04-1.61-.54-1.38-1.33-1.75-1.33-1.75-1.09-.74.08-.73.08-.73 1.2.09 1.84 1.24 1.84 1.24 1.07 1.83 2.8 1.3 3.49 1 .1-.78.42-1.31.76-1.61-2.67-.3-5.47-1.33-5.47-5.93 0-1.31.47-2.38 1.24-3.22-.14-.3-.54-1.52.1-3.18 0 0 1.01-.32 3.3 1.23a11.5 11.5 0 0 1 3-.4c1.02 0 2.04.13 3 .4 2.28-1.55 3.29-1.23 3.29-1.23.64 1.66.24 2.88.12 3.18.77.84 1.23 1.91 1.23 3.22 0 4.61-2.8 5.63-5.48 5.92.43.37.81 1.1.81 2.22v3.29c0 .32.22.69.83.57C20.56 21.8 24 17.3 24 12c0-6.63-5.37-12-12-12z" />
+            </svg>
+            GitHub
           </a>
           <a
             href="https://twocoderz.com"
             onClick={handleTwocoderzClick}
-            className="inline-flex items-center text-indigo-700 font-medium underline transition-colors"
+            className="inline-flex items-center gap-2 px-4 py-2 rounded-lg border border-gray-200 text-gray-700 text-sm font-medium hover:bg-gray-50 transition-colors"
           >
-            Visitez notre site
+            twocoderz.com
           </a>
         </div>
-      </section>
+      </div>
+
+      <hr className="border-gray-100" />
 
       {/* Version mobile */}
-      <section className="p-6 md:p-8">
-        <div className="flex items-center space-x-3 mb-4">
-          <PhoneIcon className="w-6 h-6" fill="black" aria-hidden="true" />
-          <h2 className="text-xl md:text-2xl font-semibold text-gray-900">
-            Restez connecté partout
-          </h2>
-        </div>
-        <p className="text-gray-700 mb-4">
-          Emportez toutes les informations avec vous ! Version optimisée pour
-          smartphone, disponible où que vous soyez.
+      <div>
+        <h2 className="text-lg font-semibold text-gray-900 mb-2">
+          Version mobile
+        </h2>
+        <p className="text-gray-600 text-base mb-4">
+          Une version adaptée aux téléphones est disponible à l'adresse suivante
+          :
         </p>
         <a
           href={mobileUrl}
           target="_blank"
           rel="noopener noreferrer"
-          className="inline-flex items-center px-4 py-2 rounded-lg bg-blue-600 text-white font-medium hover:bg-blue-700 transition-colors"
+          className="inline-flex items-center gap-2 text-indigo-600 text-sm font-medium hover:underline"
         >
-          Téléchargez la version mobile
+          <svg
+            className="w-4 h-4"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="2"
+            viewBox="0 0 24 24"
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              d="M12 18h.01M8 21h8a1 1 0 0 0 1-1V4a1 1 0 0 0-1-1H8a1 1 0 0 0-1 1v16a1 1 0 0 0 1 1z"
+            />
+          </svg>
+          {mobileUrl}
         </a>
-        <p className="text-xs text-gray-500 mt-2">
-          Lien direct vers la version mobile pour une navigation fluide sur
-          votre téléphone.
-        </p>
-      </section>
+      </div>
 
       <Popup
         open={isTwocoderzPopupOpen}

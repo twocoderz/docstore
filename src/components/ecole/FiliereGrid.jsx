@@ -1,4 +1,3 @@
-import React from "react";
 import { FaArrowRight, FaBook } from "react-icons/fa";
 import { BookIcon } from "../icons/BookIcon";
 
