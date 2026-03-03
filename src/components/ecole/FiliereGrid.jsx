@@ -11,7 +11,7 @@ const FiliereGrid = ({ filieres, selectedParcours, onOpenFiliere }) => (
           className="group cursor-pointer"
         >
           <div className="h-full bg-white rounded-2xl shadow-md hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1 border border-gray-100 overflow-hidden">
-            <div className="h-24 bg-gradient-to-br from-indigo-500 to-purple-600 relative">
+            <div className="h-18 md:h-24 bg-gradient-to-br from-indigo-500 to-purple-600 relative">
               <div className="absolute bottom-3 left-4 right-4">
                 <div className="flex flex-col sm:flex-row items-start sm:items-center gap-2 sm:gap-2">
                   <BookIcon
