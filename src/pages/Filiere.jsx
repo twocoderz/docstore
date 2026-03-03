@@ -1,7 +1,19 @@
 import React, { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import { databases, storage, databaseId, filieresCollectionId, uesCollectionId, bucketId, Query } from "../appwrite";
-import { isGoogleDriveUrl, getGoogleDriveFileName, getGoogleDriveDownloadUrl } from "../utils/googleDrive";
+import {
+  databases,
+  storage,
+  databaseId,
+  filieresCollectionId,
+  uesCollectionId,
+  bucketId,
+  Query,
+} from "../appwrite";
+import {
+  isGoogleDriveUrl,
+  getGoogleDriveFileName,
+  getGoogleDriveDownloadUrl,
+} from "../utils/googleDrive";
 import deburr from "lodash/deburr";
 import ErrorState from "../components/filiere/ErrorState";
 import LoadingState from "../components/filiere/LoadingState";
@@ -33,9 +45,11 @@ const Filiere = () => {
     const fetchFiliere = async () => {
       try {
         const normalizedName = decodeURIComponent(filiereName).trim();
-        const response = await databases.listDocuments(databaseId, filieresCollectionId, [
-          Query.equal("nom", normalizedName),
-        ]);
+        const response = await databases.listDocuments(
+          databaseId,
+          filieresCollectionId,
+          [Query.equal("nom", normalizedName)],
+        );
         if (response.documents.length > 0) {
           setFiliere(response.documents[0]);
           setError(null);
@@ -62,10 +76,7 @@ const Filiere = () => {
         const response = await databases.listDocuments(
           databaseId,
           uesCollectionId,
-          [
-            Query.equal("idFiliere", filiere.$id),
-            Query.limit(1000)
-          ]
+          [Query.equal("idFiliere", filiere.$id), Query.limit(1000)],
         );
 
         const uesWithFiles = await Promise.all(
@@ -81,9 +92,9 @@ const Filiere = () => {
                     return {
                       $id: fileId,
                       name: fileName,
-                      mimeType: 'application/pdf',
-                      type: 'google-drive',
-                      url: fileId
+                      mimeType: "application/pdf",
+                      type: "google-drive",
+                      url: fileId,
                     };
                   } else {
                     // C'est un ID Appwrite
@@ -92,18 +103,21 @@ const Filiere = () => {
                       $id: file.$id,
                       name: file.name,
                       mimeType: file.mimeType,
-                      type: 'appwrite',
-                      url: storage.getFileView(bucketId, file.$id)
+                      type: "appwrite",
+                      url: storage.getFileView(bucketId, file.$id),
                     };
                   }
                 } catch (error) {
-                  console.error('Erreur lors de la récupération du fichier:', error);
+                  console.error(
+                    "Erreur lors de la récupération du fichier:",
+                    error,
+                  );
                   return null;
                 }
-              })
+              }),
             );
             return { ...ue, files: files.filter((file) => file !== null) };
-          })
+          }),
         );
         setUes(uesWithFiles);
       } catch {
@@ -118,10 +132,10 @@ const Filiere = () => {
   const normalize = (str) => deburr(String(str).toLowerCase().trim());
 
   const yearOptions = [...new Set(ues.flatMap((ue) => ue.anneeEnseignement))]
-    .filter(year => year)
+    .filter((year) => year)
     .sort((a, b) => {
-      const yearA = parseInt(a.match(/\d+/)?.[0] || '0');
-      const yearB = parseInt(b.match(/\d+/)?.[0] || '0');
+      const yearA = parseInt(a.match(/\d+/)?.[0] || "0");
+      const yearB = parseInt(b.match(/\d+/)?.[0] || "0");
       return yearA - yearB;
     });
 
@@ -131,7 +145,9 @@ const Filiere = () => {
       if (!selectedYear) return true;
       if (!ue.anneeEnseignement) return false;
       if (Array.isArray(ue.anneeEnseignement)) {
-        return ue.anneeEnseignement.some(y => normalize(y) === normalize(selectedYear));
+        return ue.anneeEnseignement.some(
+          (y) => normalize(y) === normalize(selectedYear),
+        );
       }
       return normalize(ue.anneeEnseignement) === normalize(selectedYear);
     });
@@ -139,16 +155,20 @@ const Filiere = () => {
   const sortedUes = [...filteredUes].sort((a, b) => {
     const getMinYear = (ue) => {
       if (!ue.anneeEnseignement) return 99;
-      const years = Array.isArray(ue.anneeEnseignement) ? ue.anneeEnseignement : [ue.anneeEnseignement];
-      return Math.min(...years.map(y => parseInt((y.match(/\d+/) || [99])[0], 10)));
+      const years = Array.isArray(ue.anneeEnseignement)
+        ? ue.anneeEnseignement
+        : [ue.anneeEnseignement];
+      return Math.min(
+        ...years.map((y) => parseInt((y.match(/\d+/) || [99])[0], 10)),
+      );
     };
     return getMinYear(a) - getMinYear(b);
   });
 
   const handlePreview = (file) => {
-    if (file.type === 'google-drive') {
+    if (file.type === "google-drive") {
       // Pour Google Drive, on ouvre dans un nouvel onglet
-      window.open(file.url, '_blank');
+      window.open(file.url, "_blank");
     } else {
       // Pour Appwrite, on utilise le modal
       setPreviewUrl(file.url);
@@ -158,13 +178,13 @@ const Filiere = () => {
   };
 
   const handleDownload = (file) => {
-    if (file.type === 'google-drive') {
+    if (file.type === "google-drive") {
       // Pour Google Drive, on ouvre le lien de téléchargement
       const downloadUrl = getGoogleDriveDownloadUrl(file.url);
-      window.open(downloadUrl, '_blank');
+      window.open(downloadUrl, "_blank");
     } else {
       // Pour Appwrite, on utilise le lien de téléchargement
-      window.open(storage.getFileDownload(bucketId, file.$id), '_blank');
+      window.open(storage.getFileDownload(bucketId, file.$id), "_blank");
     }
   };
 
@@ -183,12 +203,19 @@ const Filiere = () => {
     setPage(1);
   }, [searchQuery, selectedYear]);
 
-  const paginatedUes = sortedUes.slice((page - 1) * UES_PER_PAGE, page * UES_PER_PAGE);
+  const paginatedUes = sortedUes.slice(
+    (page - 1) * UES_PER_PAGE,
+    page * UES_PER_PAGE,
+  );
   const pageCount = Math.ceil(sortedUes.length / UES_PER_PAGE);
 
   if (error || (!filiere && !isLoading)) {
     return (
-      <ErrorState message={error || `Filière "${decodeURIComponent(filiereName)}" non trouvée`} />
+      <ErrorState
+        message={
+          error || `Filière "${decodeURIComponent(filiereName)}" non trouvée`
+        }
+      />
     );
   }
 
@@ -200,13 +227,15 @@ const Filiere = () => {
     <div className="space-y-8">
       <FiliereHeader filiere={filiere} onBack={() => navigate(-1)} />
 
-      <FiliereFilters
-        yearOptions={yearOptions}
-        selectedYear={selectedYear}
-        onYearChange={setSelectedYear}
-        onSearch={setSearchQuery}
-        resultCount={filteredUes.length}
-      />
+      {ues.length > 0 && (
+        <FiliereFilters
+          yearOptions={yearOptions}
+          selectedYear={selectedYear}
+          onYearChange={setSelectedYear}
+          onSearch={setSearchQuery}
+          resultCount={filteredUes.length}
+        />
+      )}
 
       <div className="space-y-6">
         {paginatedUes.length > 0 ? (

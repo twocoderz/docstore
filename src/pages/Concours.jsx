@@ -1,5 +1,10 @@
 import React, { useState, useEffect } from "react";
-import { databases, databaseId, concoursCollectionId, ecolesCollectionId } from "../appwrite";
+import {
+  databases,
+  databaseId,
+  concoursCollectionId,
+  ecolesCollectionId,
+} from "../appwrite";
 import LoadingState from "../components/filiere/LoadingState";
 import ErrorState from "../components/filiere/ErrorState";
 import ConcoursHeader from "../components/concours/ConcoursHeader";
@@ -17,11 +22,17 @@ const Concours = () => {
     const fetchData = async () => {
       try {
         // Récupérer les concours
-        const concoursResponse = await databases.listDocuments(databaseId, concoursCollectionId);
+        const concoursResponse = await databases.listDocuments(
+          databaseId,
+          concoursCollectionId,
+        );
         setConcours(concoursResponse.documents);
 
         // Récupérer les écoles pour avoir leurs noms
-        const ecolesResponse = await databases.listDocuments(databaseId, ecolesCollectionId);
+        const ecolesResponse = await databases.listDocuments(
+          databaseId,
+          ecolesCollectionId,
+        );
         setEcoles(ecolesResponse.documents);
 
         setError(null);
@@ -36,14 +47,14 @@ const Concours = () => {
 
   // Fonction pour obtenir le nom de l'école à partir de son ID
   const getEcoleName = (ecoleId) => {
-    const ecole = ecoles.find(e => e.$id === ecoleId);
+    const ecole = ecoles.find((e) => e.$id === ecoleId);
     return ecole ? ecole.nom : ecoleId;
   };
 
   // Extraire les années et écoles uniques pour les filtres
-  const years = ["Tous", ...new Set(concours.map(c => c.annee))];
+  const years = ["Tous", ...new Set(concours.map((c) => c.annee))];
   // Filtrer les concours
-  const filteredConcours = concours.filter(concour => {
+  const filteredConcours = concours.filter((concour) => {
     const yearMatch = selectedYear === "Tous" || concour.annee === selectedYear;
     return yearMatch;
   });
@@ -60,15 +71,17 @@ const Concours = () => {
     <div className="space-y-8">
       <ConcoursHeader />
 
-      <ConcoursFilters
-        selectedYear={selectedYear}
-        onYearChange={setSelectedYear}
-        years={years}
-      />
+      {concours.length > 0 && (
+        <ConcoursFilters
+          selectedYear={selectedYear}
+          onYearChange={setSelectedYear}
+          years={years}
+        />
+      )}
 
       <ConcoursGrid concours={filteredConcours} getEcoleName={getEcoleName} />
     </div>
   );
 };
 
-export default Concours; 
+export default Concours;

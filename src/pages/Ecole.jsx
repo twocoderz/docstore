@@ -30,7 +30,7 @@ const Ecole = () => {
         const response = await databases.listDocuments(
           databaseId,
           ecolesCollectionId,
-          [Query.equal("nom", decodeURIComponent(ecoleName))]
+          [Query.equal("nom", decodeURIComponent(ecoleName))],
         );
         if (response.documents.length > 0) {
           setEcole(response.documents[0]);
@@ -59,7 +59,7 @@ const Ecole = () => {
         const filieresResponse = await databases.listDocuments(
           databaseId,
           filieresCollectionId,
-          [Query.equal("idEcole", ecole.$id)]
+          [Query.equal("idEcole", ecole.$id)],
         );
         setFilieres(filieresResponse.documents);
 
@@ -67,7 +67,7 @@ const Ecole = () => {
         const concoursResponse = await databases.listDocuments(
           databaseId,
           concoursCollectionId,
-          [Query.equal("idEcole", ecole.$id)]
+          [Query.equal("idEcole", ecole.$id)],
         );
         setConcours(concoursResponse.documents);
 
@@ -83,7 +83,7 @@ const Ecole = () => {
 
   const parcoursOptions = [...new Set(filieres.map((f) => f.parcours))];
   const filteredFilieres = filieres.filter(
-    (f) => !selectedParcours || f.parcours === selectedParcours
+    (f) => !selectedParcours || f.parcours === selectedParcours,
   );
 
   if (isLoading) {
@@ -100,17 +100,22 @@ const Ecole = () => {
 
       <ConcoursSection concours={concours} />
 
-      <ParcoursFilter
-        options={parcoursOptions}
-        value={selectedParcours}
-        onChange={setSelectedParcours}
-      />
+      {filieres.length > 0 && (
+        <ParcoursFilter
+          options={parcoursOptions}
+          value={selectedParcours}
+          onChange={setSelectedParcours}
+        />
+      )}
 
       <FiliereGrid
         filieres={filteredFilieres}
         selectedParcours={selectedParcours}
         onOpenFiliere={(filiere) =>
-          window.open(`/filiere/${encodeURIComponent(filiere.nom)}`, "noopener,noreferrer")
+          window.open(
+            `/filiere/${encodeURIComponent(filiere.nom)}`,
+            "noopener,noreferrer",
+          )
         }
       />
     </div>
