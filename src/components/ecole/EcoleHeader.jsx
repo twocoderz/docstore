@@ -29,11 +29,13 @@ const EcoleHeader = ({ ecole }) => (
         <div className="flex items-start justify-between">
           <div className="space-y-4">
             <div className="flex flex-col sm:flex-row items-start sm:items-center gap-3 sm:gap-3">
-              <GraduationIcon
-                className="w-12 h-12"
-                fill="white"
-                aria-hidden="true"
-              />
+              <div className="hidden md:block">
+                <GraduationIcon
+                  className="w-12 h-12"
+                  fill="white"
+                  aria-hidden="true"
+                />
+              </div>
               <div>
                 <h1 className="text-2xl md:text-4xl font-bold">
                   {ecole?.nom || "Chargement..."}
