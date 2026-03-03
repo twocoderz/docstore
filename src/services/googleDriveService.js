@@ -83,7 +83,7 @@ export const getRealFileName = async (driveUrl) => {
   try {
     const fileInfo = await getFileInfo(fileId);
     return fileInfo.name;
-  } catch (error) {
+  } catch (_error) {
     return `Document_${fileId.substring(0, 8)}`;
   }
 }; 
