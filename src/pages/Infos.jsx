@@ -2,11 +2,11 @@ import React from "react";
 import Popup from "../components/Popup";
 
 const Infos = () => {
-  const [isTwocoderzPopupOpen, setIsTwocoderzPopupOpen] = React.useState(false);
+  const [popup, setPopup] = React.useState(null);
 
-  const handleTwocoderzClick = (event) => {
-    event.preventDefault();
-    setIsTwocoderzPopupOpen(true);
+  const openPopup = (title, message) => (e) => {
+    e.preventDefault();
+    setPopup({ title, message });
   };
 
   return (
@@ -77,7 +77,10 @@ const Infos = () => {
           DocStore a été développé par{" "}
           <a
             href="https://twocoderz-team.vercel.app"
-            onClick={handleTwocoderzClick}
+            onClick={openPopup(
+              "Site en cours de développement",
+              "Le site Twocoderz est en cours de développement. Merci pour votre intérêt, revenez bientôt.",
+            )}
             className="text-indigo-600 font-medium hover:underline"
           >
             Twocoderz
@@ -99,7 +102,10 @@ const Infos = () => {
           </a>
           <a
             href="https://twocoderz-team.vercel.app"
-            onClick={handleTwocoderzClick}
+            onClick={openPopup(
+              "Site en cours de développement",
+              "Le site Twocoderz est en cours de développement. Merci pour votre intérêt, revenez bientôt.",
+            )}
             className="inline-flex items-center gap-2 px-4 py-2 rounded-lg border border-gray-200 text-gray-700 text-sm font-medium hover:bg-gray-50 transition-colors"
           >
             twocoderz-team.vercel.app
@@ -120,8 +126,10 @@ const Infos = () => {
         </p>
         <a
           href="https://docstore-download.vercel.app"
-          target="_blank"
-          rel="noopener noreferrer"
+          onClick={openPopup(
+            "Application mobile en cours de développement",
+            "La version mobile de DocStore est en cours de développement. Elle sera bientôt disponible, revenez nous voir !",
+          )}
           className="inline-flex items-center gap-2 text-indigo-600 text-sm font-medium hover:underline"
         >
           <svg
@@ -142,10 +150,10 @@ const Infos = () => {
       </div>
 
       <Popup
-        open={isTwocoderzPopupOpen}
-        title="Site en cours de développement"
-        message="Le site Twocoderz est en cours de développement. Merci pour votre intérêt, revenez bientôt."
-        onClose={() => setIsTwocoderzPopupOpen(false)}
+        open={!!popup}
+        title={popup?.title}
+        message={popup?.message}
+        onClose={() => setPopup(null)}
       />
     </div>
   );
