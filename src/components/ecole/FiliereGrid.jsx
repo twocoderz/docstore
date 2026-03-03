@@ -15,7 +15,7 @@ const FiliereGrid = ({ filieres, selectedParcours, onOpenFiliere }) => (
               <div className="absolute bottom-3 left-4 right-4">
                 <div className="flex flex-col sm:flex-row items-start sm:items-center gap-2 sm:gap-2">
                   <BookIcon
-                    className="w-9 h-9"
+                    className="hidden md:block w-9 h-9"
                     fill="white"
                     aria-hidden="true"
                   />
