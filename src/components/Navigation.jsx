@@ -76,112 +76,123 @@ const Navigation = () => {
   };
 
   return (
-    <nav className="bg-white/95 backdrop-blur-lg border-b border-gray-200/60 sticky top-0 z-50 shadow-sm">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex justify-between items-center h-13 lg:h-16">
-          <Link
-            to={ROUTES.ECOLES}
-            className="flex items-center group flex-shrink-0"
-            onClick={closeMobileMenu}
-          >
-            <img
-              src="/assets/icons/logo.svg"
-              alt="DocStore logo"
-              className="w-24 h-24"
-            />
-          </Link>
-
-          <div className="hidden md:flex items-center space-x-1 lg:space-x-6">
-            <Link
-              to={ROUTES.ECOLES}
-              className={`${getActiveClasses(ROUTES.ECOLES)} group`}
-            >
-              <GraduationIcon
-                className={`w-4 h-4 ${getIconClasses(ROUTES.ECOLES)}`}
-                aria-hidden="true"
-              />
-              <span>Écoles</span>
-            </Link>
-            <Link
-              to={ROUTES.CONCOURS}
-              className={`${getActiveClasses(ROUTES.CONCOURS)} group`}
-            >
-              <TrophyIcon
-                className={`w-4 h-4 ${getIconClasses(ROUTES.CONCOURS)}`}
-                aria-hidden="true"
-              />
-              <span>Concours</span>
-            </Link>
-            <Link
-              to={ROUTES.INFOS}
-              className={`${getActiveClasses(ROUTES.INFOS)} group`}
-            >
-              <InfoIcon
-                className={`w-4 h-4 ${getIconClasses(ROUTES.INFOS)}`}
-                aria-hidden="true"
-              />
-              <span>Infos</span>
-            </Link>
-          </div>
-
-          <button
-            onClick={toggleMobileMenu}
-            className="md:hidden p-2 rounded-lg text-gray-600 hover:text-gray-900 hover:bg-gray-100 transition-colors duration-200 touch-target"
-            aria-label="Ouvrir le menu"
-          >
-            {isMobileMenuOpen ? (
-              <FaTimes className="w-6 h-6" />
-            ) : (
-              <FaBars className="w-6 h-6" />
-            )}
-          </button>
-        </div>
-
+    <>
+      {/* Overlay pour fermer au clic à l'extérieur */}
+      {isMobileMenuOpen && (
         <div
-          className={`md:hidden transition-all duration-300 ease-in-out ${
-            isMobileMenuOpen
-              ? "max-h-64 opacity-100 border-t border-gray-200/60"
-              : "max-h-0 opacity-0 overflow-hidden"
-          }`}
-        >
-          <div className="py-4 space-y-2">
+          className="fixed inset-0 z-40 bg-black/5 md:hidden"
+          onClick={closeMobileMenu}
+          aria-hidden="true"
+        />
+      )}
+
+      <nav className="bg-white/95 backdrop-blur-lg border-b border-gray-200/60 sticky top-0 z-50 shadow-sm">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="flex justify-between items-center h-13 lg:h-16">
             <Link
               to={ROUTES.ECOLES}
-              className={`${getActiveClasses(ROUTES.ECOLES, true)} group`}
+              className="flex items-center group flex-shrink-0"
               onClick={closeMobileMenu}
             >
-              <GraduationIcon
-                className={`w-4 h-4 ${getIconClasses(ROUTES.ECOLES)}`}
-                aria-hidden="true"
+              <img
+                src="/assets/icons/logo.svg"
+                alt="DocStore logo"
+                className="w-24 h-24"
               />
-              <span className="text-base">Écoles</span>
             </Link>
-            <Link
-              to={ROUTES.CONCOURS}
-              className={`${getActiveClasses(ROUTES.CONCOURS, true)} group`}
-              onClick={closeMobileMenu}
+
+            <div className="hidden md:flex items-center space-x-1 lg:space-x-6">
+              <Link
+                to={ROUTES.ECOLES}
+                className={`${getActiveClasses(ROUTES.ECOLES)} group`}
+              >
+                <GraduationIcon
+                  className={`w-4 h-4 ${getIconClasses(ROUTES.ECOLES)}`}
+                  aria-hidden="true"
+                />
+                <span>Écoles</span>
+              </Link>
+              <Link
+                to={ROUTES.CONCOURS}
+                className={`${getActiveClasses(ROUTES.CONCOURS)} group`}
+              >
+                <TrophyIcon
+                  className={`w-4 h-4 ${getIconClasses(ROUTES.CONCOURS)}`}
+                  aria-hidden="true"
+                />
+                <span>Concours</span>
+              </Link>
+              <Link
+                to={ROUTES.INFOS}
+                className={`${getActiveClasses(ROUTES.INFOS)} group`}
+              >
+                <InfoIcon
+                  className={`w-4 h-4 ${getIconClasses(ROUTES.INFOS)}`}
+                  aria-hidden="true"
+                />
+                <span>Infos</span>
+              </Link>
+            </div>
+
+            <button
+              onClick={toggleMobileMenu}
+              className="md:hidden p-2 rounded-lg text-gray-600 hover:text-gray-900 hover:bg-gray-100 transition-colors duration-200 touch-target"
+              aria-label="Ouvrir le menu"
             >
-              <TrophyIcon
-                className={`w-4 h-4 ${getIconClasses(ROUTES.ECOLES)}`}
-                aria-hidden="true"
-              />
-              <span className="text-base">Concours</span>
-            </Link>
-            <Link
-              to={ROUTES.INFOS}
-              className={`${getActiveClasses(ROUTES.INFOS, true)} group`}
-              onClick={closeMobileMenu}
-            >
-              <InfoIcon
-                className={`w-5 h-5 ${getIconClasses(ROUTES.INFOS)}`}
-                aria-hidden="true"
-              />
-              <span className="text-base">Infos</span>
-            </Link>
+              {isMobileMenuOpen ? (
+                <FaTimes className="w-6 h-6" />
+              ) : (
+                <FaBars className="w-6 h-6" />
+              )}
+            </button>
+          </div>
+
+          <div
+            className={`md:hidden transition-all duration-300 ease-in-out ${
+              isMobileMenuOpen
+                ? "max-h-64 opacity-100 border-t border-gray-200/60"
+                : "max-h-0 opacity-0 overflow-hidden"
+            }`}
+          >
+            <div className="py-4 space-y-2">
+              <Link
+                to={ROUTES.ECOLES}
+                className={`${getActiveClasses(ROUTES.ECOLES, true)} group`}
+                onClick={closeMobileMenu}
+              >
+                <GraduationIcon
+                  className={`w-4 h-4 ${getIconClasses(ROUTES.ECOLES)}`}
+                  aria-hidden="true"
+                />
+                <span className="text-base">Écoles</span>
+              </Link>
+              <Link
+                to={ROUTES.CONCOURS}
+                className={`${getActiveClasses(ROUTES.CONCOURS, true)} group`}
+                onClick={closeMobileMenu}
+              >
+                <TrophyIcon
+                  className={`w-4 h-4 ${getIconClasses(ROUTES.ECOLES)}`}
+                  aria-hidden="true"
+                />
+                <span className="text-base">Concours</span>
+              </Link>
+              <Link
+                to={ROUTES.INFOS}
+                className={`${getActiveClasses(ROUTES.INFOS, true)} group`}
+                onClick={closeMobileMenu}
+              >
+                <InfoIcon
+                  className={`w-5 h-5 ${getIconClasses(ROUTES.INFOS)}`}
+                  aria-hidden="true"
+                />
+                <span className="text-base">Infos</span>
+              </Link>
+            </div>
           </div>
         </div>
-      </div>
-    </nav>
+      </nav>
+    </>
   );
 };
 
