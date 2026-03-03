@@ -2,11 +2,6 @@ import React from "react";
 import Popup from "../components/Popup";
 
 const Infos = () => {
-  const mobileUrl =
-    typeof window !== "undefined"
-      ? `https://m.${window.location.hostname}`
-      : "https://m.example.com";
-
   const [isTwocoderzPopupOpen, setIsTwocoderzPopupOpen] = React.useState(false);
 
   const handleTwocoderzClick = (event) => {
@@ -22,10 +17,10 @@ const Infos = () => {
           À propos
         </h1>
         <p className="text-gray-600 text-base md:text-lg leading-relaxed">
-          Biblio EPL est une plateforme pensée pour les étudiants des classes
-          préparatoires. Elle regroupe les annales de concours, les ressources
-          par filière et les informations pratiques sur les écoles — le tout
-          accessible en quelques clics.
+          DocStore est votre portail vers la réussite académique à l'Université
+          de Lomé. La plateforme regroupe les ressources de cours, les annales
+          de concours et le répertoire des écoles — tout ce dont vous avez
+          besoin, accessible en quelques clics.
         </p>
       </div>
 
@@ -38,24 +33,34 @@ const Infos = () => {
           <li className="flex gap-3">
             <span className="text-indigo-500 mt-0.5 shrink-0">→</span>
             <span>
-              Les fiches et annales des{" "}
-              <strong className="text-gray-800">concours</strong> classés par
-              école et par année
+              Des <strong className="text-gray-800">ressources de cours</strong>{" "}
+              détaillées pour chaque UE, classées par semestre et par catégorie
             </span>
           </li>
           <li className="flex gap-3">
             <span className="text-indigo-500 mt-0.5 shrink-0">→</span>
             <span>
-              Les <strong className="text-gray-800">ressources par UE</strong>{" "}
-              organisées selon les filières (MP, PC, PSI…)
+              Les <strong className="text-gray-800">annales de concours</strong>{" "}
+              et documents de préparation pour les examens d'entrée aux grandes
+              écoles
             </span>
           </li>
           <li className="flex gap-3">
             <span className="text-indigo-500 mt-0.5 shrink-0">→</span>
             <span>
-              Des infos sur les{" "}
-              <strong className="text-gray-800">écoles</strong> : filières
-              proposées, parcours, etc.
+              Un{" "}
+              <strong className="text-gray-800">répertoire des écoles</strong>{" "}
+              avec leurs filières, parcours et programmes détaillés
+            </span>
+          </li>
+          <li className="flex gap-3">
+            <span className="text-indigo-500 mt-0.5 shrink-0">→</span>
+            <span>
+              La{" "}
+              <strong className="text-gray-800">
+                prévisualisation des PDF
+              </strong>{" "}
+              directement dans le navigateur, avant tout téléchargement
             </span>
           </li>
         </ul>
@@ -69,16 +74,16 @@ const Infos = () => {
           Qui a fait ça ?
         </h2>
         <p className="text-gray-600 text-base leading-relaxed mb-5">
-          Ce site a été créé par{" "}
+          DocStore a été développé par{" "}
           <a
-            href="https://twocoderz.com"
+            href="https://twocoderz-team.vercel.app"
             onClick={handleTwocoderzClick}
             className="text-indigo-600 font-medium hover:underline"
           >
             Twocoderz
           </a>
-          , un petit studio de deux développeurs passionnés. Le projet est
-          open-source, les contributions sont les bienvenues.
+          , une équipe passionnée qui construit des outils pour simplifier le
+          quotidien des étudiants. Conçu par des étudiants, pour des étudiants.
         </p>
         <div className="flex flex-wrap gap-3">
           <a
@@ -93,11 +98,11 @@ const Infos = () => {
             GitHub
           </a>
           <a
-            href="https://twocoderz.com"
+            href="https://twocoderz-team.vercel.app"
             onClick={handleTwocoderzClick}
             className="inline-flex items-center gap-2 px-4 py-2 rounded-lg border border-gray-200 text-gray-700 text-sm font-medium hover:bg-gray-50 transition-colors"
           >
-            twocoderz.com
+            twocoderz-team.vercel.app
           </a>
         </div>
       </div>
@@ -110,11 +115,11 @@ const Infos = () => {
           Version mobile
         </h2>
         <p className="text-gray-600 text-base mb-4">
-          Une version adaptée aux téléphones est disponible à l'adresse suivante
-          :
+          Vous préférez étudier en déplacement ? Une version mobile optimisée
+          est disponible pour une expérience fluide sur smartphone.
         </p>
         <a
-          href={mobileUrl}
+          href="https://docstore-download.vercel.app"
           target="_blank"
           rel="noopener noreferrer"
           className="inline-flex items-center gap-2 text-indigo-600 text-sm font-medium hover:underline"
@@ -132,7 +137,7 @@ const Infos = () => {
               d="M12 18h.01M8 21h8a1 1 0 0 0 1-1V4a1 1 0 0 0-1-1H8a1 1 0 0 0-1 1v16a1 1 0 0 0 1 1z"
             />
           </svg>
-          {mobileUrl}
+          docstore-download.vercel.app
         </a>
       </div>
 
