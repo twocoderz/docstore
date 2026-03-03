@@ -17,16 +17,18 @@ const ConcoursDetailHeader = ({ concours, ecoleName, onBack }) => (
       <div className="h-28 bg-gradient-to-br from-orange-500 via-orange-600 to-yellow-600 relative overflow-hidden">
         <div className="absolute bottom-4 left-8 right-8">
           <div className="flex flex-col sm:flex-row items-start sm:items-center gap-3 sm:gap-4">
-            <TrophyIcon
-              className="w-12 h-12"
-              stroke="white"
-              aria-hidden="true"
-            />
+            <div className="hidden md:block">
+              <TrophyIcon
+                className="w-12 h-12"
+                stroke="white"
+                aria-hidden="true"
+              />
+            </div>
             <div className="flex-1">
               <h1 className="text-2xl md:text-3xl font-bold text-white mb-2">
                 {concours.nom}
               </h1>
-              <div className="flex items-center space-x-4 text-gray-800 text-sm md:text-base">
+              <div className="flex items-center space-x-4 text-white text-sm md:text-base">
                 <div className="flex items-center space-x-2">
                   <CalendarIcon
                     className="w-4 h-4"
