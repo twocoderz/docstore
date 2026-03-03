@@ -1,8 +1,10 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { Link, useLocation } from "react-router-dom";
-import { FaGraduationCap, FaTrophy, FaBars, FaTimes } from "react-icons/fa";
+import { FaBars, FaTimes } from "react-icons/fa";
 import ROUTES from "../constants/routes";
 import { InfoIcon } from "./icons/InfoIcon";
+import { TrophyIcon } from "./icons/TrophyIcon";
+import { GraduationIcon } from "./icons/GraduationIcon";
 
 const Navigation = () => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
@@ -60,17 +62,17 @@ const Navigation = () => {
   const getIconClasses = (path) => {
     const baseClasses = "transition-all duration-300";
     if (isActive(path)) {
-      if (path === ROUTES.ECOLES) {
-        return `${baseClasses} nav-icon-active`;
-      }
-      if (path === ROUTES.CONCOURS) {
-        return `${baseClasses} nav-icon-active-concours`;
-      }
-      if (path === ROUTES.INFOS) {
-        return `${baseClasses} nav-icon-active`;
-      }
+      if (path === ROUTES.ECOLES) return `${baseClasses} text-blue-600`;
+      if (path === ROUTES.CONCOURS) return `${baseClasses} text-orange-600`;
+      if (path === ROUTES.INFOS) return `${baseClasses} text-indigo-600`;
     }
-    return baseClasses;
+    if (path === ROUTES.ECOLES)
+      return `${baseClasses} text-gray-500 group-hover:text-blue-600`;
+    if (path === ROUTES.CONCOURS)
+      return `${baseClasses} text-gray-500 group-hover:text-orange-600`;
+    if (path === ROUTES.INFOS)
+      return `${baseClasses} text-gray-500 group-hover:text-indigo-600`;
+    return `${baseClasses} text-gray-500`;
   };
 
   return (
@@ -92,26 +94,30 @@ const Navigation = () => {
           <div className="hidden md:flex items-center space-x-1 lg:space-x-6">
             <Link
               to={ROUTES.ECOLES}
-              className={getActiveClasses(ROUTES.ECOLES)}
+              className={`${getActiveClasses(ROUTES.ECOLES)} group`}
             >
-              <FaGraduationCap
+              <GraduationIcon
                 className={`w-4 h-4 ${getIconClasses(ROUTES.ECOLES)}`}
+                aria-hidden="true"
               />
               <span>Écoles</span>
             </Link>
             <Link
               to={ROUTES.CONCOURS}
-              className={getActiveClasses(ROUTES.CONCOURS)}
+              className={`${getActiveClasses(ROUTES.CONCOURS)} group`}
             >
-              <FaTrophy
+              <TrophyIcon
                 className={`w-4 h-4 ${getIconClasses(ROUTES.CONCOURS)}`}
+                aria-hidden="true"
               />
               <span>Concours</span>
             </Link>
-            <Link to={ROUTES.INFOS} className={getActiveClasses(ROUTES.INFOS)}>
+            <Link
+              to={ROUTES.INFOS}
+              className={`${getActiveClasses(ROUTES.INFOS)} group`}
+            >
               <InfoIcon
                 className={`w-4 h-4 ${getIconClasses(ROUTES.INFOS)}`}
-                fill="white"
                 aria-hidden="true"
               />
               <span>Infos</span>
@@ -141,32 +147,33 @@ const Navigation = () => {
           <div className="py-4 space-y-2">
             <Link
               to={ROUTES.ECOLES}
-              className={getActiveClasses(ROUTES.ECOLES, true)}
+              className={`${getActiveClasses(ROUTES.ECOLES, true)} group`}
               onClick={closeMobileMenu}
             >
-              <FaGraduationCap
-                className={`w-5 h-5 ${getIconClasses(ROUTES.ECOLES)}`}
+              <GraduationIcon
+                className={`w-4 h-4 ${getIconClasses(ROUTES.ECOLES)}`}
+                aria-hidden="true"
               />
               <span className="text-base">Écoles</span>
             </Link>
             <Link
               to={ROUTES.CONCOURS}
-              className={getActiveClasses(ROUTES.CONCOURS, true)}
+              className={`${getActiveClasses(ROUTES.CONCOURS, true)} group`}
               onClick={closeMobileMenu}
             >
-              <FaTrophy
-                className={`w-5 h-5 ${getIconClasses(ROUTES.CONCOURS)}`}
+              <TrophyIcon
+                className={`w-4 h-4 ${getIconClasses(ROUTES.ECOLES)}`}
+                aria-hidden="true"
               />
               <span className="text-base">Concours</span>
             </Link>
             <Link
               to={ROUTES.INFOS}
-              className={getActiveClasses(ROUTES.INFOS, true)}
+              className={`${getActiveClasses(ROUTES.INFOS, true)} group`}
               onClick={closeMobileMenu}
             >
               <InfoIcon
                 className={`w-5 h-5 ${getIconClasses(ROUTES.INFOS)}`}
-                fill="white"
                 aria-hidden="true"
               />
               <span className="text-base">Infos</span>
