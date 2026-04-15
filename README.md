@@ -39,11 +39,9 @@ Ready to transform your study experience? Visit **[docstore-univ.vercel.app](htt
 
 DocStore was developed by **[twocoderz](https://twocoderz-team.vercel.app)** – a passionate team dedicated to building tools that make life easier.
 
-- 🌐 [Visit our website](https://twocoderz-team.vercel.app)
-- 💻 [Check our GitHub](https://github.com/twocoderz)
 
 ### Mobile App
 
 Prefer studying on the go? Download the mobile version of DocStore for an optimized experience on your smartphone.
 
-**[Get the Mobile App](https://docstore-download.vercel.app)**
+**[Get the Mobile App](https://docstore-app.vercel.app)**
