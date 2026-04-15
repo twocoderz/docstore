@@ -44,4 +44,4 @@ DocStore was developed by **[twocoderz](https://twocoderz-team.vercel.app)** –
 
 Prefer studying on the go? Download the mobile version of DocStore for an optimized experience on your smartphone.
 
-**[Get the Mobile App](https://docstore-app.vercel.app)**
+**[Get the Mobile App](https://docstore-univ-app.vercel.app)**
